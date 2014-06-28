@@ -1,0 +1,207 @@
+\documentclass[%
+a4paper,
+DIV12,
+2.5headlines,
+bigheadings,
+titlepage,
+openbib,
+twoside,
+%draft
+]{scrartcl}
+
+%%% PACKAGES
+\usepackage{rotating}
+\usepackage[ngerman, english]{babel} % zuerst deutsche Silbentrennung
+%% FONTS
+\usepackage{geometry}
+\usepackage[ansinew]{inputenc} % deutschen Umlaute
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage{amsmath}
+\usepackage[scaled=.95]{helvet}
+\usepackage{courier}
+\usepackage{eurosym}
+\usepackage{courier}
+\usepackage{scrpage2}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{varioref}
+\usepackage{babelbib}
+\usepackage{makeidx}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{ctable}
+\usepackage{multirow}
+\usepackage{nomencl}
+\usepackage{subfig}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage[titletoc]{appendix}
+\usetikzlibrary{er}
+
+%\usepackage{nomencl}
+\makenomenclature
+\renewcommand{\nomname}{Abkürzungverzeichnis}
+\setlength{\nomlabelwidth}{.25\hsize}
+\setlength{\nomitemsep}{-\parsep}
+%\usepackage{tex4ht}
+\pagestyle{scrheadings} % Seitenkopf
+%\usepackage[explicit]{titlesec}
+\geometry{a4paper, top=55mm, left=40mm, right=35mm, bottom=40mm,
+headsep=10mm, footskip=22mm}
+\linespread {1.25}
+
+\setcounter{secnumdepth}{2} % only chapter and sections will be numbered
+\setcounter{tocdepth}{2}    % entries down to \subsubsections in the TOC
+\renewcommand*\lstlistingname{Code-Beispiel}
+
+% code block settings
+\definecolor{light-gray}{gray}{0.95}
+\lstset{
+  backgroundcolor=\color{light-gray},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        			% the size of the fonts that are used for the code
+  breakatwhitespace=false,         			% sets if automatic breaks should only happen at whitespace
+  %breaklines=true,                 			% sets automatic line breaking
+  captionpos=b,                    			% sets the caption-position to bottom
+  commentstyle=\color{gray},    			  % comment style
+  %deletekeywords={...},            	  % if you want to delete keywords from the given language
+  %escapeinside={\%*}{*)},          	  % if you want to add LaTeX within your code
+  extendedchars=true,              			% lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  %frame=single,                    			% adds a frame around the code
+  %keepspaces=true,                 			% keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       			% keyword style
+  %language=Octave,                 			% the language of the code
+  %morekeywords={*,...},            			% if you want to add more keywords to the set
+  numbers=left,                    			% where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   			% how far the line-numbers are from the code
+  %numberstyle=\tiny\color{mygray}, 			% the style that is used for the line-numbers
+  %rulecolor=\color{black},         			% if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                			% show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          			% underline spaces within strings only
+  showtabs=false,                  			% show tabs within strings adding particular underscores
+  stepnumber=1,                    			% the step between two line-numbers. If it's 1, each line will be numbered
+  %stringstyle=\color{mymauve},     			% string literal style
+  tabsize=2,                       			% sets default tabsize to 2 spaces
+  %title=\lstname                   			% show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+%%% COMMANDS
+
+	%%%%%%%%%%%%%%%%%%
+	% Autor eintragen
+	\newcommand{\theauthor}{Frank Blechschmidt}
+	%%%%%%%%%%%%%%%%%%
+	% Matrikelnummer eintragen
+	\newcommand{\matrnr}{759762}
+	%%%%%%%%%%%%%%%%%%
+	% Titel eintragen
+	\newcommand{\thetitle}{Erstellung datenbewusster Tests am Beispiel eines Anwendungsfalls aus dem Unternehmenssektor}
+	\newcommand{\thesubtitle}{Guided Creation of Data-Aware Test Cases Based on a Real World Business Use Case}
+	% \newcommand{\thesubtitle}{conception}
+
+%%% COLORS
+\input{utils/hpicolors}
+
+%%% OTHER INPUTS
+\input{utils/commands}
+\input{utils/environments}
+\newcommand{\frontmatter}{\pagenumbering{roman}}
+\newcommand{\mainmatter}{\pagenumbering{arabic}\setcounter{page}{1}}
+%%% INCLUDE ONLY
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0.25cm}
+
+%%% DOCUMENT
+\begin{document}
+	%%% HEADER AND FOOTTITLES
+	\selectlanguage{ngerman}
+	\setlength{\emergencystretch}{3em}
+	\automark{section}
+
+	\ohead{\includegraphics[height=1.3cm,clip,viewport={0 60 250 180}]{utils/hpi_logo.pdf}}
+	\chead{}
+	\ihead{\headmark}
+	\setheadsepline{1.0pt}[\color{hpigrey}]
+	%%% TITLEPAGE
+	\hypersetup{
+        colorlinks,
+        hidelinks,
+        citecolor=black,
+        filecolor=black,
+        linkcolor=black,
+        urlcolor=black
+		pdftitle	= {\thetitle},
+		pdfsubject	= {Bachelorarbeit},
+		pdfauthor	= {\theauthor},
+		pdfcreator	= {XeLaTex},
+		pdfproducer	= {LaTeX with hyperref and thumbpdf}
+		}
+
+	\input{titlepage}
+
+	\input{sections/abstract}
+
+	\input{acknowledgments}
+	\clearpage
+
+	\input{disclaimer}
+	\clearpage
+
+	%%% TOC
+	\tableofcontents
+	\clearpage
+
+	%%% TOF
+	%\addcontentsline{toc}{section}{List of Figures}
+	\listoffigures
+	\cleardoublepage
+
+
+	%%% TOT
+	%\addcontentsline{toc}{section}{List of Tables}
+	%\listoftables
+	%\cleardoublepage
+
+
+	\printnomenclature
+	\clearpage
+	%\cleardoublepage
+
+
+    %%% MAIN PART
+	\mainmatter
+	\input{sections/introduction}
+	\input{sections/terminology}
+	\input{sections/ide}
+	\input{sections/dependencydetection}
+	\input{sections/testdatasuggestions}
+	\input{sections/testdataadministration}
+	\input{sections/paymentrun}
+	\input{sections/relatedwork}
+	\input{sections/conclusion}
+	\clearpage
+	%\cleardoublepage
+
+
+	%\appendix
+
+
+	%%% BIBLIOGRAPHY
+	%\bibliographystyle{babunsrt}
+	\addcontentsline{toc}{section}{Literatur}
+	%\bibliographystyle{babunsrt-fl}
+	%\bibliographystyle{abbrv}
+	\bibliographystyle{alpha}
+	\bibliography{bachelor}
+	\clearpage
+	\begin{appendices}
+		\input{appendix/bsegtable}
+		\input{appendix/distinctvalues}
+	\end{appendices}
+
+\end{document}

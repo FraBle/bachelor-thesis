@@ -1,0 +1,46 @@
+\section{Verwaltung von Test-Daten und Test-Systemen}\label{chap:testdataadministration}
+
+%%%%%%%%%%%%%%%%
+%
+%    Verwaltung von Test-Daten und Test-Systemen
+%
+%%%%%%%%%%%%%%%%
+
+- zur motivation dazu? Verwaltung
+- Motivation: Mehrere Test-Systeme, gleiche Tasks; mehrere produktive Test-Systeme, unterschiedliche Charakteristiken
+
+\subsection{Datenschema für Test-Daten-Sets}
+Referenz zu Variablen (matching)
+lines vs 3. variable in funktion
+
+
+\newcommand {\key}[1]{\underline{#1}}
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[node distance = 7em]
+		\node [entity] (person) {Person};
+		\node [attribute] (pid) [left of=person] {\key{ID}} edge (person);
+		\node [attribute] (name) [above left of=person] {Name} edge (person);
+		\node [attribute] (phone) [above of=person] {Phone} edge (person);
+		\node [attribute] (address) [above right of=person] {Address} edge (person);
+		\node [attribute] (street) [above right of=address] {Street} edge (address);
+		\node [attribute] (city) [right of=address] {City} edge (address);
+		\node [attribute] (age) [below of=person] {Age} edge (person);
+		\node [relationship] (uses) [right of=person] {Uses} edge (person);
+		\node [entity] (tool) [right of=uses] {Tool} edge [total] (uses);
+		\node [attribute] (tid) [below of=tool] {\key{ID}} edge (tool);
+		\node [attribute] (tname) [right of=tool] {Name} edge (tool);
+	\end{tikzpicture}
+	\caption{ER-Diagram für die Administration von Test-Sets und -Systemen}
+	\label{fig:erm}
+\end{figure}
+
+
+
+
+
+
+
+
+\subsection{Integration mehrerer Test-Systeme}

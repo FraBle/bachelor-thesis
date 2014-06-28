@@ -1,0 +1,34 @@
+\section{Verwandte Forschungsarbeiten}\label{chap:relatedwork}
+
+%%%%%%%%%%%%%%%%
+%
+%   Related Work
+%
+%%%%%%%%%%%%%%%%
+
+Relevante Test-Daten sind in verschiedenen Schritten im Entwicklungsprozess eine Anwendung von Wichtigkeit.
+Um Geschäftsanwendungen zu testen, gibt es neben dem Mittel die Datenbank-Anbindung zu mocken\footnote{\url{http://en.wikipedia.org/wiki/Mock_object}} auch die Möglichkeit sie mit einzubeziehen.
+In diesem Kontext werden die Eingabewerte mit dem Zustand der Datenbank in Verbindung gebracht, wobei es dabei verschiedene Vorgehensweise gibt.
+
+\subsection{Eingabewerte zum Testen von Datenbank-Anwendungen}
+Mit dem Erzeugen von relevanter Eingabewerten für Anwendungstests haben sich in den letzten Jahren eine Reihe von Projekten beschäftigt.
+Der Fokus der beschriebenen Ansätze liegt dabei, im Kontrast zu dieser Bachelorarbeit, auf der Code- und Branch-Abdeckung von Anwendungstests durch Einbeziehung des Status der Datenbank.
+
+Im Sektor Datenbank-Anwendungs-Tests bietet das AGENDA Framework \cite{Chays:2000:FTD:347324.348954, Chays:2004:TDG:997669, Chays:2004:ATR:1077269.1077271, Deng:2005:TDT:1062455.1062486, Chays:2008:QTG:1385269.1385277} eine Palette an Tools für das funktionale Testen.
+Dafür nutzt es Meta-Informationen aus der Datenbank in Kombination mit Voreinstellungen vom Entwickler um eine Test-Datenbank synthetisch zu erzeugen.
+
+Auf Basis von Microsofts Testing-Framework Pex für die .Net-Plattform \cite{Tillmann:2008:PWB:1792786.1792798} entwickelten Pan et al. mehrere Erweiterungen \cite{Pan:2011:GPI:2190078.2190154, Pan:2011:DSG:1988842.1988846}, die die Code-Abdeckung durch Einbeziehung der Datenbank und ihrer Daten erhöhen.
+Dabei werden mittels Dynamic Symbolic Execution (DSE) \cite{Cadar:2006:EAG:1180405.1180445, Godefroid:2005:DDA:1065010.1065036} die Variablen, die in SQL-Statements einfließen und ihren Änderungen nachverfolgt um daraus passende Programm-Eingaben zu generieren \cite{Pan:2011:GPI:2190078.2190154}.
+Durch die zusätzlichen Anforderungen an Logical Coverage (LC) \cite{DBLP:conf/issre/AmmannOH03} und Boundary Value Coverage (BVC) \cite{DBLP:conf/issre/KosmatovLPU04} werden die gefunden Variablen zusätzlich noch im Zusammenhang mit Bedingungen innerhalb der Anwendung betrachtet, wodurch gegebenenfalls weitere Eingabe-Werte erzeugt werden. 
+
+TODO: Weitere Paper betrachten!
+
+\subsection{Live-Analyse von Datenbank-Anwendungen}
+Eine alternative Möglichkeit die Performance eine Datenbank-Anwendung zu ermitteln, ist das Monitoring.
+Software-Lösungen wie New Relic\footnote{\url{http://newrelic.com/}} betten eigene Komponenten in die laufende Anwendung ein um Metriken aus dem laufenden Betrieb aufzunehmen und zu analysieren.
+Sie können dann unter anderem die langsamsten SQL-Statements mitsamt ihren Parameters dem Entwickler anzeigen.
+Allerdings wird eine solche Analyse erst dann ausgeführt, wenn es schon zu spät sein kann: im produktiven Einsatz.
+Die vorgestellte Entwicklungsumgebung soll hingegen Performance-Engpässe schon von vornherein aufdecken, sodass die Engpässe verhindert werden.
+Eine Erweiterung der vorgestellten Algorithmen, Parameter aus den Ausführungsdaten zu extrahieren, würde beide Ideen kombinieren.
+
+\subsection{Performance-Test-Frameworks}

@@ -1,0 +1,28 @@
+\section{Algorithmus für Testwerte anhand von Daten-Charakteristiken}
+
+\begin{lstlisting}[caption={Bestimmung von vorzuschlagenden Testwerten}, label={lst:distinctvalues}, language=SQL]
+-- Häufigste Werte
+SELECT BELNR, COUNT(<column>) AS OCCURENCES
+FROM <schema>.<table>
+GROUP BY <column>
+ORDER BY OCCURENCES DESC, <column> ASC
+LIMIT 3;
+
+-- Seltenste Werte
+SELECT BELNR, COUNT(<column>) AS OCCURENCES
+FROM <schema>.<table>
+GROUP BY <column>
+ORDER BY OCCURENCES ASC, <column> ASC
+LIMIT 3;
+
+-- Bestimmung der Anzahl an distinkten Werten
+SELECT COUNT(DISTINCT <column>) AS OCCURENCES
+FROM <schema>.<table>;
+
+-- Werte um dem Median
+SELECT <column>, COUNT(<column>) AS OCCURENCES
+FROM <schema>.<table>
+GROUP BY <column>
+ORDER BY OCCURENCES ASC, <column> ASC
+LIMIT 3 OFFSET OCCURENCES-1;
+\end{lstlisting}

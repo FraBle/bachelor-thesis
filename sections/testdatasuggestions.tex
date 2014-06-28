@@ -1,0 +1,153 @@
+\section{Generierung von Vorschlägen für Variablen-Belegungen}\label{chap:testdatasuggestions}
+
+%%%%%%%%%%%%%%%%
+%
+%   Automatische Vorschlagsgenerierung für Variablen-Belegungen
+%
+%%%%%%%%%%%%%%%%
+
+%- FOKUS darauf!
+%- ein gesamttestfall für kompletten algorithmus? --> Clemens
+%- Testfällt updatebar machen
+
+Um dem Entwickler repräsentative Testwerte, die die Variationspunkte eines SQL-Statements beeinflussen, vorzuschlagen, gibt es verschiedene Strategien.
+Grundlage dafür bietet, wie anfangs erwähnt, ein Datenbanksystem mit den enthaltenen Echt-Daten.
+In den folgenden Beispielen werden die realen Unternehmensdaten aus einer SAP-Infrastruktur einer Aktiengesellschaft genutzt.
+Die Integration solcher Systeme und die Administration von den genutzten Test-Daten werden im Kapitel \ref{chap:testdataadministration} näher erläutert.
+
+Neben der Betrachtung der Charakteristiken von Daten innerhalb der Datenbank, ist vor allem die Verknüpfung mit Analyse-Ergebnissen, vorrangig den Laufzeit-Messungen, ein Kriterium für die Generierung der Vorschläge.
+Mittels der Auswahl unterschiedlicher, vorgeschlagener Testwerte ist es dem Entwickler möglich konkrete Ausprägungen von SQL-Statements nachzuvollziehen und durch die Auswertung der Messungen gegebenenfalls Optimierungen durchzuführen bis das gewünschte Performance-Verhalten erreicht ist.
+
+
+\subsection{Vorschläge auf Basis von Daten-Charakteristiken}\label{chap:datacharacteristics}
+Der erste Anhaltspunkt für das Vorschlagen relevanter Testwerte ist die Charakteristik der Datenbankinhalte.
+Primär spielen dabei die Verteilung der Daten und die Anzahl unterschiedlicher Ausprägungen eine Rolle.
+
+%\begin{figure}
+%\centering
+	%\begin{tikzpicture}
+		%\begin{axis}[
+				%axis lines=left,
+				%width  = 0.85*\textwidth,
+				%height  = 6cm,
+				%symbolic x coords={Males,Females},
+				%xtick=data,
+				%enlarge x limits=0.5,
+				%bar width=40pt,
+				%ybar,
+				%ylabel={Percentage},
+				%ymin=0.0,
+				%ymax=100.0,
+				%]
+				%\addplot[ybar,fill=light-gray] coordinates {
+						%(Males,55)
+						%(Females,45)
+				%};
+		%\end{axis}
+	%\end{tikzpicture}
+	%\caption{(TODO: ersetzten durch statistik in BSEG.) Verteilung der Werte in der Spalte Gender.}
+	%\label{fig:gender}
+%\end{figure}
+
+\pgfkeys{
+    /pgf/number format/precision=0,
+    /pgf/number format/fixed zerofill=true,
+    /pgf/number format/fixed,
+		/pgf/number format/.cd,
+		use comma,
+		1000 sep={.}
+}
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis lines=left,
+			xbar, xmin=0,
+			width=0.85*\textwidth,
+			height=6cm,
+			enlarge y limits=0.1,
+			xlabel={Absolute Anzahl distinkter Werte},
+			symbolic y coords={MANDT,GJAHR,ZLSCH,BUKRS,AUGDT,LIFNR,SKFBT,KUNNR,WRBTR,BELNR},
+			ytick=data,
+			bar width=5pt,
+			nodes near coords, nodes near coords align={horizontal},
+			]
+			\addplot[fill=light-gray] coordinates {
+				(5636590,BELNR)
+				(560628,WRBTR)
+				(408015,KUNNR)
+				(228722,SKFBT)
+				(48407,LIFNR)
+				(2304,AUGDT)
+				(71,BUKRS)
+				(31,ZLSCH)
+				(10,GJAHR)
+				(2,MANDT)
+			};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Verteilung distinkter Werten einer Auswahl von Spalten aus BSEG}
+	\label{fig:bseg}
+\end{figure}
+
+Die Abbildung \ref{fig:bseg} zeigt eine Auswahl der 326 Spalten der BSEG-Tabelle aus einem SAP-System.
+Darin enthalten sind alle einzelnen Belegpositionen zu Buchungsbelegen des Unternehmens.
+Eine Erläuterung zu der Bedeutung der einzelnen Spalten befindet sich im Anhang (Tabelle \ref{tab:bsegerlaeuterung}).
+
+Sollte die Anzahl der distinkten Werte einstellig sein (beispielsweise in Spalte MANDT), können dem Entwickler alle möglichen Ausprägungen in einem Auswahl-Menü zur Verfügung gestellt werden.
+Damit wird gleichzeitig auch sichergestellt, dass nur Werte eingegeben werden können, die beim testweisen Ausführen von SQL-Statements ein Ergebnis zurückgeben.
+Auf der anderen Seite können sich Spalten jedoch über eine große Menge von verschiedenen Datenausprägungen erstrecken, wie zum Beispiel bei Belegnummern (BELNR), was eine einfache Auswahl passender Testdaten erschwert.
+Für diesen Fall werden Äquivalenzklassen anhand der Vorkommen von Werten erzeugt, die sich unterteilen in: die drei häufigste Werte, die drei seltensten Werte, drei Werte um den Median und der Rest.
+
+Für die häufigsten Werte wird eine aufsteigende Sortierung der Anzahl des Vorkommens eines Wertes durchgeführt und die ersten drei selektiert.
+Sollten mehrere Werte dieselbe Anzahl an Vorkommens haben, werden sie zusätzlich anhand ihrer Werte aufsteigend sortiert.
+Im Unterschied dazu wird bei den seltensten Werten eine absteigende Sortierung vorgenommen.
+Für die Werte um den Median muss zuerst die Anzahl der verschiedene Werte ermittelt werden.
+Anschließend dient die Halbierung des Ergebnisses als Offset für die Bestimmung der drei Werte.
+Die SQL-Statements dazu befinden sich im Anhang als Code-Beispiel \ref{lst:distinctvalues}.
+
+Dieser Ansatz ist zum Vorschlagen einzelner Testwerte nützlich, stößt jedoch an seine Grenzen, sobald mehrere Parameter genutzt werden und diese voneinander abhängig sind.
+Im Code-Beispiel \ref{lst:dynamicsql} aus dem Kapitel \ref{sec:dependencydetection} werden beispielsweise offene Rechnungen und deren Einzelposten gesucht.
+Die Variable \texttt{customer} gibt dabei die Kundennummer an, mit der die Rechnungen assoziiert sind.
+Sucht man nun nach der Kundennummer mit den meisten Rechnungen, bedeutet dies nicht zwangsläufig, dass man auch die mit den meisten Einzelposten oder höchsten Gesamtsummen findet.
+Diese, noch recht einfache, Abhängigkeit kann beliebig erweitert werden.
+Damit entstehen komplexe SQL-Strukturen, die durch das einfache Vorschlagen anhand von Charakteristiken einzelner Spalten nicht zwangsläufig die Randfälle aufzeigen, die der Entwickler sucht.
+Aus diesem Grund ist die Betrachtung von Messwerten der Analyse-Ergebnisse eine sinnvolle Erweiterung um die Genauigkeit zu steigern.
+
+\subsection{Adaptive Vorschlagsgenerierung durch Laufzeit-Analysen}
+Laufzeit-Analysen (\cite{Exner2014}, \cite{Mues2014}) ermöglichen das Verhalten von Datenbankzugriffen in Geschäftsanwendungen nachzuvollziehen.
+Die variablen Stellen von SQL-Statements werden dabei durch die vom Entwickler ausgewählten Werte gefüllt.
+Im nächsten Schritt werden nun diese atomaren Vorschläge kombiniert und mit dem dazugehörigen Ergebnis aus der Analyse verknüpft.
+Dies ermöglicht Vergleichbarkeit verschiedener Konstellationen.
+Für die Erstellung der initialen Daten können zwei verschiedene Ansätze verfolgt werden.
+
+Mithilfe der Brute-Force-Methode können alle Kombinationen durchprobiert und gemessen werden.
+Der enorme Aufwand, gerade bei besonders großen Relationen mit vielen distinkten Werten in den Spalten, stellt jedoch aufgrund der enormen Berechnungszeit ein großes Hindernis dar.
+
+Dem gegenüber steht der adaptive Ansatz, bei dem der Testdaten-Bestand kontinuierlich erweitert wird.
+Diese Variante speichert die Ergebnisse der Laufzeit-Analysen mit den dazugehören Testdaten-Konstellationen als Testdaten-Sets.
+Sobald mehrere dieser Sets vorhanden sind, werden dem Entwickler wiederum drei Vorauswahl-Optionen gegeben: das Testdaten-Set mit der höchsten Laufzeit, mit der geringsten Laufzeit und mit einer durchschnittlichen Laufzeit.
+Die Auswahl einer dieser Optionen füllt die Eingabefelder für die Testdaten automatisch mit den gespeicherten Werten.
+Um für diese Methode eine Datengrundlage zu schaffen, werden die in Kapitel \ref{chap:datacharacteristics} ermittelten Werte genutzt um initiale Kombinationen zu bilden und ihre Laufzeiten zu berechnen.
+Durch Eingabe weiterer Werte durch den Entwickler kann anschließend das Datenmodell erweitert und zunehmend verbessert werden, zu sehen im Code-Beispiel \ref{lst:developerinput}.
+
+\begin{lstlisting}[caption={Eingaben von Testwert-Konstellationen erweitern gegebenenfalls das Datenmodell}, label={lst:developerinput}, language=Python]
+	hier
+	kommt
+	der
+	algorithmus
+	rein
+\end{lstlisting}
+
+TODO: Algorithmus beschreiben.
+
+\subsection{Vorschläge auf Basis von Query-Plan-Analysen}
+Um den Einfluss von bestimmten Parametern auf Abfrage-Ausführungsplan zu ermitteln, können die Bordmittel des Datenbanksystems genutzt werden.
+Die Analyse des SQL-Statements durch den SQL-Befehl \texttt{EXPLAIN PLAN} liefert dafür eine Kostenaufschlüsselung der einzelnen SQL-Operatoren vor der eigentlichen Ausführung.
+Die Zuordnung von den Kosten zu den Parametern mit den zuvor ermittelten Testwerten gibt somit einen Auskunft über deren Gewichtung.
+Für eine Kostenanalyse inklusive Ausführung kann die SAP Hana interne Prozedur \texttt{PLANVIZ\_ACTION} genutzt werden.
+Die Betrachtung einer solchen Analyse ist in dieser Arbeit nicht mit erfolgt, kann aber in einer späteren Erweiterung die Präzision von Vorschläge von Testwerten erhöhen.
+
+\subsection{Integration in die Entwicklungsumgebung}
+- Screenshot von der Eingabemaske in der IDE
