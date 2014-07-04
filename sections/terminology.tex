@@ -7,31 +7,32 @@
 %%%%%%%%%%%%%%%%
 
 \subsection{Geschäftsanwendung}
-Eine Geschäftsanwendung ist eine komplexe Software, die innerhalb von Unternehmen bzw. Organisationen eingesetzt wird, um Unternehmensfunktionen und -prozesse zu realisieren und zum Teil zu automatisieren.
-Sie ist in den meisten Fällen angebunden an eine oder mehrere Datenbanken und kann durch Interaktionen mit Nutzern und/oder anderen Systemen gesteuert werden.
-Die Entwicklung solcher Anwendungen ist ein aufwendiger Prozess, bei dem am Ende neben den funktionalen Anforderungen (was soll die Geschäftsanwendung tun?) auch die Nicht-funktionalen (z.B. Leistung, Zuverlässigkeit und Skalierbarkeit) erfüllt werden sollen.
-Auf Letzteres konzentrierte sich die Arbeit des Bachelorprojektes.
+Eine Geschäftsanwendung ist eine komplexe Software, die innerhalb von Unternehmen bzw. Organisationen eingesetzt wird, um Unternehmensfunktionen bzw. -prozesse zu realisieren.
+Sie ist in den meisten Fällen angebunden an eine oder mehrere Datenbanken und kann durch Interaktionen mit Nutzern und / oder anderen Systemen gesteuert werden.
+Die Entwicklung solcher Anwendungen ist ein aufwendiger Prozess, bei dem am Ende neben den funktionalen Anforderungen auch die Nicht-funktionalen (z.B. Leistung, Zuverlässigkeit und Skalierbarkeit) erfüllt werden sollen.
 
-\subsection{Integrated Development Environment (engl. IDE)}
-Eine IDE, zu deutsch in etwa ``Integrierte Entwicklungsumgebung'' ist eine Software-Anwendung und umfasst eine Reihe von Werkzeugen, z.B. einen Text-Editor, die zum Erstellen von Software genutzt werden können.
-In den letzten Jahren setzt zunehmend der Trend ein die IDE nicht mehr als Desktop-Applikation zu installieren, sondern als Software-as-a-Service \cite{SIIA} im Web zu nutzen.
-Beispiel dafür sind Codenvy\footnote{\url{https://codenvy.com/}}, Cloud9\footnote{\url{https://c9.io/}} und Koding\footnote{\url{https://koding.com/}}.
-Aus diesem Grund ist auch der Prototyp namens »ERIC«, in dem diese Bachelorarbeit eingebettet ist, als Web-Anwendung konzipiert.
+\subsection{IDE (engl. Integrated Development Environment)}
+Eine IDE (deutsch: ``Integrierte Entwicklungsumgebung''), ist eine Anwendung, die eine Reihe von Werkzeugen, z.B. einen Text-Editor, zum Erstellen von Software beinhaltet.
+In den letzten Jahren setzt zunehmend der Trend ein die IDE nicht mehr als Desktop-Applikation, sondern als Software-as-a-Service \cite{SIIA} im Web zu nutzen.
+Beispiel dafür sind Cloud9\footnote{\url{https://c9.io/}} und Koding\footnote{\url{https://koding.com/}}.
+Aus diesem Grund ist der Prototyp des Bachelorprojektes namens »ERIC«, in dem diese Ergebnisse dieser Arbeit eingebettet sind, als Web-Anwendung konzipiert.
 
 \subsection{Relationale Datenbank}
-Relationalen Datenbanken liegt das relationale Modell \cite{Codd:1970:RMD:362384.362685} zugrunde, das eine Datenbank als Sammlung gruppierter Daten-Tupel betrachtet, die die Relationen bilden.
-Die Verwaltung und den Zugriff auf die Daten werden dabei durch ein relationales Datenbankmanagementsystem (kurz RDBMS) gewährleistet.
-Die im Kapitel \ref{chap:entwicklungsumgebung} vorgestellte Web-IDE und in dieser Arbeit beschriebenen Algorithmen nutzen das RDBMS SAP Hana \cite{DBLP:dblp_journals/sigmod/FarberCPBSL11}.
+Relationalen Datenbanken liegt das relationale Modell \cite{Codd:1970:RMD:362384.362685} zugrunde, das eine Datenbank als Sammlung gruppierter Datentupel betrachtet, die die Relationen bilden.
+Zur Beschreibung der Struktur der Daten und deren Beziehungen innerhalb der Datenbank dient das Datenbank-Schema.
+Es legt die Namen der Relationen und ihre Reihenfolgen von Attributen mit Datentypen fest.
+Zu dessen Veranschaulichung können ER-Diagramme \cite{Chen:1976:EMU:320434.320440} genutzt werden.
+Die Verwaltung und der Zugriff auf die Daten werden dabei durch ein relationales Datenbankmanagementsystem (kurz RDBMS) gewährleistet.
+Die im Kapitel \ref{chap:entwicklungsumgebung} vorgestellte Web-IDE und die Algorithmen dieser Arbeit nutzen das RDBMS SAP Hana \cite{DBLP:dblp_journals/sigmod/FarberCPBSL11}.
 
 \subsection{SQL}
 SQL (engl. Structured Query Language) \cite{DBLP:books/aw/DateD97} ist eine standardisierte\footnote{ISO/IEC 9075: \url{http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_tc_browse.htm?commid=45342}}, deklarative Sprache zum Definieren, Abfragen und Bearbeiten von Daten innerhalb eines relationales Datenbanksystems.
-Sie unterteilt sich in die Data Manipulation Language (DML) zum Einfügen, Verändern und Löschen von Daten, die Data Definition Language (DDL) zum Erzeugen, Verändern, Kürzen und Löschen der Relationen innerhalb der Datenbank und die Data Control Language (DCL) für die Rechtekontrolle.
+Sie unterteilt sich in die Data Manipulation Language (DML) zum Einfügen, Verändern und Löschen von Daten, die Data Definition Language (DDL) zum Erzeugen, Verändern, Kürzen und Löschen der Relationen und die Data Control Language (DCL) für die Rechtekontrolle.
 Der Fokus dieser Bachelorarbeit liegt auf der Data Manipulation Language, insbesondere dem Teilbereich der Datenabfrage.
-In diesem Kontext werden zwei Begriffe unterschieden: ein SQL-Statement ist ein beliebiger, valider SQL-Ausdruck, wohingegen eine SQL-Query eine Unterkategorie davon darstellt, die zur Abfrage von Daten dient und damit einen (eventuell leeren) Datensatz zurückgibt.
+In diesem Kontext werden zwei Begriffe unterschieden: ein SQL-Statement ist ein beliebiger, valider SQL-Ausdruck, wohingegen eine SQL-Query eine Unterkategorie davon darstellt, die zur Abfrage von Daten dient und damit einen Datensatz zurückgibt.
 
 \subsection{Testen von Software}
--validität
-- ausführen, vergleichen
-systematisch
-coverage
-automatisiert
+Einer der wichtigsten Schritte im Entwicklungsprozess von Software ist das Testen.
+Dabei kann zwischen funktionalen und nicht-funktionalen Tests unterscheiden werden, die sich aus den oben genannten Anforderungen ableiten.
+Ziel ist es neben der Verifikation der Anwendung (sind alle Funktionen der Anwendung implementiert und korrekt?) auch die nicht-funktionalen Aspekte zu testen.
+Auf Letzteres, insbesondere die Teilbereiche Leistung und Skalierbarkeit, konzentriert sich die Arbeit des Bachelorprojektes, da sie einen wichtigen Anspruch bei der Entwicklung von Geschäftsanwendungen darstellen.

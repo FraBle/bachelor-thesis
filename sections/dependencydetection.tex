@@ -6,13 +6,14 @@
 %
 %%%%%%%%%%%%%%%%
 
-Mit der Einbettung von SQL-Anfragen in andere Programmiersprachen, zum Beispiel JavaScript, treffen zwei unterschiedliche Konzepte aufeinander: die imperative Programmiersprache der Anwendung und die deklarative Abfragesprache der Datenbank.
+Mit der Einbettung von SQL-Anfragen in andere Programmiersprachen, zum Beispiel JavaScript\footnote{ECMAScript Language 
+Specification: \url{http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf}}, treffen zwei unterschiedliche Konzepte aufeinander: die imperative Programmiersprache der Anwendung und die deklarative Abfragesprache der Datenbank.
 
 Häufig fließen dabei Informationen aus dem Kontext der Anwendung in das SQL-Statement ein, zum Beispiel als Parameter für Filterbedingungen, oder wirken sich durch den Kontrollfluss auf das Erstellen von SQL-Statements aus.
 Im Folgenden werden die verschiedenen Varianten von SQL-Statements, deren Erstellung sowie Zusammenhänge mit Quelltext-Variablen untersucht.
 
 \subsection{Dynamische Erstellung von SQL-Statements}
-SQL-Statements können auf verschiedenste Weisen in den Quelltext einer Anwendung integriert werden, die sich vor Allem durch die Stärke der Beziehung von SQL-Statements und dem umliegenden Anwendungskontext unterscheiden.
+SQL-Statements können auf verschiedenste Weisen in den Quelltext einer Anwendung integriert werden, die sich vor Allem durch die Stärke der Bindung von SQL-Statements und dem umliegenden Anwendungskontext unterscheiden.
 Grundlegend kann man drei Arten differenzieren:
 
 \subsubsection{Statische SQL-Statements}
@@ -23,9 +24,9 @@ Grundlegend kann man drei Arten differenzieren:
 		ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR");
 	\end{lstlisting}
 
-Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und sind unabhängig von der Anwendung (Code-Beispiel \ref{lst:staticsql}).
-Sie können für häufige Anfragen, die jederzeit dieselben Informationen aus der Datenbank auslesen (zum Beispiel das Auflisten aller Kunden) genutzt werden.
-Vor allem für Analysen sind diese Datenbankanfragen leicht aus dem Quelltext heraus zu parsen und müssen nicht verändert oder ergänzt werden.
+Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und sind unabhängig vom Kontext der Anwendung (Code-Beispiel \ref{lst:staticsql}).
+Sie können für Anfragen genutzt werden, die jederzeit dieselben Informationen aus der Datenbank auslesen (zum Beispiel das Auflisten aller Kunden).
+Vor allem für Analysen sind diese Datenbankanfragen leicht aus dem Quelltext herauszuparsen und müssen nicht verändert oder mit Testwerten ergänzt werden.
 
 \subsubsection{Prepared SQL-Statements}
 
@@ -42,7 +43,7 @@ Vor allem für Analysen sind diese Datenbankanfragen leicht aus dem Quelltext he
 Der Anwendungsfall von Prepared Statements ist das mehrfache Ausführen derselben Anfrage mit verschiedenen Parametern.
 Dabei werden die variablen Stellen mit Fragezeichen versehen und vor der Datenabfrage explizit gesetzt.
 Die im Code-Beispiel \ref{lst:preparedsql} gezeigte Variante setzt dabei in Zeile 6 einen konstanten Wert (23342341) für \texttt{LFA1.KUNNR} ein.
-Häufig kommen diesen Informationen aber aus der Anfrage vom Nutzer oder Session-Daten und sind damit nicht im Quelltext erfasst.
+Häufig kommen diesen Informationen aus der Anfrage vom Nutzer oder Sitzungs-Daten und sind damit nicht als Konstanten im Quelltext erfasst.
 Das resultierende Statement ist somit abhängig von zu setzenden Parametern, wird jedoch nicht strukturell verändert.
 
 \subsubsection{Dynamische SQL-Statements}
@@ -65,19 +66,19 @@ Das resultierende Statement ist somit abhängig von zu setzenden Parametern, wir
 
 Dynamische SQL-Statements werden erst zur Laufzeit in Abhängigkeit vom Kontrollfluss des Programms erstellt.
 So ist es möglich, Variablen aus der Anwendung sowohl zur Anpassung des SQL-Statements zu nutzen, als auch als Parameter für die Abfrage.
-Es entsteht eine enge Verzahnung des Kontrollflusses und der resultierenden SQL-Statements, wodurch die Variabilität steigt, aber auch mit zunehmender Komplexität das Lesen und Verstehen der Anwendung erschwert wird.
+Es entsteht eine enge Bindung des Kontrollflusses an das resultierende SQL-Statement, wodurch die Variabilität steigt, aber auch mit zunehmender Komplexität das Lesen und Verstehen der Anwendung erschwert wird.
 Im Code-Beispiel \ref{lst:dynamicsql} verändert sich das SQL-Statement durch das Setzen bzw. Nicht-Setzen von Anfrage-Parameter durch den Nutzer.
-Dabei kann der Nutzer entscheiden, ob er die Informationen für eine konkrete Kundennummer abruft (Zeile 5 bis 7) oder für ein Intervall von Kundennummern (Zeile 8 bis 11).
-In beiden Fällen gibt es einen konstanten Part der Anfrage (Zeile 1 bis 4) und fließen die Anfrage-Parameter auch in das SQL-Statement ein (\texttt{customer}, \texttt{customerTo}).
-Im folgenden Abschnitt werden diese Beziehungen auf Basis von Variablen im Kontext der Anwendung tiefer untersucht.
+Dabei kann der Nutzer entscheiden, ob er die Informationen für eine konkrete Kundennummer (Zeile 5 bis 7) oder für ein Intervall von Kundennummern (Zeile 8 bis 11) abruft.
+In beiden Fällen gibt es einen konstanten Part der Anfrage (Zeile 1 bis 4) und es fließen die Anfrage-Parameter in das SQL-Statement ein (\texttt{customer}, \texttt{customerTo}).
+Im folgenden Abschnitt werden diese Beziehungen auf Basis von Variablen aus dem Kontext der Anwendung ausführlicher untersucht.
 
 
 \subsection{Verkn{\"u}pfung von SQL-Parametern und Quelltext-Variablen}
 Aus dem Code-Beispiel \ref{lst:dynamicsql} geht bereits deutlich hervor, dass Kontext-Variablen einen Einfluss auf das SQL-Statement und vorrangig dessen Parameter haben.
-Allerdings wurden in den vorherigen Beispielen SQL-Teile stets nur als Zeichenketten in die Anwendung eingebunden.
-Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (zum Beispiel Autovervollständigung, Syntax-Highlighting und -Überprüfung) und bergen zeitgleich das Risiko von Fehlern, zum Beispiel durch vergessene Leerzeichen, ohne die das finale SQL-Statement nicht valide wäre.
-Um die Nachteile dieser Konkatenation verschiedener Zeichenketten abzuschaffen, kann der Quelltext in die Syntax nach \cite{Horschig2014} übertragen werden (vgl. Code-Beispiel \ref{lst:newsql}).
-Durch diese Einbettung ähnlich dem Konzept der Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die enge Verknüpfung von Quelltext-Variablen mit SQL-Statements und -Parametern.
+Allerdings wurden in den vorherigen Beispielen SQL-Teile stets nur als Zeichenketten in der Anwendung genutzt.
+Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (z.B. Autovervollständigung, Syntax-Highlighting und -Überprüfung) und bergen zeitgleich das Risiko von Fehlern, zum Beispiel durch vergessene Leerzeichen, ohne die das finale SQL-Statement nicht valide wäre.
+Um die Nachteile dieser Konkatenation von Zeichenketten abzuschaffen, kann der Quelltext in die Syntax nach \cite{Horschig2014} übertragen werden (vgl. Code-Beispiel \ref{lst:newsql}).
+Durch diese Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die explizite Verknüpfung von Quelltext-Variablen mit SQL-Statements und -Parametern.
 
 	\begin{lstlisting}[caption={Übertragung des Code-Beispiels \ref{lst:dynamicsql} in die Syntax nach \cite{Horschig2014}}, label={lst:newsql}, language=JavaScript]
 		var stmt = SQL[CUSTOMER]
@@ -95,25 +96,28 @@ Durch diese Einbettung ähnlich dem Konzept der Language Boxes \cite{diekmann201
 Die einzelnen SQL-Blöcke im Code-Beispiel \ref{lst:newsql} beginnen mit einer \texttt{SQL}-Anweisung woraufhin der eigentliche SQL-Text folgt und mit einem Semikolon abgeschlossen wird.
 In Zeile 1 wird zusätzlich das Schema \texttt{CUSTOMER} für das Statement \texttt{stmt} festgelegt.
 Markant dabei ist die Verwendung von \texttt{@}.
-Durch diese Anweisung wird der aktuelle Wert zum der Variable \texttt{customer} zum Zeitpunkt der Ausführung fest in das SQL-Statement gesetzt.
+Durch diese Anweisung wird der zum Zeitpunkt der Ausführung aktuelle Wert der Variable \texttt{customer} fest im SQL-Statement gesetzt.
 
-Darüber hinaus besteht die Möglichkeit die SQL-Blöcke – ähnlich zu Funktionen – zu formulieren, um eine Wiederverwendung zu ermöglichen.
+Um eine Wiederverwendung von SQL-Blöcken zu ermöglichen, können sie ähnlich zu Funktionen als SQL-Templates \cite{Horschig2014} formuliert werden.
 
-	\begin{lstlisting}[caption={SQL-Blöcke mit Parametern ermöglichen Wiederverwendung.}, label={lst:sqlfunctions}, language=JavaScript]
+	\begin{lstlisting}[caption={SQL-Templates ermöglichen Wiederverwendung}, label={lst:sqlfunctions}, language=JavaScript]
 	var toleranceDays = request.body.toleranceDays;
 	var percentageRate = request.body.percentageRate;
 	var getFunctionParameters = SQL[CUSTOMER](xskr1)
 		REGUP.BUDAT, REGUP.WSKTO, REGUP.BLDAT,
 		:xskr1, @toleranceDays, @percentageRate;
+	getFunctionParameters(11).execute();
 	\end{lstlisting}
 
-Neben dem \texttt{@} kann nun zusätzlich \texttt{:} verwendet werden.
-Im Code-Beispiels \ref{lst:sqlfunctions} kann \texttt{getFunctionParameters} einem existieren SQL-Statement, zum Beispiel mittels \texttt{+=} angefügt werden.
-Dabei wird der Wert von dem Parameter \texttt{xskr1} erst beim Ausführen der Datenbankabfrage bestimmt, die Werte von \texttt{toleranceDays} und \texttt{percentageRate} jedoch schon beim Evaluieren des Statements.
+Neben dem \texttt{@} kann so zusätzlich \texttt{:} zur Referenzierung verwendet werden.
+Der Unterschied liegt darin, dass der Wert des Parameters (\texttt{xskr1}) erst beim Aufruf des SQL-Templates festgesetzt wird, die Werte von \texttt{toleranceDays} und \texttt{percentageRate} hingegen zum Zeitpunkt der Definition des SQL-Statements.
+Das SQL-Template \texttt{getFunctionParameters} aus dem Code-Beispiel \ref{lst:sqlfunctions} kann mittels der Anweisung \texttt{+=} einem existieren SQL-Statement angefügt werden.
 
 TODO: Skizzieren von AST-Referenz für Zusammenhang von COLUMN und Variable.
 
 Vor allem die Code-Beispiele \ref{lst:dynamicsql} und \ref{lst:sqlfunctions} zeigen auf, wie Variablen ein SQL-Statement verändern und in dieses an verschiedenen Stellen wieder einfließen.
-Schon in diesen einfachen Beispielen ist es für Entwickler schwer passende Testwerte zu finden um Analysen auf dem resultierenden SQL-Statement zu ermöglichen ohne die Inhalte der Relationen der Datenbank zu kennen.
-Zudem können die Relationen kryptische Werte in unverständlich benannten Spalten enthalten, beispielsweise bedeutet der Eintrag \texttt{R} in der Spalte \texttt{BSIK.ZLSCH} in einem SAP ERP-System, dass eine Rechnung mittels Euroüberweisung beglichen wurde.
-Im folgenden werden deshalb Algorithmen besprochen, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
+Schon bei diesen einfachen Algorithmen ist es für Entwickler schwer relevante Testwerte zu finden um Analysen auf dem resultierenden SQL-Statement zu ermöglichen ohne die Inhalte der Relationen der Datenbank zu kennen.
+Zudem können die Relationen kryptische Werte in unverständlich benannten Spalten enthalten, beispielsweise bedeutet in einem SAP ERP-System der Eintrag \texttt{R} in der Spalte \texttt{BSIK.ZLSCH}, dass eine Rechnung mittels Euroüberweisung beglichen wurde.
+Im Kapitel \ref{chap:testdatasuggestions} werden dazu Ansätze besprochen, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
+
+\subsection{Verkn{\"u}pfung von SQL-Parametern und Quelltext-Variablen}

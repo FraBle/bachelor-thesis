@@ -6,19 +6,19 @@
 %
 %%%%%%%%%%%%%%%%
 
-In vielen Bereichen und vor allem bei Geschäftsanwendungen dienen relationale Datenbanken als essentielle Persistenz-Schicht.
+In vielen Bereichen, vor allem bei Geschäftsanwendungen, dienen relationale Datenbanken als essentielle Persistenz-Schicht.
 Bei der Entwicklung solcher Anwendungen spielt neben der Validität auch die Performance eine wichtige Rolle.
-Wichtigster Indikator dafür ist die tolerierbare Wartezeit, die sich laut psychologischen Studien schon nach 2 Sekunden negativ auf die Aufmerksamkeit der Nutzer auswirkt, das sie in ihrem Denkprozess unterbrochen werden \cite{Nah04}.
+Wichtigster Indikator dafür ist die tolerierbare Wartezeit, die sich laut psychologischen Studien schon nach 2 Sekunden negativ auf die Aufmerksamkeit der Nutzer auswirkt, sodass sie in ihrem Denkprozess unterbrochen werden \cite{Nah04}.
 Ein zweiter wichtiger Aspekt ist die Entwicklung anhand von Echt-Daten.
-Sie wird als beste Vorgehensweise betrachtet \cite[S. 212]{Plattner:2013:CID:2490529}, da sie die Charakteristiken der realen Welt als Maßstab nutzt.
-Das frühzeitige Betrachten der Performance einer Anwendung auf Echt-Daten liegt so in der Verantwortung des Entwicklers und sollte von Anfang an in den Entwicklungsprozess einfließen.
+Sie wird als Best Practice betrachtet \cite[S. 212]{Plattner:2013:CID:2490529}, da sie die Charakteristiken der realen Welt als Maßstab nutzt.
+Das frühzeitige Betrachten der Performance einer Anwendung auf Echt-Daten liegt so in der Verantwortung des Entwicklers und soll von Anfang an in den Entwicklungsprozess einfließen.
 
-Um Informationen aus der Datenbank in der Anwendung zu nutzen, erfolgt der Zugriff durch das Einbetten der, vorwiegend in SQL geschrieben, Anfragen.
-Die eingebetteten Datenbankanfragen haben allerdings zumeist variable Bestandteile und Parameter, die für Performance-Messungen und -Analysen mit passenden Testwerten gefüllt werden müssen.
-Häufig wird dies jedoch durch riesige Datenmengen in unverständlich benannten Tabellen und Attributen zusätzlich erschwert.
-Um dies zu vereinfachen werden in dieser Bachelorarbeit verschiedene Ansätze diskutiert, die das Auswählen relevanter Testwerte durch sinnvolle Vorschläge anhand von Eigenschaften der Datenbank-Informationen unterstützen.
+Um Informationen aus der Datenbank in der Anwendung zu nutzen, erfolgt der Zugriff durch das Einbetten von in SQL geschrieben Anfragen.
+Die eingebetteten Datenbankanfragen haben zumeist variable Bestandteile und Parameter, für die für Performance-Messungen und -Analysen passende Testwerte ausgewählt werden müssen.
+Dies wird jedoch häufig durch riesige Datenmengen in unverständlich benannten Tabellen und Attributen zusätzlich erschwert.
+Mit dem Ziel der Vereinfachung werden in dieser Bachelorarbeit verschiedene Ansätze diskutiert, die das Auswählen relevanter Testwerte durch sinnvolle Vorschläge anhand von Eigenschaften der Datenbank-Informationen unterstützen.
 
-Die Ansätze bilden einen essentiellen Teil in einer Reihe von Konzepten für Entwicklungsumgebungen, die im \ref{chap:entwicklungsumgebung}. Kapitel zusammengetragen werden und bei der Entwicklung von Geschäftsanwendungen assistieren.
-Anschließend wird die Einbettung von SQL in die Programmiersprache der Anwendungen untersucht um auf deren Basis die im Kapitel \ref{chap:testdatasuggestions} vorgestellten Algorithmen zur Vorschlagsgenerierung von Test-Daten zu erörtern.
+Die vorgestellten Ansätze bilden einen essentiellen Teil in einer Reihe von Konzepten für Entwicklungsumgebungen, die im \ref{chap:entwicklungsumgebung}. Kapitel zusammengetragen werden und bei der Entwicklung von Geschäftsanwendungen assistieren.
+Anschließend wird die Einbettung von SQL in die Programmiersprache der Anwendungen untersucht um auf deren Basis die im Kapitel \ref{chap:testdatasuggestions} vorgestellten Algorithmen zur Vorschlagsgenerierung von Test-Daten darzulegen.
 Im Kapitel \ref{chap:testdataadministration} wird ergänzend die administrative Architektur für Test-Daten und -Systeme betrachtet.
-Abschließend werden die vorgestellten Ansätze im Rahmen der Umsetzung einer realistischen Geschäftsanwendung evaluiert.
+Abschließend werden die vorgestellten Ansätze im Rahmen der Umsetzung einer praxisnahen Geschäftsanwendung evaluiert.
