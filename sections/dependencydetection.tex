@@ -49,12 +49,12 @@ Das resultierende Statement ist somit abhängig von zu setzenden Parametern, wir
 \subsubsection{Dynamische SQL-Statements}
 
 	\begin{lstlisting}[caption={Dynamische SQL-Statements können verschiedene Ausprägungen annehmen.}, label={lst:dynamicsql}, language=JavaScript]
-		var customer = request.body.customer;
-		var customerTo = request.body.customerTo;
-		var stmt = "SELECT *
-		FROM CUSTOMER.BSIK LEFT OUTER JOIN CUSTOMER.LFA1
-		ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR
-		WHERE ";
+		var customer = request.body.customer,
+		    customerTo = request.body.customerTo,
+		    stmt = "SELECT *
+					FROM CUSTOMER.BSIK LEFT OUTER JOIN CUSTOMER.LFA1
+					ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR
+					WHERE ";
 		if(customer && !customerTo){
 			stmt += "LFA1.KUNNR = '" + customer + "'";
 		}
@@ -70,21 +70,24 @@ Es entsteht eine enge Bindung des Kontrollflusses an das resultierende SQL-State
 Im Code-Beispiel \ref{lst:dynamicsql} verändert sich das SQL-Statement durch das Setzen bzw. Nicht-Setzen von Anfrage-Parameter durch den Nutzer.
 Dabei kann der Nutzer entscheiden, ob er die Informationen für eine konkrete Kundennummer (Zeile 5 bis 7) oder für ein Intervall von Kundennummern (Zeile 8 bis 11) abruft.
 In beiden Fällen gibt es einen konstanten Part der Anfrage (Zeile 1 bis 4) und es fließen die Anfrage-Parameter in das SQL-Statement ein (\texttt{customer}, \texttt{customerTo}).
+
 Im folgenden Abschnitt werden diese Beziehungen auf Basis von Variablen aus dem Kontext der Anwendung ausführlicher untersucht.
 
 
-\subsection{Verkn{\"u}pfung von SQL-Parametern und Quelltext-Variablen}
+\subsection{Verkn{\"u}pfung von SQL-Parametern und Quelltext-Variablen}\label{sec:sqlandsourcecode}
 Aus dem Code-Beispiel \ref{lst:dynamicsql} geht bereits deutlich hervor, dass Kontext-Variablen einen Einfluss auf das SQL-Statement und vorrangig dessen Parameter haben.
 Allerdings wurden in den vorherigen Beispielen SQL-Teile stets nur als Zeichenketten in der Anwendung genutzt.
-Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (z.B. Autovervollständigung, Syntax-Highlighting und -Überprüfung) und bergen zeitgleich das Risiko von Fehlern, zum Beispiel durch vergessene Leerzeichen, ohne die das finale SQL-Statement nicht valide wäre.
+Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (z.B. Autovervollständigung und Syntax-Überprüfung) und bergen zeitgleich das Risiko von Fehlern, zum Beispiel durch vergessene Leerzeichen, ohne die das finale SQL-Statement nicht valide wäre.
 Um die Nachteile dieser Konkatenation von Zeichenketten abzuschaffen, kann der Quelltext in die Syntax nach \cite{Horschig2014} übertragen werden (vgl. Code-Beispiel \ref{lst:newsql}).
-Durch diese Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die explizite Verknüpfung von Quelltext-Variablen mit SQL-Statements und -Parametern.
+Durch die Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die explizite Verknüpfung von Quelltext-Variablen mit SQL-Statements und -Parametern.
 
 	\begin{lstlisting}[caption={Übertragung des Code-Beispiels \ref{lst:dynamicsql} in die Syntax nach \cite{Horschig2014}}, label={lst:newsql}, language=JavaScript]
-		var stmt = SQL[CUSTOMER]
-			SELECT *
-			FROM BSIK LEFT OUTER JOIN CUSTOMER.LFA1
-			ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR;
+		var customer = request.body.customer,
+		    customerTo = request.body.customerTo,
+		    stmt = SQL[CUSTOMER]
+					SELECT *
+					FROM BSIK LEFT OUTER JOIN CUSTOMER.LFA1
+					ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR;
 		if(customer && !customerTo){
 			stmt += SQL WHERE LFA1.KUNNR = @customer;
 		}
@@ -94,30 +97,53 @@ Durch diese Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes
 	\end{lstlisting}
 
 Die einzelnen SQL-Blöcke im Code-Beispiel \ref{lst:newsql} beginnen mit einer \texttt{SQL}-Anweisung woraufhin der eigentliche SQL-Text folgt und mit einem Semikolon abgeschlossen wird.
-In Zeile 1 wird zusätzlich das Schema \texttt{CUSTOMER} für das Statement \texttt{stmt} festgelegt.
+In Zeile 3 wird zusätzlich das Schema \texttt{CUSTOMER} für das Statement \texttt{stmt} festgelegt.
 Markant dabei ist die Verwendung von \texttt{@}.
-Durch diese Anweisung wird der zum Zeitpunkt der Ausführung aktuelle Wert der Variable \texttt{customer} fest im SQL-Statement gesetzt.
+Durch diese Anweisung wird der zum Zeitpunkt der Definition des SQL-Statements aktuelle Wert der Variable \texttt{customer} fest im SQL-Statement gesetzt.
 
 Um eine Wiederverwendung von SQL-Blöcken zu ermöglichen, können sie ähnlich zu Funktionen als SQL-Templates \cite{Horschig2014} formuliert werden.
 
 	\begin{lstlisting}[caption={SQL-Templates ermöglichen Wiederverwendung}, label={lst:sqlfunctions}, language=JavaScript]
-	var toleranceDays = request.body.toleranceDays;
-	var percentageRate = request.body.percentageRate;
-	var getFunctionParameters = SQL[CUSTOMER](xskr1)
-		REGUP.BUDAT, REGUP.WSKTO, REGUP.BLDAT,
-		:xskr1, @toleranceDays, @percentageRate;
+	var toleranceDays = request.body.toleranceDays,
+	    percentageRate = request.body.percentageRate,
+	    getFunctionParameters = SQL[CUSTOMER](xskr1)
+				REGUP.BUDAT, REGUP.WSKTO, REGUP.BLDAT,
+				:xskr1, @toleranceDays, @percentageRate;
 	getFunctionParameters(11).execute();
 	\end{lstlisting}
 
-Neben dem \texttt{@} kann so zusätzlich \texttt{:} zur Referenzierung verwendet werden.
+Neben dem \texttt{@} kann so zusätzlich \texttt{:} zur Referenzierung dienen.
 Der Unterschied liegt darin, dass der Wert des Parameters (\texttt{xskr1}) erst beim Aufruf des SQL-Templates festgesetzt wird, die Werte von \texttt{toleranceDays} und \texttt{percentageRate} hingegen zum Zeitpunkt der Definition des SQL-Statements.
-Das SQL-Template \texttt{getFunctionParameters} aus dem Code-Beispiel \ref{lst:sqlfunctions} kann mittels der Anweisung \texttt{+=} einem existieren SQL-Statement angefügt werden.
+Das SQL-Template \texttt{getFunctionParameters} kann anschließend mittels der Anweisung \texttt{+=} einem existieren SQL-Statement angefügt werden.
 
-TODO: Skizzieren von AST-Referenz für Zusammenhang von COLUMN und Variable.
+Diese Code-Beispiele machen deutlich, dass Variablen durchaus ein SQL-Statement verändern und in dieses an verschiedenen Stellen wieder einfließen.
+Im Folgenden wird deshalb eine Unterscheidung anhand der Verbindung zwischen dem eingebetteten SQL und dem umliegende Quelltext vorgenommen.
 
-Vor allem die Code-Beispiele \ref{lst:dynamicsql} und \ref{lst:sqlfunctions} zeigen auf, wie Variablen ein SQL-Statement verändern und in dieses an verschiedenen Stellen wieder einfließen.
-Schon bei diesen einfachen Algorithmen ist es für Entwickler schwer relevante Testwerte zu finden um Analysen auf dem resultierenden SQL-Statement zu ermöglichen ohne die Inhalte der Relationen der Datenbank zu kennen.
+\subsection{Differenzierung von Kontrollfluss- und SQL-Statement-Abhängigkeiten}
+Neben dem direkten Einfließen von Variablen in ein SQL-Statement (vgl. Kapitel \ref{sec:sqlandsourcecode}), können diese auch (nur) als Abhängigkeit im Kontrollfluss auftreten.
+
+	\begin{lstlisting}[caption={Verschiedene Arten von Abhängigkeiten der Variablen}, label={lst:differentdep}, language=JavaScript]
+		var noDunning = request.body.noDunning,
+		    customer = request.body.customer,
+		    selection = request.body.selection;
+		var stmt = SQL[CUSTOMER]
+			SELECT @selection
+			FROM BSIK LEFT OUTER JOIN CUSTOMER.LFA1
+			ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR;
+		if(noDunning){
+			stmt += SQL WHERE BSIK.MANST = 0;
+		}
+		if(customer){
+			stmt += SQL WHERE LFA1.KUNNR = @customer;
+		}
+	\end{lstlisting}
+
+Im Code-Beispiel \ref{lst:differentdep} sind alle drei Möglichkeiten der Einflussnahme auf SQL-Statements durch Variablen dargestellt.
+Sie können direkt in das SQL-Statement eingebunden werden (\texttt{selection}), das SQL-Statement in der Struktur manipulieren \texttt{noDunning}) oder beides zugleich (\texttt{customer}).
+
+Schon bei diesen einfachen Algorithmen ist es für Entwickler schwer relevante Testwerte zu finden um Analysen auf dem resultierenden SQL-Statement zu ermöglichen ohne zum Beispiel die Inhalte der Relationen der zugrundeliegenden Datenbank zu kennen.
 Zudem können die Relationen kryptische Werte in unverständlich benannten Spalten enthalten, beispielsweise bedeutet in einem SAP ERP-System der Eintrag \texttt{R} in der Spalte \texttt{BSIK.ZLSCH}, dass eine Rechnung mittels Euroüberweisung beglichen wurde.
-Im Kapitel \ref{chap:testdatasuggestions} werden dazu Ansätze besprochen, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
 
-\subsection{Verkn{\"u}pfung von SQL-Parametern und Quelltext-Variablen}
+Auf der anderen Seite stellen die Variationen an Verknüpfungen von Variablen und SQL-Statements eine Herausforderung für das Vorschlagen passender Testdaten dar, denn nicht immer können Informationen aus der Datenbank genutzt werden.
+Aus diesem Grund werden im Kapitel \ref{chap:testdatasuggestions} verschiedene Lösungsstrategien und Ansätze erörtert, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
+TODO: Skizzieren von AST-Referenz für Zusammenhang von COLUMN und Variable.
