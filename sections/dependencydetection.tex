@@ -119,7 +119,7 @@ Das SQL-Template \texttt{getFunctionParameters} kann anschließend mittels der A
 Diese Code-Beispiele machen deutlich, dass Variablen durchaus ein SQL-Statement verändern und in dieses an verschiedenen Stellen wieder einfließen.
 Im Folgenden wird deshalb eine Unterscheidung anhand der Verbindung zwischen dem eingebetteten SQL und dem umliegende Quelltext vorgenommen.
 
-\subsection{Differenzierung von Kontrollfluss- und SQL-Statement-Abhängigkeiten}
+\subsection{Differenzierung von Kontrollfluss- und SQL-Statement-Abhängigkeiten}\label{sec:controlflowandsqldependencies}
 Neben dem direkten Einfließen von Variablen in ein SQL-Statement (vgl. Kapitel \ref{sec:sqlandsourcecode}), können diese auch (nur) als Abhängigkeit im Kontrollfluss auftreten.
 
 	\begin{lstlisting}[caption={Verschiedene Arten von Abhängigkeiten der Variablen}, label={lst:differentdep}, language=JavaScript]
@@ -146,4 +146,3 @@ Zudem können die Relationen kryptische Werte in unverständlich benannten Spalt
 
 Auf der anderen Seite stellen die Variationen an Verknüpfungen von Variablen und SQL-Statements eine Herausforderung für das Vorschlagen passender Testdaten dar, denn nicht immer können Informationen aus der Datenbank genutzt werden.
 Aus diesem Grund werden im Kapitel \ref{chap:testdatasuggestions} verschiedene Lösungsstrategien und Ansätze erörtert, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
-TODO: Skizzieren von AST-Referenz für Zusammenhang von COLUMN und Variable.
