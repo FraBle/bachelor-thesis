@@ -19,12 +19,13 @@ Grundlegend kann man drei Arten differenzieren:
 \subsubsection{Statische SQL-Statements}
 
 	\begin{lstlisting}[caption={Statisches Statement eingebettet im Quelltext}, label={lst:staticsql}, language=JavaScript]
-		stmt.execute("SELECT *
+		var stmt = "SELECT *
 		FROM CUSTOMER.BSIK LEFT OUTER JOIN CUSTOMER.LFA1
-		ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR");
+		ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR";
+		stmt.execute();
 	\end{lstlisting}
 
-Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und sind unabhängig vom Kontext der Anwendung (Code-Beispiel \ref{lst:staticsql}).
+Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und sind unabhängig vom umliegenden Kontext der Anwendung (Code-Beispiel \ref{lst:staticsql}).
 Sie können für Anfragen genutzt werden, die jederzeit dieselben Informationen aus der Datenbank auslesen (zum Beispiel das Auflisten aller Kunden).
 Vor allem für Analysen sind diese Datenbankanfragen leicht aus dem Quelltext herauszuparsen und müssen nicht verändert oder mit Testwerten ergänzt werden.
 
@@ -40,11 +41,11 @@ Vor allem für Analysen sind diese Datenbankanfragen leicht aus dem Quelltext he
 		stmt.execute();
 	\end{lstlisting}
 
-Der Anwendungsfall von Prepared Statements ist das mehrfache Ausführen derselben Anfrage mit verschiedenen Parametern.
+Der Anwendungsfall von Prepared Statements ist das mehrfache Ausführen derselben Anfrage mit verschiedenen Parameter-Werten.
 Dabei werden die variablen Stellen mit Fragezeichen versehen und vor der Datenabfrage explizit gesetzt.
 Die im Code-Beispiel \ref{lst:preparedsql} gezeigte Variante setzt dabei in Zeile 6 einen konstanten Wert (23342341) für \texttt{LFA1.KUNNR} ein.
 Häufig kommen diesen Informationen aus der Anfrage vom Nutzer oder Sitzungs-Daten und sind damit nicht als Konstanten im Quelltext erfasst.
-Das resultierende Statement ist somit abhängig von zu setzenden Parametern, wird jedoch nicht strukturell verändert.
+Das SQL-Statement ist somit abhängig von den zu setzenden Parameter-Werten, wird jedoch nicht strukturell verändert.
 
 \subsubsection{Dynamische SQL-Statements}
 
@@ -119,6 +120,7 @@ Das SQL-Template \texttt{getFunctionParameters} kann anschließend mittels der A
 Diese Code-Beispiele machen deutlich, dass Variablen durchaus ein SQL-Statement verändern und in dieses an verschiedenen Stellen wieder einfließen.
 Im Folgenden wird deshalb eine Unterscheidung anhand der Verbindung zwischen dem eingebetteten SQL und dem umliegende Quelltext vorgenommen.
 
+\nomenclature{ERP}{Enterprise Resource Planning}
 \subsection{Differenzierung von Kontrollfluss- und SQL-Statement-Abhängigkeiten}\label{sec:controlflowandsqldependencies}
 Neben dem direkten Einfließen von Variablen in ein SQL-Statement (vgl. Kapitel \ref{sec:sqlandsourcecode}), können diese auch (nur) als Abhängigkeit im Kontrollfluss auftreten.
 

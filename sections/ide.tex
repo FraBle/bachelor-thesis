@@ -1,4 +1,4 @@
-\section{Eine IDE f{\"u}r daten- und performancebewusste Entwicklung}\label{chap:entwicklungsumgebung}
+\section{ERIC: Eine IDE f{\"u}r daten- und performancebewusste Entwicklung}\label{chap:entwicklungsumgebung}
 
 %%%%%%%%%%%%%%%%
 %
@@ -8,12 +8,12 @@
 
 \begin{figure}[ht]
 	\centering
-  \includegraphics[width=0.94\textwidth]{figures/ide.png}
+  \includegraphics[width=1\textwidth]{figures/ide.png}
 	\caption{Übersicht der Web-IDE}
 	\label{fig:ide}
 \end{figure}
 
-Die im Rahmen des Bachelorprojektes ``Modern Computer-Aided Software Engineering'' entwickelte Web-IDE (Abbildung \ref{fig:ide}) vereint eine Reihe von Konzepten zur Entwicklung von Geschäftsanwendungen mit dem Fokus auf der besseren Integration von Informationen aus Datenbanken.
+Die im Rahmen des Bachelorprojektes ``Modern Computer-Aided Software Engineering'' entwickelte Web-IDE namens »ERIC« (Abbildung \ref{fig:ide}) vereint eine Reihe von Konzepten zur Entwicklung von Geschäftsanwendungen mit dem Fokus auf der besseren Integration von Informationen aus Datenbanken.
 Besonders die Schärfung des Bewusstseins für Daten und Datenmengen sowie das vorausschauende Entwickeln in Hinblick auf die Skalierung der Anwendung soll gefördert werden.
 Grundlage dafür bietet die Einbettung von SQL in die Programmiersprache der Geschäftsanwendung \cite{Horschig2014} (mehr Details dazu in Kapitel \ref{sec:dependencydetection}).
 Durch das Parsen des Quelltextes \cite{Horschig2014} und der darin enthaltenen SQL-Statements \cite{Schulz2014} werden die Voraussetzungen geschaffen, Analysen und Visualisierungen der Datenabfragen durchzuführen.
@@ -22,7 +22,7 @@ Für die Berechnung der abgeschätzten Laufzeiten und Ergebnisgrößen stehen zw
 
 \begin{figure}[ht]
 	\centering
-  \includegraphics[width=0.3\textwidth]{figures/feedback.png}
+  \includegraphics[width=0.52\textwidth]{figures/feedback.png}
 	\caption{Visualisierung des Kontrollflusses}
 	\label{fig:feedback}
 \end{figure}
@@ -45,7 +45,7 @@ Die betrachteten Features für die Analysen von SQL-Statements haben dabei zwei 
 	}
 \end{lstlisting}
 
-Schon einfache Algorithmen, wie im Code-Beispiel \ref{lst:ide}, lassen das SQL-Statement auf Basis von Programmvariablen variieren (\texttt{country}) und belegen die SQL-Parameter in Abhängigkeit von zum Beispiel Sitzungs-Daten, Formularen oder Anfrage-Parametern mit unterschiedlichen Werten (\texttt{firstname}).
+Schon einfache Algorithmen, wie im Code-Beispiel \ref{lst:ide}, lassen das SQL-Statement auf Basis von Programm-Variablen variieren (\texttt{country}) und belegen die SQL-Parameter in Abhängigkeit von beispielsweise Sitzungs-Daten, Formularen oder Anfrage-Parametern mit unterschiedlichen Werten (\texttt{firstname}).
 Dadurch ist es für den Entwickler schwer abzuschätzen, welche testweisen Werte repräsentativ sind oder sogar Randfälle darstellen und die Antwortzeit der Anwendung in die Höhe treiben.
 Deshalb ist es wichtig sinnvolle Testwerte und Kombinationen von Testwerten zu nutzen, die die verschiedenen Szenarien innerhalb der Anwendung abdecken.
 Mit der Theorie und möglichen Algorithmen zum Vorschlagen dieser Daten beschäftigt sich diese Bachelorarbeit und diskutiert sie in den folgenden Kapiteln.

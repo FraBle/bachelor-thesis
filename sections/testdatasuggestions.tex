@@ -29,7 +29,7 @@ In Abbildung \ref{fig:querytree} ist eine solche Datenstruktur beispielhaft für
 			\tikzstyle{r} = [draw, shape=rectangle]
 			\node[r] (is-root) {SqlQuery}
 				[sibling distance=11.6cm]
-				child { 
+				child {
 					node[e] {dependencies}
 					[sibling distance=5.8cm]
 					child {
@@ -44,17 +44,17 @@ In Abbildung \ref{fig:querytree} ist eine solche Datenstruktur beispielhaft für
 					child {
 						node[r] {1}
 						[sibling distance=2.9cm]
-						child { 
-							node[e] {context} 
+						child {
+							node[e] {context}
 							child {
 								node[r] {0}
 								[sibling distance=3cm]
 								child {
-									node[e] {operator} 
+									node[e] {operator}
 									child { node[r] {``=''} }
 								}
 								child {
-									node[e] {other} 
+									node[e] {other}
 									child { node[r] {SqlNode} }
 								}
 							}
@@ -65,14 +65,14 @@ In Abbildung \ref{fig:querytree} ist eine solche Datenstruktur beispielhaft für
 						}
 					}
 				}
-				child { 
+				child {
 					node[e] {variables}
 					[sibling distance=5.8cm]
 					child {
 						node[r] {0}
 						[sibling distance=2.9cm]
-						child { 
-							node[e] {context} 
+						child {
+							node[e] {context}
 							child { node[r] {0} }
 						}
 						child {
@@ -83,17 +83,17 @@ In Abbildung \ref{fig:querytree} ist eine solche Datenstruktur beispielhaft für
 					child {
 						node[r] {1}
 						[sibling distance=2.9cm]
-						child { 
-							node[e] {context} 
+						child {
+							node[e] {context}
 							child {
 								node[r] {0}
 								[sibling distance=3cm]
 								child {
-									node[e] {operator} 
+									node[e] {operator}
 									child { node[r] {``=''} }
 								}
 								child {
-									node[e] {other} 
+									node[e] {other}
 									child { node[r] {SqlNode} }
 								}
 							}
@@ -106,8 +106,8 @@ In Abbildung \ref{fig:querytree} ist eine solche Datenstruktur beispielhaft für
 				};
 		\end{tikzpicture}
 	}
-	
-	
+
+
 
 	\caption{Verteilung distinkter Werten einer Auswahl von Spalten aus BSEG}
 	\label{fig:querytree}
@@ -206,8 +206,8 @@ Die SQL-Statements dazu befinden sich im Anhang als Code-Beispiel \ref{lst:disti
 
 \subsection{Vorschläge anhand von Meta-Informationen}\label{chap:databasemeta}
 Für Projektion, Sortierung oder Gruppierung sind weniger die Spalte-Inhalte wichtig, als vielmehr die Spalten an sich.
-Um Vorschläge für diese Art SQL-Statement-Variablen zu erzeugen, werden dazu anhand der Meta-Informationen über Spalten der betrachteten Relation aus der SAP Hana-internen System-Tabelle \texttt{SYS.TABLE\_COLUMNS} die Spalten-Namen bestimmt (vgl. Code-Beispiel\ref{lst:hanasys}).
-\begin{lstlisting}[caption={Systemtabellen von SAP Hana liefern Meta-Informationen zu Relationen}, label={lst:hanasys}, language=SQL]
+Um Vorschläge für diese Art SQL-Statement-Variablen zu erzeugen, werden dazu anhand der Meta-Informationen über Spalten der betrachteten Relation aus der SAP HANA-internen System-Tabelle \texttt{SYS.TABLE\_COLUMNS} die Spalten-Namen bestimmt (vgl. Code-Beispiel\ref{lst:hanasys}).
+\begin{lstlisting}[caption={Systemtabellen von SAP HANA liefern Meta-Informationen zu Relationen}, label={lst:hanasys}, language=SQL]
 	SELECT COLUMN_NAME
 	FROM SYS.TABLE_COLUMNS
 	WHERE SCHEMA_NAME = '<schema>'
@@ -231,7 +231,7 @@ Die Variable \texttt{customer} gibt dabei die Kundennummer an, mit der die Rechn
 Sucht man nun nach der Kundennummer mit den meisten Rechnungen, bedeutet dies nicht zwangsläufig, dass man auch die mit den meisten Einzelposten oder höchsten Gesamtsummen findet.
 Diese, noch recht einfache, Abhängigkeit kann beliebig erweitert werden.
 Damit entstehen komplexe SQL- und Programm-Strukturen, die durch das einfache Vorschlagen anhand von Charakteristiken einzelner Spalten nicht zwangsläufig die Randfälle aufzeigen, die der Entwickler sucht.
-Aus diesem Grund ist die Betrachtung von Messegebnissen aus Laufzeit-Analysen (\cite{Exner2014}, \cite{Mues2014}) eine sinnvolle Erweiterung um die Genauigkeit der Vorschläge zu steigern.
+Aus diesem Grund ist die Betrachtung von Messergebnissen aus Laufzeit-Analysen (\cite{Exner2014}, \cite{Mues2014}) eine sinnvolle Erweiterung um die Genauigkeit der Vorschläge zu steigern.
 Die variablen Stellen von SQL-Statements werden dabei durch die vom Entwickler ausgewählten Werte gefüllt.
 Im nächsten Schritt werden nun diese atomaren Vorschläge kombiniert und mit dem dazugehörigen Ergebnis aus der Laufzeit-Analyse verknüpft.
 Dies ermöglicht Vergleichbarkeit verschiedener Konstellationen.

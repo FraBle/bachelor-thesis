@@ -117,6 +117,8 @@ headsep=10mm, footskip=22mm}
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{0.25cm}
 
+\makeindex
+\makenomenclature
 %%% DOCUMENT
 \begin{document}
 	%%% HEADER AND FOOTTITLES
@@ -160,7 +162,8 @@ headsep=10mm, footskip=22mm}
 	%%% TOF
 	%\addcontentsline{toc}{section}{List of Figures}
 	\listoffigures
-	\cleardoublepage
+	%\cleardoublepage
+	\clearpage
 
 
 	%%% TOT
@@ -168,7 +171,7 @@ headsep=10mm, footskip=22mm}
 	%\listoftables
 	%\cleardoublepage
 
-
+	\markboth{\nomname}{\nomname}
 	\printnomenclature
 	\clearpage
 	%\cleardoublepage

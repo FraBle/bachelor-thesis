@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%
 
-An das Backend der Web-IDE ist eine eigene SAP Hana-Instanz angebunden.
+An das Backend der Web-IDE ist eine eigene SAP HANA-Instanz angebunden.
 Darin werden die Testdaten-Sets und Zugangsdaten für Test-Systeme hinterlegt.
 Im folgenden geht es um das zugrundeliegende Schema, die Integration verschiedener Test-Systeme und das Pflegen der Test-Daten, insbesondere in Hinblick auf deren Gültigkeit.
 
@@ -46,7 +46,7 @@ In Abbildung \ref{fig:erm} ist das dazugehörige Datenschema dargestellt.
 \end{figure}
 
 \subsection{Caching und Gültigkeit von Test-Daten}
-Um nicht für jede Vorschlagsanfrage einen Datenbankzugriff durchzuführen, werden die Testdaten und Testdaten-Sets sowohl im Frontend als auch im Backend gecached.
+Um nicht für jede Vorschlaganfrage einen Datenbankzugriff durchzuführen, werden die Testdaten und Testdaten-Sets sowohl im Frontend als auch im Backend gecached.
 Die Caches unterscheiden sich in der Hinsicht, dass es einen Frontend-Cache für jede Sitzung eines Entwicklers gibt, wohingegen der Backend-Cache global agiert.
 Eine Anfrage für Testdaten-Vorschläge zu einer Spalte einer Relation wird dabei erst versucht durch den Frontend-Cache zu beantworten.
 Sollten dort keine passenden Daten vorliegen, wird eine Anfrage an das Backend ausgelöst.
@@ -64,7 +64,7 @@ Die Invalidierung der Daten durch Veränderung des dazugehörigen Quelltextes wu
 Die Schwierigkeit liegt darin, eine Granularität zu finden, auf der Änderungen zur Invalidierung führen, und gegebenenfalls diese Veränderung nachzuvollziehen.
 Legt man die Granularitätsstufe auf das gesamte Dokument fest, würde dies dazu führen, dass die Test-Daten zu häufig als ungültig gekennzeichnet werden, obwohl das nicht zwangsläufig zutreffen muss.
 Wählt man eine feine Granularitätsstufe (zum Beispiel alle Änderungen, die nur Variablen betreffen, die in SQL-Statements einfließen), so ist eine komplexe Nachverfolgung der Änderungen am Dokument über dessen verschiedene Revisionen notwendig.
-Sollte ein Versionsverwaltungssystem für die Quelltext-Dateien genutzt werden, können dessen Informationen in er Nachverfolgung berücksichtig werden.
+Sollte ein Versionsverwaltungssystem für die Quelltext-Dateien genutzt werden, können dessen Informationen in der Nachverfolgung berücksichtigt werden.
 
 \subsection{Integration mehrerer Test-Systeme}
 Typischerweise dient nicht nur ein System als Grundlage für Performance-Analysen einer Geschäftsanwendung, sondern ein Auswahl an Systemen mit unterschiedlichen Ausstattungsmerkmalen.
