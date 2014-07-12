@@ -38,9 +38,13 @@ twoside,
 \usepackage{multirow}
 \usepackage{nomencl}
 \usepackage{subfig}
+\usepackage{lscape}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{siunitx}
+\usepackage{hvfloat}
+\usepackage{afterpage}
+%\usepackage{showframe}
 \usepackage[titletoc]{appendix}
 \usetikzlibrary{er}
 \usetikzlibrary{positioning}
@@ -63,6 +67,66 @@ headsep=10mm, footskip=22mm}
 
 % code block settings
 \definecolor{light-gray}{gray}{0.95}
+\definecolor{atcolor}{HTML}{4271AE}
+\lstdefinelanguage{JavaScript}{
+  %keywords=[1]{for, typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, SQL, push, data, length, execute},
+	keywords=[1]{break, case, class, catch, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import, in, instanceof, let, new, return, super, switch, this, throw, try, typeof, var, void, while, with, yield},
+  %keywordstyle=[1]\color{blue}\bfseries,
+	keywordstyle=[1]\color[HTML]{8959A8}\bfseries,
+  sensitive=false,
+  comment=[s]{//},
+  morecomment=[s]{/*}{*/},
+  morecomment=[s]{(/}{/g},
+  morecomment=[s]{(/}{/g},
+  morestring=[b]',
+  morestring=[b]",
+	stringstyle=\color[HTML]{718C00}\ttfamily
+}
+
+\lstdefinelanguage{JavaScriptSQL}{
+  %keywords=[1]{for, typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, SQL, push, data, length, execute},
+	keywords=[3]{break, class, catch, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import,  instanceof, let, new, return, super, switch, this, throw, try, typeof, var, void, while, with, yield},
+  keywords=[2]{ALL, ALTER, AS, BEFORE, BEGIN, BOTH, CASE, CHAR, CONDITION, CONNECT, CROSS, CUBE, CURRENT_CONNECTION, CURRENT_DATE, CURRENT_SCHEMA, CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURRENT_UTCDATE, CURRENT_UTCTIME, CURRENT_UTCTIMESTAMP, CURRVAL, CURSOR, DECLARE, DISTINCT, ELSE, ELSEIF, ELSIF, END, EXCEPT, EXCEPTION, EXEC, FOR, FROM, FULL, GROUP, HAVING, IF, IN, INNER, INOUT, INTERSECT, INTO, IS, JOIN, LEADING, LEFT, LIMIT, LOOP, MINUS, NATURAL, NEXTVAL, NULL, ON, ORDER, OUT, PRIOR, RETURN, RETURNS, REVERSE, RIGHT, ROLLUP, ROWID, SELECT, SET, SQL, START, SYSDATE, SYSTIME, SYSTIMESTAMP, SYSUUID, TOP, TRAILING, UNION, USING, UTCDATE, UTCTIME, UTCTIMESTAMP, VALUES, WHEN, WHERE, WHILE, WITH, OUTER, BETWEEN, AND, OR},
+	keywords=[1]{@},
+  %keywordstyle=[1]\color{blue}\bfseries,
+	keywordstyle=[1]\color[HTML]{4271AE}\bfseries,
+  keywordstyle=[2]\color[HTML]{F5871F}\bfseries,
+	keywordstyle=[3]\color[HTML]{8959A8}\bfseries,
+  sensitive=false,
+  comment=[s]{//},
+  morecomment=[s]{/*}{*/},
+  morecomment=[s]{(/}{/g},
+  morecomment=[s]{(/}{/g},
+  %morecomment=[s][\color{atcolor}\bfseries]{@}{\ },
+  morestring=[b]',
+  morestring=[b]",
+	stringstyle=\color[HTML]{718C00}\ttfamily,
+	%keywordsprefix=\@,
+	keywordsprefix=\@,
+	alsoletter=\@,
+	%alsoletter=\:,\@,
+}
+\lstdefinelanguage{JavaScriptSQL2}{
+  %keywords=[1]{for, typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, SQL, push, data, length, execute},
+	keywords=[3]{break, class, catch, const, continue, debugger, default, delete, do, export, extends, finally, for, function, if, import,  instanceof, let, new, return, super, switch, this, throw, try, typeof, var, void, while, with, yield},
+  keywords=[2]{ALL, ALTER, AS, BEFORE, BEGIN, BOTH, CASE, CHAR, CONDITION, CONNECT, CROSS, CUBE, CURRENT_CONNECTION, CURRENT_DATE, CURRENT_SCHEMA, CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURRENT_UTCDATE, CURRENT_UTCTIME, CURRENT_UTCTIMESTAMP, CURRVAL, CURSOR, DECLARE, DISTINCT, ELSE, ELSEIF, ELSIF, END, EXCEPT, EXCEPTION, EXEC, FOR, FROM, FULL, GROUP, HAVING, IF, IN, INNER, INOUT, INTERSECT, INTO, IS, JOIN, LEADING, LEFT, LIMIT, LOOP, MINUS, NATURAL, NEXTVAL, NULL, ON, ORDER, OUT, PRIOR, RETURN, RETURNS, REVERSE, RIGHT, ROLLUP, ROWID, SELECT, SET, SQL, START, SYSDATE, SYSTIME, SYSTIMESTAMP, SYSUUID, TOP, TRAILING, UNION, USING, UTCDATE, UTCTIME, UTCTIMESTAMP, VALUES, WHEN, WHERE, WHILE, WITH, OUTER, BETWEEN, AND, INSERT, THEN},
+	keywords=[1]{@},
+  %keywordstyle=[1]\color{blue}\bfseries,
+	keywordstyle=[1]\color[HTML]{4271AE}\bfseries,
+  keywordstyle=[2]\color[HTML]{F5871F}\bfseries,
+	keywordstyle=[3]\color[HTML]{8959A8}\bfseries,
+  sensitive=false,
+  comment=[s]{//},
+  morecomment=[s]{/*}{*/},
+  morecomment=[s]{(/}{/g},
+  morecomment=[s]{(/}{/g},
+  %morecomment=[s][\color{atcolor}\bfseries]{@}{\ },
+  morestring=[b]',
+  morestring=[b]",
+	stringstyle=\color[HTML]{718C00}\ttfamily,
+	keywordsprefix=\@,
+	alsoletter=\@,
+}
 \lstset{
   backgroundcolor=\color{light-gray},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   basicstyle=\footnotesize,        			% the size of the fonts that are used for the code
@@ -101,7 +165,7 @@ headsep=10mm, footskip=22mm}
 	\newcommand{\matrnr}{759762}
 	%%%%%%%%%%%%%%%%%%
 	% Titel eintragen
-	\newcommand{\thetitle}{Erstellung datenbewusster Tests an einem Fallbeispiel aus dem Unternehmenssektor}
+	\newcommand{\thetitle}{Konzepte zur Erstellung datenbewusster Tests anhand eines Fallbeispiels aus dem Unternehmenssektor}
 	\newcommand{\thesubtitle}{Guided Creation of Data-Aware Test Cases Based on a Real World Business Use Case}
 	% \newcommand{\thesubtitle}{conception}
 
@@ -180,7 +244,7 @@ headsep=10mm, footskip=22mm}
     %%% MAIN PART
 	\mainmatter
 	\input{sections/introduction}
-	\input{sections/terminology}
+	%\input{sections/terminology}
 	\input{sections/ide}
 	\input{sections/dependencydetection}
 	\input{sections/testdatasuggestions}
@@ -206,6 +270,9 @@ headsep=10mm, footskip=22mm}
 	\begin{appendices}
 		\input{appendix/bsegtable}
 		\input{appendix/distinctvalues}
+		\input{appendix/paymentrunsql}
+		\input{appendix/paymentruntable}
+		\input{appendix/paymentrundistribution}
 	\end{appendices}
 
 \end{document}

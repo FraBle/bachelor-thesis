@@ -1,2 +1,33 @@
 %%% Abstract
-\myabstract{ Abstract auf Deutsch }{Abstract auf English}
+\myabstract{
+%Mit steigender Komplexität durch die enorm wachsende Datenmenge in datenbankgestützten Geschäftsanwendungen wird es zunehmend schwerer für Entwickler Skalierbarkeit zu gewährleisten.
+%Umso wichtiger ist es durch Laufzeitanalysen von Datenbankabfragen bereits frühzeitig im Entwicklungsprozess Performanceprobleme zu erkennen und zu beheben, damit die Kosten von Nachbesserungen im operativen Geschäft vermieden werden können.
+%Für die datengetriebene Erstellung dieser Abfragen sind relevante Testwerte essentiell, da sie auch die Randfälle der Implementierung abdecken und so Engpässe innerhalb der Anwendung aufzeigen können.
+%In dieser Bachelorarbeit stelle ich deshalb Ansätze vor, die es dem Entwickler durch Vorschläge passender Testdaten ermöglichen bereits während der Implementierung die Datenbankabfragen zu analysieren um frühzeitig potentielle Skalierungsfehler zu beheben.
+%
+%\textbf{Alternative:}
+
+Kontinuierlich wachsenden Datenmengen in Unternehmenssoftware beeinflussen zunehmend die Anwendungsentwicklung.
+%Sie erfordern eine skalierbare Verarbeitung und Speicherung in Datenbanken.
+% Mit jedem Tag wachsen die Datenmengen einer Geschäftsanwendung, sodass die skalierbare Verarbeitung und Speicherung in Datenbanken zunehmend in den Fokus der Entwicklung rückt.
+Die frühzeitig Analyse von Datenbankinteraktionen hinsichtlich ihrer Performance ist deshalb bereits im Entwicklungsprozess essentiell um die hohen Kosten von Nachbesserungen im operativen Geschäft zu vermeiden.
+Die durch den Programmfluss und die Parameter geprägten Anfragen an die Datenbank erfordern dabei passende Testwerte, welche auch die Randfälle der Anfrageausführung abdecken.
+
+In dieser Bachelorarbeit stelle ich deshalb verschiedene Ansätze vor, die Entwicklern bereits während der Implementierung relevante Testdaten vorschlagen.
+Die unmittelbare Bereitstellung repräsentativer Testdaten in Echtzeit hilft potentielle Stellen der Datenbankinteraktion, die die Skalierbarkeit beeinflussen, frühzeitig zu entdecken und zu beheben.
+Die vorgestellten Ansätze werden dazu in der praktischen Umsetzung eines Fallbeispiels aus dem Unternehmenssektor evaluiert.
+}
+{
+The cotinously growing mass of data in enterprise applications has an increasing impact on the development process.
+Therefore it is essential to analyze database interactions regarding their performance already during the development phase and therewith reducing the costs caused by the correction of defects in the operating phase.
+Database queries, which are driven by the control flow and their parameters, need appropriate test values, which also cover edge cases of the query execution.
+
+This bachelor thesis describes approaches to generating suggestions of relevat test data for developers.
+The immediate provision of representive test data in real time helps to find and fix potential scalability issues in database interaction.
+The presented approaches are evaluated by the practical implementation of a business use case.
+
+%It becomes more and more difficult for developers to ensure scalability for database-assisted enterprise applications due to their rising complexity and increasingly mass of data.
+%Therefore it is important to identify and fix performance issues early in the development process by analyzing the runtime of database queries and therewith reducing the costs caused by the correction of defects in the operating phase.
+%For the data-driven creation of database queries it is essential to use relevant test data, which also covers edgecases and thereby reveal bottlenecks of the implementation.
+%This bachelor thesis describes approaches to generating suggestions of appropriate test data, which supports developers in analyzing database accesses already during the implementation and eliminating potential scalability issues.
+}

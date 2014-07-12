@@ -1,5 +1,7 @@
 \section{Terminologie und Hintergrund}\label{chap:terminology}
 
+Für die Bachelorarbeit werden in diesem Kapitel die wichtigsten Begriffe erläutert und im Kontext der Arbeit zugeordnet.
+
 \nomenclature{IDE}{Integrated Development Environment}
 \nomenclature{ERIC}{Enterprise Ready IDE Concepts}
 \nomenclature{SQL}{Structured Query Language}
@@ -9,33 +11,37 @@
 \nomenclature{DDL}{Data Definition Language}
 \nomenclature{DCL}{Data Control Language}
 
-\subsection{Geschäftsanwendung}
+\subsubsection{IDE (engl. Integrated Development Environment)}
+Für die Entwicklung von Softwareanwendungen nutzen Entwickler zumeist eine IDE (deutsch: ``Integrierte Entwicklungsumgebung'').
+Sie umfasst eine Palette von Werkzeugen, z.B. einen Texteditor, die den Entwickler bei seiner Arbeit unterstützen.
+Der zunehmende Trend der letzten Jahren verschiebt die IDE von der Desktop-Umgebung hin zum Web als Software-as-a-Service \cite{SIIA}.
+Beispiel dafür sind Cloud9\footnote{\url{https://c9.io/}} und Koding\footnote{\url{https://koding.com/}}.
+Aus diesem Grund ist der im Kapitel \ref{chap:entwicklungsumgebung} vorgestellte Prototyp des Bachelorprojektes, in dem die Ergebnisse dieser Arbeit eingebettet sind, als Web-IDE konzipiert.
+
+\subsubsection{Geschäftsanwendung}
+Der Fokus in der Entwicklung der Web-IDE lag vorrangig auf der Unterstützung von Entwicklern von Geschäftsanwendungen.
 Eine Geschäftsanwendung ist eine komplexe Software, die innerhalb von Unternehmen bzw. Organisationen eingesetzt wird, um Unternehmensfunktionen bzw. -prozesse zu realisieren.
 Sie ist in den meisten Fällen angebunden an eine oder mehrere Datenbanken und kann durch Interaktionen mit Nutzern und / oder anderen Systemen gesteuert werden.
-Die Entwicklung solcher Anwendungen ist ein aufwendiger Prozess, bei dem am Ende neben den funktionalen Anforderungen auch die Nicht-funktionalen (z.B. Leistung, Zuverlässigkeit und Skalierbarkeit) erfüllt werden sollen.
+Die Entwicklung solcher Anwendungen ist ein aufwendiger Prozess, bei dem am Ende neben den funktionalen Anforderungen auch die nicht-funktionalen Anforderungen, z.B. Leistung, Zuverlässigkeit und Skalierbarkeit, erfüllt werden sollen.
+Vor allem die Förderung der Erfüllung von nicht-funktionalen Anforderungen war ein Schwerpunkt bei der Entwicklung des Web-IDE-Prototypens.
 
-\subsection{IDE (engl. Integrated Development Environment)}
-Eine IDE (deutsch: ``Integrierte Entwicklungsumgebung''), ist eine Anwendung, die eine Reihe von Werkzeugen, z.B. einen Text-Editor, zum Erstellen von Software beinhaltet.
-In den letzten Jahren setzt zunehmend der Trend ein die IDE nicht mehr als Desktop-Applikation, sondern als Software-as-a-Service \cite{SIIA} im Web zu nutzen.
-Beispiel dafür sind Cloud9\footnote{\url{https://c9.io/}} und Koding\footnote{\url{https://koding.com/}}.
-Aus diesem Grund ist der Prototyp des Bachelorprojektes namens »ERIC«, in dem diese Ergebnisse dieser Arbeit eingebettet sind, als Web-Anwendung konzipiert.
+\subsubsection{Relationale Datenbank}
+Die Web-IDE und die Algorithmen dieser Arbeit basieren auf dem relationalen Datenbankmanagementsystem (kurz RDBMS) SAP HANA \cite{DBLP:dblp_journals/sigmod/FarberCPBSL11}.
+Es gewährleistet die Verwaltung und den Zugriff auf die Daten der enthalten relationalen Datenbank.
+Im Unterschied zu vielen klassischen Datenbanksystemen werden die Daten von SAP HANA dauerhaft im Hauptspeicher gehalten.
+Dies ermöglicht in Zusammenarbeit mit der Nutzung von Wörterbuchkompression, einem spalten-orientiertem Design und massiv paralleler Ausführung eine besonders schnelle Bearbeitung von Anfragen.
+Dies wirkt sich auch auf die Anwendungsentwicklung aus.
+Um die Optimierungen durch das Datenbanksystem voll auszunutzen, werden Anfragen vorzugsweise in SQL formuliert im Gegensatz zur Nutzung eines ORMs\footnote{\url{http://en.wikipedia.org/wiki/Object-relational_mapping}} als zusätzliche Anwendungsschicht \cite{plattner_-memory_2012}.
 
-\subsection{Relationale Datenbank}
-Relationalen Datenbanken liegt das relationale Modell \cite{Codd:1970:RMD:362384.362685} zugrunde, das eine Datenbank als Sammlung gruppierter Datentupel betrachtet, die die Relationen bilden.
-Zur Beschreibung der Struktur der Daten und deren Beziehungen innerhalb der Datenbank dient das Datenbank-Schema.
-Es legt die Namen der Relationen und ihre Reihenfolgen von Attributen mit Datentypen fest.
-Zu dessen Veranschaulichung können ER-Diagramme \cite{Chen:1976:EMU:320434.320440} genutzt werden.
-Die Verwaltung und der Zugriff auf die Daten werden dabei durch ein relationales Datenbankmanagementsystem (kurz RDBMS) gewährleistet.
-Die im Kapitel \ref{chap:entwicklungsumgebung} vorgestellte Web-IDE und die Algorithmen dieser Arbeit nutzen das RDBMS SAP HANA \cite{DBLP:dblp_journals/sigmod/FarberCPBSL11}.
-
-\subsection{SQL}
-SQL (engl. Structured Query Language) \cite{DBLP:books/aw/DateD97} ist eine standardisierte\footnote{ISO/IEC 9075: \url{http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_tc_browse.htm?commid=45342}}, deklarative Sprache zum Definieren, Abfragen und Bearbeiten von Daten innerhalb eines relationales Datenbanksystems.
-Sie unterteilt sich in die Data Manipulation Language (DML) zum Einfügen, Verändern und Löschen von Daten, die Data Definition Language (DDL) zum Erzeugen, Verändern, Kürzen und Löschen der Relationen und die Data Control Language (DCL) für die Rechtekontrolle.
+\subsubsection{SQL}
+Für die Abfrage, Definition und Bearbeitung der Daten innerhalb des relationalen Datenbanksystems dient die standardisierte\footnote{ISO/IEC 9075: \url{http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_tc_browse.htm?commid=45342}}, deklarative Sprache SQL \cite{DBLP:books/aw/DateD97} (engl. Structured Query Language).
+Sie unterteilt sich in die Data Manipulation Language (DML) zum Einfügen, Verändern, Abfragen und Löschen von Daten, die Data Definition Language (DDL) zum Erzeugen, Verändern, Kürzen und Löschen der Relationen und die Data Control Language (DCL) für die Rechtekontrolle.
 Der Fokus dieser Bachelorarbeit liegt auf der Data Manipulation Language, insbesondere dem Teilbereich der Datenabfrage.
-In diesem Kontext werden zwei Begriffe unterschieden: ein SQL-Statement ist ein beliebiger, valider SQL-Ausdruck, wohingegen eine SQL-Query eine Unterkategorie davon darstellt, die zur Abfrage von Daten dient und damit einen Datensatz zurückgibt.
+In diesem Kontext werden zwei Begriffe unterschieden: ein SQL-Statement ist ein beliebiger, valider SQL-Ausdruck, wohingegen eine SQL-Query eine Unterkategorie davon darstellt, die zur Abfrage von Daten dient und im Ergebnis einen Datensatz dem Nutzer zurückgibt.
+Die verschiedenen Werkzeuge der entwickelten Web-IDE analysieren SQL-Statements innerhalb einer Anwendung und können ihre Abhängigkeiten untereinander und zum Anwendungskontext visualisieren.
 
-\subsection{Testen von Software}
+\subsubsection{Testen von Software}
 Einer der wichtigsten Schritte im Entwicklungsprozess von Software ist das Testen.
-Dabei kann zwischen funktionalen und nicht-funktionalen Tests unterscheiden werden, die sich aus den oben genannten Anforderungen ableiten.
+Dabei kann zwischen funktionalen und nicht-funktionalen Tests unterschhieden werden, die sich aus den oben genannten Anforderungen ableiten.
 Ziel ist es neben der Verifikation der Anwendung (sind alle Funktionen der Anwendung implementiert und korrekt?) auch die nicht-funktionalen Aspekte zu testen.
 Auf Letzteres, insbesondere die Teilbereiche Leistung und Skalierbarkeit, konzentriert sich die Arbeit des Bachelorprojektes, da sie einen wichtigen Anspruch bei der Entwicklung von Geschäftsanwendungen darstellen.

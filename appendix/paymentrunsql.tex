@@ -1,0 +1,95 @@
+\clearpage
+\section{Teile des Algorithmus zum Zahllauf}
+
+\begin{lstlisting}[caption={Ermittlung der Nutzereingaben aus der JSON-Anfrage}, label={lst:jsoninput}, language=JavaScript, basicstyle=\ttfamily\scriptsize]
+    var json = JSON.parse($.request.body.asString());
+    var runDate = json.runDate;
+    var identification = json.identification;
+    var postingDate = json.postingDate;
+    var docsEnteredDate = json.docsEnteredDate;
+    var paymentControl = json.paymentControl;
+    var vendor = json.vendor;
+    var vendorTo = json.vendorTo;
+    var customer = json.customer;
+    var customerTo = json.customerTo;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Verarbeitung der Filter in Tabellenform}, label={lst:paymentcontrol}, language=JavaScriptSQL, basicstyle=\ttfamily\scriptsize]
+	var paymentControlFilter = SQL ;
+	for(var i = 0; i < paymentControl.length; i++){
+			var line = paymentControl[i];
+			var companyCodeFilter = SQL ;
+			if (line.companyCodes){
+					var companyCodes = parseCompanyCodes(line.companyCodes);
+					if (companyCodes.singles)
+							companyCodeFilter += SQL OR BSEG.BUKRS IN @companyCodes.singles;
+					if (companyCodes.ranges){
+							for (var j = 0; j < companyCodes.ranges.length; j++){
+									companyCodeFilter += SQL OR BSEG.BUKRS BETWEEN 
+										@companyCodes.ranges[j][0] AND @companyCodes.ranges[j][1];
+							}
+					}
+			}
+			var paymentMethodsFilter = SQL ;
+			if (line.paymentMethods){
+					paymentMethodsFilter += SQL
+						AND BSEG.ZLSCH IN @line.paymentMethods;
+			}
+			if (line.nextPaymentDate){
+					paymentMethodsFilter += SQL
+						AND ADD_DAYS(ZFBDT, ZBD1T) < @line.nextPaymentDate;
+			}
+			paymentControlFilter += SQL
+				OR (@paymentMethodsFilter AND @companyCodeFilter);
+	}
+	insertRegup += SQL WHERE AND @paymentControlFilter;
+\end{lstlisting}
+
+\clearpage
+\begin{lstlisting}[caption={Allgemeiner Teil des SQL-Statements für die Belegpositionen}, label={lst:regupgeneral}, language=JavaScriptSQL2, basicstyle=\ttfamily\scriptsize]
+var insertRegup = SQL[CUSTOMER]
+    INSERT INTO REGUP (MANDT, ZBUKR, LIFNR, BUKRS, BELNR, GJAHR, BUZEI,
+		ZLSCH, BSCHL, HKONT, SAKNR, SHKZG, DMBTR, WRBTR, MWSKZ, ZFBDT,
+		ZTERM, ZBD1T, ZBD2T, ZBD3T, ZBD1P, ZBD2P, SKFBT, SKNTO, WSKTO,
+		DMBE2, PSWSL, PSWBT, BVTYP, SGTXT, SLAND1, POKEN, EMPFG, HBKID,
+		BUDAT, BLDAT, VBLNR, KUNNR, LAUFD, LAUFI, XVORL, ZBFIX, WAERS)
+
+    SELECT BSEG.MANDT, BSEG.BUKRS as ZBUKR, BSEG.LIFNR as LIFNR, BSEG.BUKRS,
+		BELNR, GJAHR, BUZEI, ZLSCH, BSCHL, HKONT, SAKNR, SHKZG, DMBTR, WRBTR,
+		MWSKZ, ZFBDT, BSEG.ZTERM, ZBD1T, ZBD2T, ZBD3T, ZBD1P, ZBD2P, SKFBT, SKNTO,
+		WSKTO, DMBE2, PSWSL, PSWBT, BVTYP, SGTXT, LAND1 as SLAND1,
+    CASE
+			WHEN (LFA1.CONFS = '' OR LFA1.CONFS is null)
+					AND (LFA1.LOEVM = '' OR LFA1.LOEVM is null)
+					AND (LFB1.CONFS = '' OR LFB1.CONFS is null)
+					AND (LFB1.LOEVM = '' OR LFB1.LOEVM is null)
+			THEN ''
+			ELSE 'X'
+    END as POKEN,
+    CASE
+			WHEN EMPFB <> '' THEN EMPFB
+			WHEN LNRZB <> '' THEN LNRZB
+			WHEN LNRZA <> '' THEN LNRZA
+			ELSE ''
+    END AS EMPFG,
+    CASE
+			WHEN BSEG.HBKID <> '' THEN BSEG.HBKID
+			WHEN LFB1.HBKID <> '' THEN LFB1.HBKID
+			ELSE ''
+    END AS HBKID,
+    CASE BUDAT
+			WHEN '00000000' THEN NULL
+			ELSE TO_DATE(BUDAT, 'YYYYMMDD')
+    END AS BUDAT,
+    CASE BLDAT
+			WHEN '00000000' THEN NULL
+			ELSE TO_DATE(BLDAT, 'YYYYMMDD')
+    END AS BLDAT,
+    BSEG.BELNR as VBLNR, KUNNR
+    FROM BSEG
+		LEFT OUTER JOIN LFA1 ON BSEG.MANDT = LFA1.MANDT AND BSEG.LIFNR = LFA1.LIFNR
+		LEFT OUTER JOIN LFB1 ON BSEG.MANDT = LFB1.MANDT AND BSEG.LIFNR = LFB1.LIFNR
+			AND BSEG.BUKRS = LFB1.BUKRS
+    WHERE LFB1.ZAHLS = '' AND (LFA1.SPERR = '' OR LFA1.SPERR is null)
+			AND (LFB1.SPERR = '' OR LFB1.SPERR is null);
+\end{lstlisting}

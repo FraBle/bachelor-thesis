@@ -1,18 +1,14 @@
 \section{Zusammenfassung und Ausblick}\label{chap:conclusion}
 
-%%%%%%%%%%%%%%%%
-%
-%    Zusammenfassung und Ausblick
-%
-%%%%%%%%%%%%%%%%
+In dieser Bachelorarbeit wurden Konzept und Implementierung der Vorschlagsgenerierung relevanter Testwerte für Performanceanalysen vorgestellt.
+Die entwickelten Ansätze sind Bestandteil der Werkzeugpalette der vom Bachelorprojekt erschaffenen Web-IDE und dienen als Grundlage sowohl für Vorhersagen von Laufzeit und Ergebnisgrößen als auch für die Visualisierung von SQL-Statements.
 
-TODO: Zusammenfassung und Ausblick
-
+Nachfolgend werden weitere Ideen diskutiert, die die Ansätze in Zukunft ergänzen können.
 
 \subsection{Vorschläge auf Basis von Query-Plan-Analysen}
-Um den Einfluss von bestimmten Parametern auf Abfrage-Ausführungsplan zu ermitteln, können die Bordmittel des Datenbanksystems als Ergänzung genutzt werden.
+Um den Einfluss bestimmter Parameter auf Abfrageausführungspläne zu ermitteln, können die Bordmittel des Datenbanksystems als Ergänzung genutzt werden.
 Die Analyse des SQL-Statements durch den SQL-Befehl \texttt{EXPLAIN PLAN} liefert dafür eine Kostenaufschlüsselung der einzelnen SQL-Operatoren vor der eigentlichen Ausführung.
-Die Zuordnung von den Kosten zu den Parametern mit den zuvor ermittelten Testwerten würde eine Auskunft über deren Gewichtung geben.
+Die Zuordnung der Kosten zu den Parametern mit den zuvor ermittelten Testwerten würde eine Auskunft über deren Gewichtung geben.
 Für eine Kostenanalyse inklusive Ausführung kann die SAP HANA interne Prozedur \texttt{PLANVIZ\_ACTION} genutzt werden.
 Die Betrachtung einer solchen Analyse ist nicht Teil dieser Arbeit, kann aber in einer späteren Erweiterung die Präzision der Vorschläge von Testwerten erhöhen.
 
@@ -20,3 +16,6 @@ Die Betrachtung einer solchen Analyse ist nicht Teil dieser Arbeit, kann aber in
 Sollte ein bestimmtes System genutzt werden, z.B. SAP ERP-Software, so kann Vorwissen über dessen Charakteristiken in den Vorschlägen zu Testdaten berücksichtigt werden.
 Ein Beispiel dafür sind Standardwerte, die in jeder Instanz des Systems verwendet werden (z.B. feste Benutzerkennungen), oder die Betrachtung besonderer Zeiträume, wie das Jahresende.
 Somit können Informationen aus dem Kontext des Systems die Vorschläge erweitern um typische Szenarien abzudecken.
+
+
+Schon jetzt unterstützen die Werkzeuge den Entwicklern von Geschäftsanwendungen während der Entwicklungsphase Engpässe aufzudecken und zu beheben um so das kostenintensive Nachbessern zu vermeiden.

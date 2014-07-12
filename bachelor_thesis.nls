@@ -2,23 +2,10 @@
 
  \nomgroup{A}
 
-  \item [{DCL}]\begingroup Data Control Language\nomeqref {0}
-		\nompageref{2}
-  \item [{DDL}]\begingroup Data Definition Language\nomeqref {0}
-		\nompageref{2}
-  \item [{DML}]\begingroup Data Manipulation Language\nomeqref {0}
-		\nompageref{2}
-  \item [{ER}]\begingroup Entity-Relationship\nomeqref {0}
-		\nompageref{2}
-  \item [{ERIC}]\begingroup Enterprise Ready IDE Concepts\nomeqref {0}
-		\nompageref{2}
+  \item [{AST}]\begingroup Abstract Syntax Tree\nomeqref {0}
+		\nompageref{16}
   \item [{ERP}]\begingroup Enterprise Resource Planning\nomeqref {0}
-		\nompageref{10}
-  \item [{IDE}]\begingroup Integrated Development Environment\nomeqref {0}
-		\nompageref{2}
-  \item [{RDBMS}]\begingroup Relational Database Management System\nomeqref {0}
-		\nompageref{2}
-  \item [{SQL}]\begingroup Structured Query Language\nomeqref {0}
-		\nompageref{2}
+		\nompageref{8}
+  \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{24}
 
 \end{thenomenclature}

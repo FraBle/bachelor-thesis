@@ -1,11 +1,19 @@
 \section{Fallbeispiel: Der Zahllauf}\label{chap:paymentrun}
 
-TODO: Umschreiben zu Thomas' Vorschlag!!!
-
-
 Im Bereich der Geschäftsanwendungen gibt es eine Reihe hochkomplexer Prozesse, die in der IT abgebildet werden.
-Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt und anschließend veranlasst.
-Dabei spielen die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren.
+Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt und anschließend die Bearbeitung durch das System veranlasst.
+Dabei spielen die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
+
+Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren. 
+Zusätzlich erschweren große Relationen stark abgekürzten Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung besonders für domänenfremde Entwickler.
+Umso wichtiger ist es bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
+Dabei unterstützt die im Rahmen des Bachelorprojektes erstellte Web-IDE durch die in dieser Arbeit vorgestellten Ansätze zur Generierung von Testdatenvorschlägen.
+
+In diesem Kapitel wird exemplarisch die Implementierung des Zahllauf-Algorithmus mithilfe der Web-IDE vorgestellt.
+Dabei steht die von Nutzereingaben geprägte Verarbeitung der Suchanfrage im Fokus.
+Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansätze zum Vorgeschlagen von Testwerten durchgeführt.
+
+\subsection{Implementierung des Algorithmus in der Web-IDE}
 
 \begin{figure}[ht]
 	\centering
@@ -14,39 +22,236 @@ Dabei spielen die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträge
 	\label{fig:paymentrun}
 \end{figure}
 
-Dementsprechend gibt es viele Einflussfaktoren und Variablen in der Umsetzung des dazugehörigen Algorithmus'.
-Dies macht es vor allem dem Entwickler schwer: große Tabellen mit zum Teil kryptischen Feldern und Werten dienen als Grundlage, Zwischenspeicher und Ausgabe.
-Da es wichtig ist bereits während der Entwicklung die Performance zu testen, sind sinnvolle Testdaten nötig, die frühzeitig auch die Randfälle der Implementierung aufdecken.
+\nomenclature{UI}{User Interface}
+Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs besteht zum einen aus allgemeinen Parametern für die Suche und zum anderen aus Eingabefeldern für Suchkriterien einzelner Rechnungen.
+Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt, der Fokus dieses Kapitels liegt indessen auf der Backendimplementierung mittels der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
 
-\subsection{Der Einfluss der Eingabe auf die resultierende Query}
-Die Eingabemaske des Zahllaufs besteht aus vielen allgemeinen Parametern und einzelnen Suchfeldern für bestimmte Rechnungen.
-Neben den Identifikationsmerkmalen für den Lauf, kann ein Zeitbereich festgelegt werden, in dem die Zahlungen liegen.
-Anschließend werden in Tabellenform Suchkriterien (Buchungskreise, Zahlmethoden, nächstes Ausführungsdatum) eingeben um Zahlungen herauszufiltern.
-Die einzelnen Zellen einer Reihe bilden eine Konjunktion, wobei die Reihen miteinander disjunkt sind.
-Komplexität entsteht durch die vielen Möglichkeiten von Eingaben.
-So können z.B. Buchungskreise kommasepariert, mittels Klammern als Bereich oder beides kombiniert angeben werden.
-Die Zahlmethoden werden mit Großbuchstaben abgekürzt und aneinander gereiht um mehrere Methoden zuzulassen.
-Schlussendlich können noch Filter nach Kunden- und Lieferanten-Nummern angegeben werden, wobei hier einzelne oder Bereichsangaben möglich sind, wie man im (bereits im Kapitel \ref{sec:dependencydetection} gezeigten) Code-Beispiel \ref{lst:paymentrun} erkennen kann.
+Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
+   \begin{enumerate}
+      \item Parsen der JSON-Anfrage vom Frontend
+			\item Selektion von Belegpositionen und Speicherung in der REGUP-Relation
+			\item Berechnung von Zahldatum und Skonto
+			\item Speicherung der Beleginformationen in der REGUH-Relation
+			\item Senden einer JSON-Antwort
+   \end{enumerate}
 
-\begin{lstlisting}[caption={Mehrere Möglichkeiten des Auswahl anhand von Kundennummern}, label={lst:paymentrun}, language=JavaScript]
-	var stmt = "SELECT BSIK.BUKRS, BSIK.LIFNR, LFA1.CONFS
-	FROM CUSTOMER.BSIK LEFT OUTER JOIN CUSTOMER.LFA1
-	ON BSIK.MANDT = LFA1.MANDT AND BSIK.LIFNR = LFA1.LIFNR
-	WHERE ";
-	if(customer && !customerTo){
-		stmt += "LFA1.KUNNR = '" + customer + "'";
-	}
-	if(customer && customerTo){
-		stmt += "LFA1.KUNNR BETWEEN '" + customer +
-						"' AND '" + customerTo + "'" ;
+Die Eingaben des Nutzers in der Filtermaske (aus dem 1. Schritt, siehe Code-Beispiel \ref{lst:jsoninput} im Anhang) wirken sich insbesondere auf die Selektion der Belegpositionen aus.
+Dem allgemeinen Teil des dazugehörigen SQL-Statements (siehe Code-Beispiel \ref{lst:regupgeneral} im Anhang) werden durch die Eingaben weitere Filterkriterien hinzugefügt, die nachfolgend näher untersucht werden.
+
+Das Code-Beispiel \ref{lst:laufi} zeigt exemplarisch, wie die Projektion des Ausführungsdatums (zu sehen in Abbildung \ref{fig:paymentrun} unter ``General Settings'') dem SQL-Statement ergänzt werden.
+Für das Identifikationsmerkmal (\texttt{LAUFI}) gilt dies analog.
+
+\begin{lstlisting}[caption={Ergänzung der Projektion im SQL-Statement um das Ausführungsdatum für den Zahllauf}, label={lst:laufi}, language=JavaScriptSQL]
+	if(oRunDate){
+			insertRegup += SQL SELECT @oRunDate as LAUFD;
+	} else {
+			insertRegup += SQL SELECT '' as LAUFD;
 	}
 \end{lstlisting}
 
-Diese Variabilität in der Eingabemaske schlägt sich auch auf das resultierende SQL-Statement nieder, dessen Aussehen, Komplexität und Laufzeit durch die optionalen Parameter bestimmt wird, weshalb passende Testdaten für den Entwickler wichtig sind.
+Anschließend werden dem SQL-Statement optional die Filter für Buchungs- und Erfassungsdatum (unter ``Parameters'' in Abbildung \ref{fig:paymentrun}) hinzugefügt (Code-Beispiel \ref{lst:budat}).
 
-\subsection{Passende Vorschl{\"a}ge f{\"u}r das Testen des Zahllauf-Programms}
-Skizzieren welche Vorschläge der Algorithmus für das Programm liefert
+\begin{lstlisting}[caption={Einfügung von zusätzlichen Filtern}, label={lst:budat}, language=JavaScriptSQL]
+	if(oPostingDate){
+			insertRegup += SQL WHERE AND BSEG.BUDAT = @oPostingDate;
+	}
+	if(oDocsEnteredDate){
+			insertRegup += SQL WHERE AND BSEG.BLDAT <= @oDocsEnteredDate;
+	}
+\end{lstlisting}
 
-- Vergleich von meinem Ansatz mit Brute-Force beim Fallbeispiel
-  - Evaluiering: Zeit-Aufwand vs. bessere Ergebnisse
-  - Betrachtung von Datum-Feldern
+Für die Eingabe von einer bzw. mehreren Kundennummern (in Abbildung \ref{fig:paymentrun} unter ``Accounts'' ) wird das bereits bekannte Code-Beispiel \ref{lst:newsql} aus Kapitel \ref{sec:sqlandsourcecode} genutzt und kann in leicht abgewandelter Form auch für Lieferantennummern verwendet werden.
+
+\begin{lstlisting}[caption={Unterscheidung zwischen Einzel- und Bereichsfilter}, label={lst:vendor}, language=JavaScriptSQL]
+	if(oTextInputVendor && !oTextInputVendorTo ){
+			insertRegup += SQL WHERE AND BSEG.LIFNR = @oTextInputVendor;
+	}
+	if(oTextInputVendor && oTextInputVendorTo ){
+			insertRegup += SQL WHERE AND BSEG.LIFNR BETWEEN @oTextInputVendor
+				AND @oTextInputVendorTo;
+	}
+\end{lstlisting}
+
+Das komplexeste Konstrukt der Eingabemaske ist die Tabelle für Kriterien zur Suche anhand von Buchungskreisen, Zahlmethoden und dem nächsten Ausführungsdatums des Zahllaufs.
+Die einzelnen Zellen einer Reihe bilden eine Konjunktion, wobei die Reihen miteinander disjunkt sind.
+Die Komplexität entsteht durch die vielen Möglichkeiten der Eingabe.
+So können Buchungskreise z.B. kommasepariert, mittels Klammern als Bereich oder beides kombiniert angegeben werden.
+Die Zahlmethoden werden mit Großbuchstaben abgekürzt und aneinander gereiht um mehrere Methoden zuzulassen.
+
+Die Verarbeitung der Nutzereingaben aus der Tabelle erfolgt zeilenweise.
+Für jede Zeile wird ein leeres SQL-Statement erstellt.
+Dieses wird im ersten Schritt mit den, mittels der Funktion \texttt{parseCompanyCodes()} ermittelten, Buchungskreisen gefüllt.
+Sollten Zahlmethoden und ein nächstes Ausführungsdatum angegeben sein, werden diese dem SQL-Statement ergänzt.
+Anschließend wird es einem allgemeinen, anfangs leeren SQL-Statement hinzugefügt.
+Sobald alle Zeilen der Tabelle abgearbeitet sind, wird der zusammengestellte Filter dem SQL-Statement \texttt{insertRegup} angefügt.
+Der Algorithmus zur Verarbeitung dieser Eingaben befindet sich im Anhang (Code-Beispiel \ref{lst:paymentcontrol}).
+
+Die Berechnung vom Zahldatum und Skontobetrag erfolgt mithilfe einer SQLScript-Funktion im selben Schritt mit der Ermittlung und Speicherung der Beleginformationen in der REGUH-Relation.
+Im letzten Schritt dienen der Ergebnisse in der REGUH-Relation für die JSON-Antwort an den Anwender.
+Sie enthält eine Liste mit Gesamtbetrag, Lieferantennummer, Ausführungsdatum Identifikationsmerkmal für jede erfasste Rechnung der REGUH-Relation.
+
+Die vielen optionalen Eingaben durch den Anwender bestimmen das Aussehen, die Komplexität und die Laufzeit des untersuchten SQL-Statements.
+In diesen Fällen ist es für Entwickler deshalb wichtig relevante Testwerte zu haben, um früh in der Entwicklung Performance-Analysen zu ermöglichen.
+Für das vorgestellte SQL-Statement werden dazu im folgenden Kapitel die Ansätze dieser Arbeit zur Vorschlagsgenerierung evaluiert.
+
+\subsection{Evaluierung der vorgestellten Ansätze am Fallbeispiel}
+% Die im Rahmen dieser Bachelorarbeit vorgestellten Ansätze zur Vorschlagsgenerierung von Testwerten werden in diesem Kapitel auf Basis des Fallbeispiels evaluiert.
+Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
+Dazu wurde das Verhältnis der durch die Algorithmen vorgeschlagenen Eingabetupel mit der Betrachtung aller Wertkombinationen (Brute-Force) untersucht.
+
+Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
+
+   \begin{itemize}
+      \item Buchungsdatum (\texttt{BUDAT})
+      \item Belegdatum (\texttt{BLDAT})
+			\item Lieferantennummer (\texttt{LIFNR})
+			\item Zahlmethode (\texttt{ZLSCH})
+			\item Buchungskreis (\texttt{BUKRS})
+   \end{itemize}
+	
+Die ermittelten Vorschläge nach dem im Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
+Eine naheliegende Auswahl betrachtet die häufigsten Werte der jeweiligen Spalten für die Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
+Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Bildung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommmen.
+Tabelle \ref{tab:tupel} zeigt die drei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben, mitsamt ihren Ausführungszeiten.
+\begin{table}[h]
+	\centering
+	\scalebox{.9}{
+	\begin{tabular}{ |c|c|c|c|c|c|c| }
+		\hline
+		\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms) \\
+		\hline
+		'20110228' & '20110216' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
+		'20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
+		'20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Gefundene Tupel für Testdatensets}
+	\label{tab:tupel}
+\end{table}
+
+Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum drei verschiedene Ausprägungen annimmt.
+Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
+Dies kann mit der Verteilung der Daten begründet werden, dargestellt in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang).
+Die Grafiken zeigen das Verhältnis von dem Umfang distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
+Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
+
+Die Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}) zeigen deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
+Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsenationen innerhalb der Relation umfassen.
+Dies zeichnet sich auch in den ermittelten, vorgeschlagenen Werten um den Median aus (Tabelle \ref{tab:paymentruntable3}), bei der die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
+
+Auch die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) zeigen eine deutlich Spaltung der Verteilung.
+So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und die anderen distinkten Werte nur wenige Ausprägungen haben.
+Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
+
+Zum Vergleich würde die Betrachtung aller Wertkombinationen das Erzeugen einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
+Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsummme ein Liste mit über 11,2 Milliarden Einträgen.
+Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank und dazugehörige Ermittlung würde zu viel Rechenzeit benötigen, weshalb eine Eingrenzung bei der Bestimmung vorgenommen wird.
+Dazu werden die distinkten Tupel der kombinierten Spalten in der Datenbank ermittelt (siehe Code-Beispiel \ref{lst:distinctvaluecombinations}).
+
+\begin{lstlisting}[caption={Bestimmung der distinkten Tupel der betrachteten Spalten}, label={lst:distinctvaluecombinations}, language=SQL]
+SELECT DISTINCT BUDAT, BLDAT, LIFNR, ZLSCH, BUKRS FROM BSIK;
+\end{lstlisting}
+
+Dies ergibt eine Liste mit 1860 Einträgen, die als Eingabe für das Zahllaufprogramm genutzt wurde.
+Nur insgesamt 301 der 1860 Tupel haben mindestens eine Ergebniszeile beim Ausführen des Programms.
+Die Verteilung in Abbildung \ref{fig:tupelverteilung} macht deutlich, dass der Großteil der Eingabetupel nur eine Ergebniszeile aus der Datenbank zurückgeben (187 Tupel) und nur wenige Eingabetupel eine größere Ergebnismenge abrufen (4 Tupel mir über 200 Ergebnissen).
+Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
+Die Tupel mit den größten Ergebnismengen sind zum Vergleich in Tabelle \ref{tab:tupel2} dargestellt.
+Dabei ist zu erkennen, dass mit absteigender Anzahl von Ergebnissen die Laufzeit der Anfragebearbeitung sinkt.
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				axis lines=left,
+				width  = 1*\textwidth,
+				height  = 6cm,
+				%symbolic x coords={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,18,21,22,23,30,32,35,37,40,41,44,47,49,50,51,52,55,59,60,61,65,66,67,117,231,232,233,234},
+				%xtick=data,
+				%enlarge x limits=0.05,
+				%bar width=5pt,
+				%ybar,
+				ylabel={Eingabetupel},
+				xlabel={Anzahl der Ergebniszeilen},
+				ymin=0.0,
+				ymax=200.0,
+				xmax=250.0,
+				]
+				%\addplot[ybar,fill=light-gray] coordinates {
+				\addplot[color=red,mark=x] coordinates {
+						(1,187)
+						(2,23)
+						(3,14)
+						(3,14)
+						(4,11)
+						(5,8)
+						(6,4)
+						(7,4)
+						(8,4)
+						(9,2)
+						(10,2)
+						(11,3)
+						(12,1)
+						(13,1)
+						(14,2)
+						(15,2)
+						(15,2)
+						(18,1)
+						(21,1)
+						(22,2)
+						(23,2)
+						(30,1)
+						(32,1)
+						(35,1)
+						(37,1)
+						(40,1)
+						(41,1)
+						(44,1)
+						(47,1)
+						(49,1)
+						(50,1)
+						(51,1)
+						(52,1)
+						(55,1)
+						(59,2)
+						(60,1)
+						(61,1)
+						(65,1)
+						(66,1)
+						(67,1)
+						(117,1)
+						(231,1)
+						(232,1)
+						(233,1)
+						(234,1)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Verteilung der Ergebnisszeilen in Relation zu den Eingabetupeln}
+	\label{fig:tupelverteilung}
+\end{figure}
+
+
+\begin{table}[h]
+	\centering
+	\scalebox{.9}{
+	\begin{tabular}{ |c|c|c|c|c|c|c| }
+		\hline
+		\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		\hline
+		\textbf{'20110228'} & \textbf{'20110216'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{234} & \textbf{52,317} \\
+		'20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
+		'20110228' & '20110216' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
+		\textbf{'20110228'} & \textbf{'20101213'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{231} & \textbf{49,917} \\
+		\textbf{'20110228'} & \textbf{'20101204'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{117} & \textbf{49,280} \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Gefundene Tupel für Testdatensets}
+	\label{tab:tupel2}
+\end{table}
+
+Die Messergebnisse zeigen, dass 3 der 5 Kombinationen von Eingabewerten mit den höchsten Ergebnismengen und Laufzeiten durch die vorgestellten Ansätze vorgeschlagen wurden (in Tabelle \ref{tab:tupel2} dick hervorgehoben).
+Im Vergleich mussten dazu jediglich 
+Zusätzlich kann die adaptive Variantedurch exploratives Probieren weitere Testwerte durch den Entwickler dem ermittelten Datensatz ergänzen.

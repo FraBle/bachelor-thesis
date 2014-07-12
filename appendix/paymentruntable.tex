@@ -1,0 +1,118 @@
+\section{Tabelle zur Evaluation}
+
+%\begin{sidewaystable}
+
+%\begin{table}[ht!]
+	%\centering
+	%\begin{sideways}
+	%\scalebox{.4}{
+	%\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c| }
+		%\cline{3-20}
+		%%\multicolumn{2}{|c|}{BSEG-Spalten} \\
+		%\multicolumn{2}{c|}{} & \multicolumn{6}{c|}{Häufigste Werte} & \multicolumn{6}{c|}{Seltenste Werte} & \multicolumn{6}{c|}{Werte um den Median}\\
+		%\hline
+		%Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen& Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen\\
+		%\hline
+		%BUDAT & 903 & 20110228 & 760 & 20110221 & 139 & 20110224 & 103 & 20031231 & 1 & 20050131 & 1 & 20050224 & 1 & 20091127 & 1 & 20091202 & 1 & 20091203 & 1\\
+		%BLDAT & 933 & 20110216 & 177 & 20101208 & 124 & 20101204 & 118 & 20031231 & 1 & 20041029 & 1 & 20050105 & 1 & 20091216 & 1 & 20091218 & 1 & 20091221 & 1\\
+		%LIFNR & 247 & 1051 & 3717 & 2671 & 1029 & 1082993 & 234 & 3021 & 1 & 3101 & 1 & 3491 & 1 & 7015822 & 1 & 7018820 & 1 & 7019738 & 1\\
+		%BUKRS & 9 & 3451 & 4426 & 8211 & 816 & 4101 & 259 & 3551 & 2 & 3961 & 7 & 5501 & 54 & 3601 & 157 & 4101 & 259 & 8211 & 816\\
+		%ZLSCH & 6 & & 5739 & T & 181 & R & 10 & A & 1 & L & 2 & U & 3 & R & 10 & T & 181 & & 5739\\
+		%\hline
+%
+%
+		%
+		%
+																		 %%& Operator 											& Erfüllender Wert 	& Nicherfüllender Wert\\
+		%%Elternknotentyp 								 & Operator 											& Erfüllender Wert 	& Nicherfüllender Wert\\
+		%%\hline
+		%%\multicolumn{2}{|l|}{IfStatement} 																& \texttt{true} 		& \texttt{false} 	\\
+		%%\hline
+		%%UnaryExpression 								 & \texttt{!} 										& \texttt{true} 		& \texttt{false} 	\\
+		%%\hline
+		%%\multirow{7}{*}{BinarExpression} & \multirow{3}{*}{\texttt{==}} 	& \texttt{x} 				& \texttt{x+1}		\\ \cline{3-4}
+																		 %%& 																& \texttt{x} 				& \texttt{x+'a'}	\\ \cline{3-4}
+																		 %%& 																& \texttt{x} 				& \texttt{!x}			\\ \cline{2-4}
+																		 %%& \texttt{<} 										& \texttt{x-1} 			& \texttt{x}			\\ \cline{2-4}
+																		 %%& \texttt{<=} 										& \texttt{x} 				& \texttt{x+1}		\\ \cline{2-4}
+																		 %%& \texttt{>} 										& \texttt{x+1} 			& \texttt{x}			\\ \cline{2-4}
+																		 %%& \texttt{>=} 										& \texttt{x} 				& \texttt{x-1}		\\
+		%%\hline
+	%\end{tabular}
+	%}
+	%\end{sideways}
+	%%\caption{Ermittelte Testwertvorschläge für das Fallbeispiel}
+	%\label{tab:paymentruntable}
+%%\end{sidewaystable}
+%\end{table}
+
+
+
+
+
+
+\begin{table}[ht!]
+	\centering
+	\scalebox{.75}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\cline{3-8}
+		\multicolumn{2}{c|}{} & \multicolumn{6}{c|}{Häufigste Werte}\\
+		\hline
+		Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen \\
+		\hline
+		BUDAT & 903 & 20110228 	& 760 	& 20110221 	& 139 	& 20110224 	& 103 \\
+		BLDAT & 933 & 20110216 	& 177 	& 20101208 	& 124 	& 20101204 	& 118 \\
+		LIFNR & 247 & 1051 			& 3717 	& 2671 			& 1029 	& 1082993 	& 234 \\
+		BUKRS & 9 	& 3451 			& 4426 	& 8211 			& 816 	& 4101 			& 259 \\
+		ZLSCH & 6 	& 					& 5739 	& T 				& 181 	& R 				& 10 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Ermittelte, häufigste Werte für die Eingabedaten}
+	\label{tab:paymentruntable1}
+\end{table}
+
+
+\begin{table}[ht!]
+	\centering
+	\scalebox{.75}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\cline{3-8}
+		\multicolumn{2}{c|}{} & \multicolumn{6}{c|}{Seltenste Werte}\\
+		\hline
+		Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen \\
+		\hline
+		BUDAT & 903 & 20031231 	& 1 		& 20050131 	& 1 	& 20050224 	& 1 \\
+		BLDAT & 933 & 20031231 	& 1 		& 20041029 	& 1 	& 20050105 	& 1 \\
+		LIFNR & 247 & 3021 			& 1 		& 3101 			& 1 	& 3491 			& 1 \\
+		BUKRS & 9 	& 3451 			& 4426 	& 8211 			& 816 & 4101 			& 259 \\
+		ZLSCH & 6 	& A 				& 1 		& L 				& 2 	& U 				& 3 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Ermittelte, seltenste Werte für die Eingabedaten}
+	\label{tab:paymentruntable2}
+\end{table}
+
+\begin{table}[ht!]
+	\centering
+	\scalebox{.75}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\cline{3-8}
+		\multicolumn{2}{c|}{} & \multicolumn{6}{c|}{Werte um den Median}\\
+		\hline
+		Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen \\
+		\hline
+		BUDAT & 903 & 20091127 	& 1 	& 20091202 	& 1 	& 20091203 	& 1 \\
+		BLDAT & 933 & 20091216 	& 1 	& 20091218 	& 1 	& 20091221 	& 1 \\
+		LIFNR & 247 & 7015822 	& 1 	& 7018820 	& 1 	& 7019738 	& 1 \\
+		BUKRS & 9 	& 3601 			& 157 & 4101 			& 259 & 8211 			& 816\\
+		ZLSCH & 6 	& R 				& 10 	& T 				& 181 & 					& 5739\\
+		\hline
+	\end{tabular}
+	}
+	\caption{Ermittelte Werte um den Median für die Eingabedaten}
+	\label{tab:paymentruntable3}
+\end{table}
+
+\clearpage
