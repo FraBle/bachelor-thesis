@@ -270,46 +270,65 @@ Tabelle \ref{tab:vergleichkonstellationen} verdeutlicht das Gegenteil.
 Im oberen Teil der Tabelle sind drei Kundennummern gelistet, die die meisten Belegpositionen umfassen.
 Der untere Teil enthält die Kundennummern mit den höchsten Gesamtsummen.
 Es gibt zwei Auffälligkeiten: die Belege haben im Durchschnitt nur sehr wenige Positionen und viele Belege bzw. Belegpositionen haben nicht automatisch eine hohe Gesamtsumme zur Folge.
-Würden nun Entscheidungen auf dieser Grundlage gefällt, z.B. zusätzliche Berechnungen für Kunden mit einem Umsatzvolumen von über 1 Milliarde €, würden einfache Testwertvorschläge diesen Teilbereich nicht abdecken.
+Würden nun Entscheidungen auf dieser Grundlage gefällt, z.B. zusätzliche Berechnungen für Kunden mit einem Umsatzvolumen von über 1 Milliarde \euro{}, würden einfache Testwertvorschläge diesen Teilbereich nicht abdecken.
 
 Diese, noch recht einfache, Abhängigkeit kann beliebig erweitert werden.
 Damit entstehen komplexe SQL- und Programmstrukturen, die durch das einfache Vorschlagen anhand von Charakteristiken einzelner Spalten nicht zwangsläufig die Randfälle aufzeigen, die der Entwickler sucht.
 Aus diesem Grund ist die Betrachtung von Messergebnissen aus Laufzeitanalysen (\cite{Exner2014}, \cite{Mues2014}) eine sinnvolle Erweiterung um die Genauigkeit bzw. den Nutzen der Vorschläge zu steigern.
 Die variablen Stellen von SQL-Statements werden dabei durch die vom Entwickler ausgewählten Werte gefüllt.
 Im nächsten Schritt werden nun diese atomaren Vorschläge kombiniert und mit dem dazugehörigen Ergebnis aus der Laufzeitanalyse verknüpft.
-Dies ermöglicht die Vergleichbarkeit verschiedener Konstellationen
+Dies ermöglicht die Vergleichbarkeit verschiedener Konstellationen.
 Für die Erstellung der initialen Daten können zwei verschiedene Ansätze verfolgt werden.
 
-Der offensichtliche Ansatz wäre das durchprobieren und messen aller Kombinationen (Brute-Force).
+Der offensichtliche Ansatz ist das Durchprobieren und Messen aller Kombinationen (Brute-Force).
 Der hohe Aufwand, besonders bei Relationen mit vielen Einträgen und distinkten Werten in den Spalten, stellt jedoch aufgrund der enormen Berechnungszeit ein großes Hindernis dar.
-Beispielsweise entstehen schon bei der Betrachtung von 3 Spalten mit jeweils 1000 distinkten Werten (typisch für Identifikationsmerkmalen wie Kundennummern) eine Milliarde 1 Kombinationen, die analysiert werden müssen.
+Beispielsweise entstehen schon bei der Betrachtung von 3 Spalten mit jeweils 1000 distinkten Werten (typisch für Identifikationsmerkmale) eine Milliarde 1 Kombinationen, die analysiert werden müssen.
 
 Dem gegenüber steht der adaptive Ansatz, bei dem der Testdatenbestand kontinuierlich erweitert wird.
 Diese Variante speichert die Ergebnisse der Laufzeitanalysen mit den dazugehören Testdatenkonstellationen als Testdatensets.
 Sobald mehrere dieser Sets vorhanden sind, können dem Entwickler drei Vorauswahloptionen gegeben: das Testdatenset mit der höchsten Laufzeit, mit der geringsten Laufzeit und mit mittlerer Laufzeit.
 
-Um für diese Methode eine Datengrundlage zu schaffen, werden die in Kapitel \ref{chap:datacharacteristics} ermittelten Werte genutzt um initiale Kombinationen zu bilden und ihre Laufzeiten zu berechnen.
-Durch Eingabe weiterer Werte durch den Entwickler kann anschließend das Datenmodell kontinuierlich erweitert und zunehmend verbessert werden, zu sehen im Code-Beispiel \ref{lst:developerinput}.
+Um für diese Methode eine Datengrundlage zu schaffen, stehen wiederum zwei Verfahren zur Auswahl.
+Mithilfe der im Kapitel \ref{chap:datacharacteristics} ermittelten Werte können alle möglichen Kombinationen von Tupelausbildungen erstellt werden.
+Dies entspricht einer Permutation der Werte aller betrachteten Spalten.
+Allerdings entsteht somit dasselbe Problem wie bei der Brute-Force-Methode: mit steigender Anzahl an Spalten wächst die Anzahl zu betrachtenden Tupel, selbst wenn diese keine Repräsentation in der Relation haben.
 
-\begin{lstlisting}[caption={Eingaben von Testwertkonstellationen erweitern gegebenenfalls das Datenmodell}, label={lst:developerinput}, language=Python]
-	hier
-	kommt
-	der
-	algorithmus
-	rein
+Aus diesem Grund werden die 50 distinkten Tupel der Kombinationen der betrachteten Spalten mit dem meisten Vorkommen innerhalb der Relation bestimmt (sie Code-Beispiel \ref{lst:disinctcombinations}).
+
+\begin{lstlisting}[caption={Systemtabellen von SAP HANA liefern Metainformationen zu Relationen}, label={lst:disinctcombinations}, language=SQL]
+	SELECT TOP 50 DISTINCT <list of columns>, count(*) AS OCCURENCES
+	FROM <table>
+	GROUP BY <list of columns>
+	ORDER BY OCCURENCES DESC
 \end{lstlisting}
 
-TODO: Algorithmus beschreiben.
+Anschließend werden die gefundenen Tupel zur Analyse ihrer Laufzeit der Datenbankabfrage genutzt.
+Sie bilden somit die initialen Testdatensets, die durch die explorative Eingabe weiterer Werte durch den Entwickler kontinuierlich in ihrer Genauigkeit verbessert werden können.
+Sollten neue Konstellationen von Testwerten vorliegen, werden diese als Sets mitsamt ihrer Laufzeit in der Datenbank der Web-IDE hinterlegt.
+Die Ermittlung der Vorschläge an Testdatensets mit höchster, mittlerer und langsamster Laufzeit erfolgt durch Sortierung und Filterung anhand der gespeicherten Laufzeit.
 
-\subsection{Betrachtung von Zeitbereichsanfragen}
-Ein typischer Bestandteil von Datenbankanfragen in Geschäftsanwendungen sind Bereichsfilter mittels \texttt{column BETWEEN x AND y},  insbesondere für Zeiträume.
-Der in Kapitel \ref{chap:datacharacteristics} vorgestellte Algorithmus generiert Vorschläge basierend auf binären Operationen (zumeist Vergleiche), wohingegen ein Bereichsfilter ternär ist: er hat eine Wertuntergrenze, eine Wertobergrenze und eine Referenz auf eine Spalte.
-Deshalb ist eine besondere Betrachtung für passende Vorschläge sinnvoll.
+%
+%Durch explorative Eingabe weiterer Werte durch den Entwickler kann anschließend das Datenmodell kontinuierlich erweitert und zunehmend verbessert werden, zu sehen im Code-Beispiel \ref{lst:developerinput}.
+%
+%\begin{lstlisting}[caption={Eingaben von Testwertkonstellationen erweitern gegebenenfalls das Datenmodell}, label={lst:developerinput}, language=Python]
+	%hier
+	%kommt
+	%der
+	%algorithmus
+	%rein
+%\end{lstlisting}
+%
+%TODO: Algorithmus beschreiben.
 
-Sollte eine Bereichsanfrage erkannt werden, die eine Spalte vom Datentyp \texttt{DATE} referenziert, so kann der Entwickler eine vorgeschlagene Zeitraumgröße (z.B. eine Woche, ein Monat oder ein Jahr) auswählen oder selbst festlegen.
-Anschließend wird die referenzierte Spalte mithilfe der angegebenen Zeitraumgröße gescannt, ähnlich dem Prinzip des Sliding Window\footnote{\url{http://en.wikipedia.org/wiki/Sliding_window_protocol}}.
-Auf dieser Basis werden, ähnlich dem Algorithmus aus Kapitel \ref{chap:datacharacteristics}, bis zu 3 Vorschläge für die größte, kleinste und mittlere Anzahl an Resultaten erzeugt.
-Alternativ steht es dem Entwickler offen, Start- und Enddatum eigenständig festzulegen.
+%\subsection{Betrachtung von Zeitbereichsanfragen}
+%Ein typischer Bestandteil von Datenbankanfragen in Geschäftsanwendungen sind Bereichsfilter mittels \texttt{column BETWEEN x AND y},  insbesondere für Zeiträume.
+%Der in Kapitel \ref{chap:datacharacteristics} vorgestellte Algorithmus generiert Vorschläge basierend auf binären Operationen (zumeist Vergleiche), wohingegen ein Bereichsfilter ternär ist: er hat eine Wertuntergrenze, eine Wertobergrenze und eine Referenz auf eine Spalte.
+%Deshalb ist eine besondere Betrachtung für passende Vorschläge sinnvoll.
+%
+%Sollte eine Bereichsanfrage erkannt werden, die eine Spalte vom Datentyp \texttt{DATE} referenziert, so kann der Entwickler eine vorgeschlagene Zeitraumgröße (z.B. eine Woche, ein Monat oder ein Jahr) auswählen oder selbst festlegen.
+%Anschließend wird die referenzierte Spalte mithilfe der angegebenen Zeitraumgröße gescannt, ähnlich dem Prinzip des Sliding Window\footnote{\url{http://en.wikipedia.org/wiki/Sliding_window_protocol}}.
+%Auf dieser Basis werden, ähnlich dem Algorithmus aus Kapitel \ref{chap:datacharacteristics}, bis zu 3 Vorschläge für die größte, kleinste und mittlere Anzahl an Resultaten erzeugt.
+%Alternativ steht es dem Entwickler offen, Start- und Enddatum eigenständig festzulegen.
 
 \nomenclature{AST}{Abstract Syntax Tree}
 \subsection{Vorschläge für Variablenwerte ohne Datenbankbezug}

@@ -20,10 +20,12 @@ LIMIT 3;
 SELECT COUNT(DISTINCT <column>) AS OCCURENCES
 FROM <schema>.<table>;
 
+-- OCCURENCES_HALF = OCCURENCES / 2
+
 -- Werte um dem Median
 SELECT <column>, COUNT(<column>) AS OCCURENCES
 FROM <schema>.<table>
 GROUP BY <column>
 ORDER BY OCCURENCES ASC, <column> ASC
-LIMIT 3 OFFSET OCCURENCES/2;
+LIMIT 3 OFFSET OCCURENCES_HALF;
 \end{lstlisting}

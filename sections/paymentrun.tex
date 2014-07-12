@@ -110,9 +110,9 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
    \end{itemize}
 	
 Die ermittelten Vorschläge nach dem im Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
-Eine naheliegende Auswahl betrachtet die häufigsten Werte der jeweiligen Spalten für die Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
+Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
 Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Bildung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommmen.
-Tabelle \ref{tab:tupel} zeigt die drei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben, mitsamt ihren Ausführungszeiten.
+Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben, mitsamt ihren Ausführungszeiten.
 \begin{table}[h]
 	\centering
 	\scalebox{.9}{
@@ -120,7 +120,6 @@ Tabelle \ref{tab:tupel} zeigt die drei in diesem Schritt gefundenen Tupel, die b
 		\hline
 		\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms) \\
 		\hline
-		'20110228' & '20110216' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
 		'20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
 		'20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
 		\hline
@@ -130,37 +129,87 @@ Tabelle \ref{tab:tupel} zeigt die drei in diesem Schritt gefundenen Tupel, die b
 	\label{tab:tupel}
 \end{table}
 
-Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum drei verschiedene Ausprägungen annimmt.
+Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
 Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
 Dies kann mit der Verteilung der Daten begründet werden, dargestellt in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang).
-Die Grafiken zeigen das Verhältnis von dem Umfang distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
+Die Grafiken zeigen das Verhältnis von der Anzahl distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
 Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
 
-Die Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}) zeigen deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
+Dies zeigt sich auch in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
+Es wird deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
 Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsenationen innerhalb der Relation umfassen.
-Dies zeichnet sich auch in den ermittelten, vorgeschlagenen Werten um den Median aus (Tabelle \ref{tab:paymentruntable3}), bei der die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
+Dies zeichnet sich auch in den ermittelten, vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei der die Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
 
-Auch die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) zeigen eine deutlich Spaltung der Verteilung.
-So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und die anderen distinkten Werte nur wenige Ausprägungen haben.
+Ebenso zeigen die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) eine deutlich Spaltung.
+So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen distinkten Werte nur wenige Ausprägungen haben.
 Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
 
 Zum Vergleich würde die Betrachtung aller Wertkombinationen das Erzeugen einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
-Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsummme ein Liste mit über 11,2 Milliarden Einträgen.
-Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank und dazugehörige Ermittlung würde zu viel Rechenzeit benötigen, weshalb eine Eingrenzung bei der Bestimmung vorgenommen wird.
-Dazu werden die distinkten Tupel der kombinierten Spalten in der Datenbank ermittelt (siehe Code-Beispiel \ref{lst:distinctvaluecombinations}).
+Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11,2 Milliarden Einträgen.
+Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
+In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, entspräche dies über 3 Jahre Berechnungen.
 
-\begin{lstlisting}[caption={Bestimmung der distinkten Tupel der betrachteten Spalten}, label={lst:distinctvaluecombinations}, language=SQL]
-SELECT DISTINCT BUDAT, BLDAT, LIFNR, ZLSCH, BUKRS FROM BSIK;
-\end{lstlisting}
+Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse folgender Ansätze:
 
-Dies ergibt eine Liste mit 1860 Einträgen, die als Eingabe für das Zahllaufprogramm genutzt wurde.
-Nur insgesamt 301 der 1860 Tupel haben mindestens eine Ergebniszeile beim Ausführen des Programms.
-Die Verteilung in Abbildung \ref{fig:tupelverteilung} macht deutlich, dass der Großteil der Eingabetupel nur eine Ergebniszeile aus der Datenbank zurückgeben (187 Tupel) und nur wenige Eingabetupel eine größere Ergebnismenge abrufen (4 Tupel mir über 200 Ergebnissen).
+   \begin{enumerate}
+      \item Adaptiver Algorithmus mit fester Obergrenze (50)
+      \item Adaptiver Algorithmus ohne feste Obergrenze
+			\item Permutation der ermittelten häufigste, seltensten und mittleren Werte der Spalten
+   \end{enumerate}
+
+Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen ermittelt (zu sehen in Tabelle \ref{tab:tupel2}).
+Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die Laufzeit der Ermittlung betrachtet.
+
+\begin{table}[h]
+	\centering
+	\scalebox{.85}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\hline
+		Tupel & \texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		\hline
+        1 & '20110228' & '20101227' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
+        2 & '20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
+        3 & '20110228' & '20101213' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
+        4 & '20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
+        5 & '20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Eingabetupel für mit den meisten Ergebnissen}
+	\label{tab:tupel2}
+\end{table}
+
+Die Ergebnisse (Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefunden Tupel reduziert.
+Die Betrachtung der Permutation ergibt zwar einen Tupel mehr, benötigt aber über eine Halbe Minute, da mehr als 30.000 Tupel getestet werden.
+
+\begin{table}[h]
+	\centering
+	\scalebox{.75}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c|c| }
+		\cline{2-8}
+		\multicolumn{1}{c|}{} & Tupel 1 & Tupel 2 & Tupel 3 & Tupel 4 & Tupel 5 & Getestete Tupel & Laufzeit (sek)\\
+		\hline
+        mit Obergrenze &  &  &  & X & X & 50 & 0,058 \\
+        ohne Obergrenze & X & X & X & X & X & 1.860 & 2,239 \\
+        Permutation & X &  &  & X & X & 30.618 & 34,352 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Vergleich der Ansätze}
+	\label{tab:tupel3}
+\end{table}
+
+Der Grund für vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
+Die 1.860 bestimmten Tupel entsprechen allen distinkten Konstellationen der Werte der betrachteten Spalten.
+Davon haben insgesamt nur 301 mindestens eine Ergebniszeile beim Ausführen des Programms, was einer Abdeckung des kompletten Eingaberaums entspricht.
+Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Subraum.
+Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgeben (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
 Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
-Die Tupel mit den größten Ergebnismengen sind zum Vergleich in Tabelle \ref{tab:tupel2} dargestellt.
-Dabei ist zu erkennen, dass mit absteigender Anzahl von Ergebnissen die Laufzeit der Anfragebearbeitung sinkt.
 
-\begin{figure}
+Aufgrund dessen ist es in Erwägung zu ziehen dem Entwickler die Möglichkeit der Festlegung einer Obergrenze zu geben.
+Dies bedarf weiteren Untersuchungen in Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
+
+\begin{figure}[ht]
 \centering
 	\begin{tikzpicture}
 		\begin{axis}[
@@ -232,26 +281,27 @@ Dabei ist zu erkennen, dass mit absteigender Anzahl von Ergebnissen die Laufzeit
 	\label{fig:tupelverteilung}
 \end{figure}
 
+Die derzeitige adaptive Lösung ermöglicht es auf Grundlage der mit Obergrenze ermittelten initialen Testdatensets durch exploratives Erweiterung durch den Entwickler den ermittelten Datensatz zu ergänzen.
 
-\begin{table}[h]
-	\centering
-	\scalebox{.9}{
-	\begin{tabular}{ |c|c|c|c|c|c|c| }
-		\hline
-		\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
-		\hline
-		\textbf{'20110228'} & \textbf{'20110216'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{234} & \textbf{52,317} \\
-		'20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
-		'20110228' & '20110216' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
-		\textbf{'20110228'} & \textbf{'20101213'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{231} & \textbf{49,917} \\
-		\textbf{'20110228'} & \textbf{'20101204'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{117} & \textbf{49,280} \\
-		\hline
-	\end{tabular}
-	}
-	\caption{Gefundene Tupel für Testdatensets}
-	\label{tab:tupel2}
-\end{table}
+%\begin{table}[h]
+	%\centering
+	%\scalebox{.9}{
+	%\begin{tabular}{ |c|c|c|c|c|c|c| }
+		%\hline
+		%\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		%\hline
+		%\textbf{'20110228'} & \textbf{'20110216'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{234} & \textbf{52,317} \\
+		%'20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
+		%'20110228' & '20110216' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
+		%\textbf{'20110228'} & \textbf{'20101213'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{231} & \textbf{49,917} \\
+		%\textbf{'20110228'} & \textbf{'20101204'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{117} & \textbf{49,280} \\
+		%\hline
+	%\end{tabular}
+	%}
+	%\caption{Gefundene Tupel für Testdatensets}
+	%\label{tab:tupel2}
+%\end{table}
 
-Die Messergebnisse zeigen, dass 3 der 5 Kombinationen von Eingabewerten mit den höchsten Ergebnismengen und Laufzeiten durch die vorgestellten Ansätze vorgeschlagen wurden (in Tabelle \ref{tab:tupel2} dick hervorgehoben).
-Im Vergleich mussten dazu jediglich 
-Zusätzlich kann die adaptive Variantedurch exploratives Probieren weitere Testwerte durch den Entwickler dem ermittelten Datensatz ergänzen.
+%Die Messergebnisse zeigen, dass 3 der 5 Kombinationen von Eingabewerten mit den höchsten Ergebnismengen und Laufzeiten durch die vorgestellten Ansätze vorgeschlagen wurden (in Tabelle \ref{tab:tupel2} dick hervorgehoben).
+%Im Vergleich mussten dazu jediglich 
+%Zusätzlich kann die adaptive Variantedurch exploratives Probieren weitere Testwerte durch den Entwickler dem ermittelten Datensatz ergänzen.
