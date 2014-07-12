@@ -127,6 +127,16 @@ headsep=10mm, footskip=22mm}
 	keywordsprefix=\@,
 	alsoletter=\@,
 }
+
+\lstdefinelanguage{mySQL}{
+  language=SQL,
+  keywordstyle=\color[HTML]{F5871F},
+  %deletekeywords={table},
+  morekeywords={[1]{schema}},
+  %keywordstyle={[2]{\color{red}}},
+}
+
+
 \lstset{
   backgroundcolor=\color{light-gray},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   basicstyle=\footnotesize,        			% the size of the fonts that are used for the code
@@ -226,6 +236,7 @@ headsep=10mm, footskip=22mm}
 	%%% TOF
 	%\addcontentsline{toc}{section}{List of Figures}
 	\listoffigures
+	%\lstlistoflistings
 	%\cleardoublepage
 	\clearpage
 

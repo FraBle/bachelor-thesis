@@ -7,16 +7,16 @@
 %%%%%%%%%%%%%%%%
 
 Relevante Testdaten sind in verschiedenen Phasen im Entwicklungsprozess einer Anwendung von hoher Wichtigkeit.
-Um Geschäftsanwendungen zu testen, gibt es neben dem Mittel die Datenbankanbindung zu mocken\footnote{\url{http://en.wikipedia.org/wiki/Mock_object}} auch die Möglichkeit sie direkt mit einzubeziehen.
+Um Geschäftsanwendungen zu testen, gibt es neben dem Mittel die Datenbankanbindung zu mocken\footnote{\url{http://www.mockobjects.com/}} auch die Möglichkeit sie direkt mit einzubeziehen.
 Bei diesem Ansatz werden die Eingabewerte mit dem Zustand der Datenbank in Verbindung gebracht.
 Dabei gibt es verschiedene Vorgehensweisen.
 
 \subsection{Eingabewerte zum Testen von Datenbankanwendungen}
-Mit dem Erzeugen von relevanter Eingabewerten für funktionale Anwendungstests haben sich in den letzten Jahren eine Reihe von Forschungsprojekten beschäftigt.
+Mit dem Erzeugen relevanter Eingabewerte für funktionale Anwendungstests haben sich in den letzten Jahren eine Reihe von Forschungsprojekten beschäftigt.
 Der Fokus der nachfolgend beschriebenen Ansätze liegt dabei, im Kontrast zu dieser Bachelorarbeit, auf der Abdeckung und Zweigüberdeckung von Anwendungstests durch Einbeziehung des Status der Datenbank.
 
 Im Sektor Datenbankanwendungstests bietet das AGENDA Framework \cite{Chays:2000:FTD:347324.348954, Chays:2004:TDG:997669, Chays:2004:ATR:1077269.1077271, Deng:2005:TDT:1062455.1062486, Chays:2008:QTG:1385269.1385277} eine Palette an Tools für das funktionale Testen.
-Es nutzt Metainformationen aus der Datenbank in Kombination mit Voreinstellungen vom Entwickler um eine Testdatenbank synthetisch zu erzeugen um dadurch die Testabdeckung zu erhöhen.
+Es nutzt Metainformationen aus der Datenbank in Kombination mit Voreinstellungen vom Entwickler um eine Testdatenbank synthetisch zu erzeugen, um dadurch die Testabdeckung zu erhöhen.
 
 Auf Basis von Microsofts Testing-Framework Pex für die .Net-Plattform \cite{Tillmann:2008:PWB:1792786.1792798} entwickelten Pan et al. mehrere Erweiterungen \cite{Pan:2011:GPI:2190078.2190154, Pan:2011:DSG:1988842.1988846}, die die Quellcodeabdeckung durch Einbeziehung der Datenbank und ihrer Daten erhöhen.
 Dabei werden mittels Dynamic Symbolic Execution (DSE) \cite{Cadar:2006:EAG:1180405.1180445, Godefroid:2005:DDA:1065010.1065036} sowohl die Variablen, die in SQL-Statements einfließen, als auch ihre Änderungen im Programmfluss nachverfolgt, um daraus passende Eingaben zu generieren \cite{Pan:2011:GPI:2190078.2190154}.
@@ -25,7 +25,7 @@ Durch die zusätzlichen Anforderungen an Logical Coverage (LC) \cite{DBLP:conf/i
 TODO: Weitere Paper betrachten!
 
 \subsection{Liveanalyse von Datenbankanwendungen}
-Eine alternative Möglichkeit die Performance eine Datenbankanwendung zu ermitteln, ist das Monitoring.
+Eine alternative Möglichkeit die Performance eine Datenbankanwendung zu ermitteln ist das Monitoring.
 Softwarelösungen wie New Relic\footnote{\url{http://newrelic.com/}} betten eigene Komponenten in Anwendungen ein um Metriken aus dem laufenden Betrieb aufzunehmen und zu analysieren.
 Sie können dann unter anderem die langsamsten SQL-Statements mitsamt ihren Parametern dem Entwickler anzeigen.
 Für dieses Verfahren ist es allerdings erforderlich, dass SQL-Statements vollständig erfasst und ihre variablen Bestandteile mit Werten gefüllt sind.

@@ -50,7 +50,7 @@ Das SQL-Statement ist somit abhängig von den zu setzenden Parameterwerten, wird
 
 \subsubsection{Dynamische SQL-Statements}
 
-	\begin{lstlisting}[caption={Dynamische SQL-Statements können verschiedene Ausprägungen annehmen.}, label={lst:dynamicsql}, language=JavaScript]
+	\begin{lstlisting}[caption={Der Kontrollfluss verändert dynamische SQL-Statements}, label={lst:dynamicsql}, language=JavaScript]
 		var customer = request.body.customer,
 		    customerTo = request.body.customerTo,
 		    stmt = "SELECT *
@@ -128,13 +128,13 @@ Im Folgenden wird deshalb eine Unterscheidung der Variablenverbindung zwischen d
 \subsection{Differenzierung von Kontrollfluss- und SQL-Statement-Abhängigkeiten}\label{sec:controlflowandsqldependencies}
 Neben dem direkten Einfließen von Variablen in ein SQL-Statement (vgl. Kapitel \ref{sec:sqlandsourcecode}), können diese auch (nur) als Abhängigkeit im Kontrollfluss auftreten.
 
-	\begin{lstlisting}[caption={Verschiedene Arten von Abhängigkeiten der Variablen}, label={lst:differentdep}, language=JavaScriptSQL]
+	\begin{lstlisting}[caption={Verschiedene Arten der Abhängigkeit von Variablen}, label={lst:differentdep}, language=JavaScriptSQL]
 		var noDunning = request.body.noDunning,
 		    customer = request.body.customer,
 		    selection = request.body.selection;
 		var stmt = SQL[CUSTOMER]
 			SELECT @selection
-			FROM BSEG LEFT OUTER JOIN CUSTOMER.LFA1
+			FROM BSEG LEFT OUTER JOIN LFA1
 			ON BSEG.MANDT = LFA1.MANDT AND BSEG.LIFNR = LFA1.LIFNR;
 		if(noDunning){
 			stmt += SQL WHERE BSEG.MANST = 0;
@@ -152,4 +152,4 @@ Zudem können die Relationen kryptische Werte in unverständlich benannten Spalt
 Beispielsweise bedeutet in einem SAP ERP-System der Eintrag \texttt{R} in der Spalte \texttt{BSEG.ZLSCH}, dass eine Rechnung mittels Euroüberweisung beglichen wurde.
 
 Zusätzlich stellt die Variation an Verknüpfungen von Variablen und SQL-Statements eine Herausforderung für das Vorschlagen passender Testdaten dar, denn nicht immer können Informationen aus der Datenbank genutzt werden.
-Aus diesem Grund werden im Kapitel \ref{chap:testdatasuggestions} verschiedene Lösungsstrategien und Ansätze erörtert, die den Entwickler unterstützen repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.
+Aus diesem Grund werden im Kapitel \ref{chap:testdatasuggestions} verschiedene Lösungsstrategien und Ansätze erörtert, die den Entwickler unterstützen, repräsentative Testwerte durch passende Vorschläge zu finden um aussagekräftige Analysen auf SQL-Statements zu ermöglichen.

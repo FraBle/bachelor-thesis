@@ -15,8 +15,8 @@ Die größte Herausforderung beim Speichern der Testdatensets liegt in der Wiede
 Der in der Web-IDE genutzte Quellcode-Parser \cite{Horschig2014} nutzt symbolische Ausführung \cite{DBLP:journals/cacm/King76} zur Bestimmung von Variablen und deren eventuell bereits festgelegten Werten.
 Die auf diesem Wege gefundenen Variablen bekommen eine eindeutige Kennzeichnung, die zum Identifizieren genutzt werden kann.
 Sollten die Variablen im Laufe des Programmflusses in mindestens ein SQL-Statement einfließen, werden sie als sog. Testvariablen betrachtet.
-Eine Menge von Testvariablen bildet zusammen mit dem Pfad der geöffnet Quellcodedatei auf dem Server und einem vom Entwickler angegebenen Namen ein Testdatenset.
-Diese Sets können wiederum in Beziehung mit dem Testsystem gebracht werden, auf dem die Performance-Analysen erfolgten, um die Abhängigkeit der Systemauswahl auf die Laufzeiten der Testdatensets zu berücksichtigen.
+Eine Menge von Testvariablen bildet zusammen mit dem Pfad der geöffneten Quellcodedatei auf dem Server, der ermittelten Laufzeit und einem vom Entwickler angegebenen Namen ein Testdatenset.
+Diese Sets können wiederum in Beziehung mit dem Testsystem gebracht werden, auf dem die Performanceanalysen erfolgten, um die Abhängigkeit der Systemauswahl auf die Laufzeiten der Testdatensets zu berücksichtigen.
 In Abbildung \ref{fig:erm} ist das dazugehörige Datenschema dargestellt.
 
 \newcommand {\key}[1]{\underline{#1}}
@@ -28,6 +28,7 @@ In Abbildung \ref{fig:erm} ist das dazugehörige Datenschema dargestellt.
 		\node [attribute] (tsid) [left of=testset] {\key{ID}} edge (testset);
 		\node [attribute] (tsname) [above right of=testset] {Name} edge (testset);
 		\node [attribute] (tsfilepath) [above left of=testset] {File Path} edge (testset);
+		\node [attribute] (tsruntime) [above = 2cm of testset] {Runtime} edge (testset);
 		\node [relationship] (tshastv) [right of=testset] {has} edge (testset);
 		\node [entity] (testvalue) [right of=tshastv] {Test Variable} edge [total] (tshastv);
 		\node [attribute] (tvid) [above left of=testvalue] {\key{ID}} edge (testvalue);
@@ -41,23 +42,23 @@ In Abbildung \ref{fig:erm} ist das dazugehörige Datenschema dargestellt.
 		\node [attribute] (tsysuser) [below left of=testsystem] {User} edge (testsystem);
 		\node [attribute] (tsyspassword) [right = 0.5cm of testsystem] {Password} edge (testsystem);
 	\end{tikzpicture}
-	\caption{ER-Diagramm für die Administration von Testdatensets und -systemen}
+	\caption{ER-Diagramm für Testdatensets und -systeme}
 	\label{fig:erm}
 \end{figure}
 
 \subsection{Caching und Gültigkeit von Testdaten}
 Um nicht für jede Vorschlagsanfrage einen Datenbankzugriff durchzuführen, werden die Testdaten und Testdatensets sowohl im Frontend als auch im Backend gecached.
 Die Caches unterscheiden sich in der Hinsicht, dass es einen Frontendcache für jede Sitzung eines Entwicklers gibt, wohingegen der Backendcache global agiert.
-Eine Anfrage für Testdatenvorschläge zu einer Spalte einer Relation wird dabei erst versucht durch den Frontendcache zu beantworten.
+Eine Anfrage für Testdatenvorschläge zu einer Spalte einer Relation wird dabei erst durch den Frontendcache zu beantworten versucht.
 Sollten dort keine passenden Daten vorliegen, wird eine Anfrage an das Backend ausgelöst.
 Dort versucht der Backendcache als erste Instanz diese Anfrage zu beantworten.
-Sollten auch dort keine Daten vorliegen, werden die Vorschläge mithilfe der in Kapitel \ref{chap:testdatasuggestions} vorgestellten Algorithmen bestimmt und in den Caches hinterlegt.
+Sollten auch dort keine Daten vorliegen, werden die initialen Vorschläge mithilfe der in Kapitel \ref{chap:testdatasuggestions} vorgestellten Algorithmen bestimmt und in den Caches hinterlegt.
 
 Eine Herausforderung stellt das Überprüfen der Gültigkeit der Vorschläge und Testdatensets dar.
 Diese kann durch zwei Fälle beeinflusst werden: die Daten in der genutzten Datenbank werden verändert (erweitert, aktualisiert oder gelöscht) oder der Quellcode der Anwendung wird in einer Weise abgeändert, die die Variablen aus den SQL-Statements beeinflusst.
 
 Für Ersteres gibt es Ansätze \cite{DBLP:conf/dasfaa/HarangsriSN97}, die kontinuierlich verändernde SQL-Statements nachverfolgen und dementsprechend ihren Algorithmus durch manuelles Mitzählen der Anzahl von Einträgen in der betrachteten Relation anpassen.
-Dieser Ansatz ist für die in Kapitel \ref{chap:testdatasuggestions} beschrieben Algorithmen nicht anwendbar, da sie nicht nur die Anzahl der Vorkommen innerhalb einer Relation betrachten, sondern darüber hinaus auch die Werteausprägungen und Analyseergebnisse für die Vorschlagsgenerierung berücksichtigen.
+Dieser Ansatz ist für die in Kapitel \ref{chap:testdatasuggestions} beschriebenen Algorithmen nicht anwendbar, da sie nicht nur die Anzahl der Vorkommen innerhalb einer Relation betrachten, sondern darüber hinaus auch die Werteausprägungen und Analyseergebnisse für die Vorschlagsgenerierung berücksichtigen.
 Nichtsdestotrotz floss die Idee der Betrachtung von manipulierenden SQL-Statements mit in die Implementierung ein, indem ein Schwellwert für Datenveränderungen festgelegt wird (derzeit 10), ab dem eine Neubestimmung der Vorschläge und der initial berechneten Testdatensets erfolgt.
 
 Die Invalidierung der Daten durch Veränderung des dazugehörigen Quellcodes wurde im Zuge dieser Arbeit nicht betrachtet, ist aber als Weiterentwicklung geplant.

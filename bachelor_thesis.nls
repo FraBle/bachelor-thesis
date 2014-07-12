@@ -4,8 +4,18 @@
 
   \item [{AST}]\begingroup Abstract Syntax Tree\nomeqref {0}
 		\nompageref{16}
+  \item [{ER}]\begingroup Entity-Relationship\nomeqref {0}
+		\nompageref{1}
+  \item [{ERIC}]\begingroup Enterprise-Ready IDE Concepts\nomeqref {0}
+		\nompageref{1}
   \item [{ERP}]\begingroup Enterprise Resource Planning\nomeqref {0}
-		\nompageref{8}
+		\nompageref{9}
+  \item [{IDE}]\begingroup Integrated Development Environment\nomeqref {0}
+		\nompageref{1}
+  \item [{JSON}]\begingroup JavaScript Object Notation\nomeqref {0}
+		\nompageref{1}
+  \item [{SQL}]\begingroup Structured Query Language\nomeqref {0}
+		\nompageref{1}
   \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{23}
 
 \end{thenomenclature}

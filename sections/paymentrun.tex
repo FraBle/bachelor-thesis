@@ -5,7 +5,7 @@ Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste vo
 Dabei spielen die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
 
 Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren. 
-Zusätzlich erschweren große Relationen stark abgekürzten Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung besonders für domänenfremde Entwickler.
+Zusätzlich erschweren große Relationen mit stark abgekürzten Namen von Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung besonders für domänenfremde Entwickler.
 Umso wichtiger ist es bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
 Dabei unterstützt die im Rahmen des Bachelorprojektes erstellte Web-IDE durch die in dieser Arbeit vorgestellten Ansätze zur Generierung von Testdatenvorschlägen.
 
@@ -35,15 +35,18 @@ Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
 			\item Senden einer JSON-Antwort
    \end{enumerate}
 
+Die REGUP- und REGUH dienen als datenbankinterne Zwischenspeicher für die ermittelten Ergebnisse.
+Zur Selektion wird BSIK als materialisierte Sicht auf die BSEG-Relation genutzt.
+
 Die Eingaben des Nutzers in der Filtermaske (aus dem 1. Schritt, siehe Code-Beispiel \ref{lst:jsoninput} im Anhang) wirken sich insbesondere auf die Selektion der Belegpositionen aus.
 Dem allgemeinen Teil des dazugehörigen SQL-Statements (siehe Code-Beispiel \ref{lst:regupgeneral} im Anhang) werden durch die Eingaben weitere Filterkriterien hinzugefügt, die nachfolgend näher untersucht werden.
 
 Das Code-Beispiel \ref{lst:laufi} zeigt exemplarisch, wie die Projektion des Ausführungsdatums (zu sehen in Abbildung \ref{fig:paymentrun} unter ``General Settings'') dem SQL-Statement ergänzt werden.
 Für das Identifikationsmerkmal (\texttt{LAUFI}) gilt dies analog.
 
-\begin{lstlisting}[caption={Ergänzung der Projektion im SQL-Statement um das Ausführungsdatum für den Zahllauf}, label={lst:laufi}, language=JavaScriptSQL]
-	if(oRunDate){
-			insertRegup += SQL SELECT @oRunDate as LAUFD;
+\begin{lstlisting}[caption={Ergänzung der Projektion um das Ausführungsdatum}, label={lst:laufi}, language=JavaScriptSQL]
+	if(runDate){
+			insertRegup += SQL SELECT @runDate as LAUFD;
 	} else {
 			insertRegup += SQL SELECT '' as LAUFD;
 	}
@@ -51,24 +54,24 @@ Für das Identifikationsmerkmal (\texttt{LAUFI}) gilt dies analog.
 
 Anschließend werden dem SQL-Statement optional die Filter für Buchungs- und Erfassungsdatum (unter ``Parameters'' in Abbildung \ref{fig:paymentrun}) hinzugefügt (Code-Beispiel \ref{lst:budat}).
 
-\begin{lstlisting}[caption={Einfügung von zusätzlichen Filtern}, label={lst:budat}, language=JavaScriptSQL]
-	if(oPostingDate){
-			insertRegup += SQL WHERE AND BSEG.BUDAT = @oPostingDate;
+\begin{lstlisting}[caption={Einfügen zusätzlicher Filter}, label={lst:budat}, language=JavaScriptSQL]
+	if(postingDate){
+			insertRegup += SQL WHERE AND BSIK.BUDAT = @postingDate;
 	}
-	if(oDocsEnteredDate){
-			insertRegup += SQL WHERE AND BSEG.BLDAT <= @oDocsEnteredDate;
+	if(docsEnteredDate){
+			insertRegup += SQL WHERE AND BSIK.BLDAT <= @docsEnteredDate;
 	}
 \end{lstlisting}
 
-Für die Eingabe von einer bzw. mehreren Kundennummern (in Abbildung \ref{fig:paymentrun} unter ``Accounts'' ) wird das bereits bekannte Code-Beispiel \ref{lst:newsql} aus Kapitel \ref{sec:sqlandsourcecode} genutzt und kann in leicht abgewandelter Form auch für Lieferantennummern verwendet werden.
+Für die Eingabe einer bzw. mehrerer Kundennummern (in Abbildung \ref{fig:paymentrun} unter ``Accounts'' ) wird das bereits bekannte Code-Beispiel \ref{lst:newsql} aus Kapitel \ref{sec:sqlandsourcecode} genutzt und kann in leicht abgewandelter Form auch für Lieferantennummern verwendet werden.
 
 \begin{lstlisting}[caption={Unterscheidung zwischen Einzel- und Bereichsfilter}, label={lst:vendor}, language=JavaScriptSQL]
-	if(oTextInputVendor && !oTextInputVendorTo ){
-			insertRegup += SQL WHERE AND BSEG.LIFNR = @oTextInputVendor;
+	if(vendor && !vendorTo ){
+			insertRegup += SQL WHERE AND BSIK.LIFNR = @vendor;
 	}
-	if(oTextInputVendor && oTextInputVendorTo ){
-			insertRegup += SQL WHERE AND BSEG.LIFNR BETWEEN @oTextInputVendor
-				AND @oTextInputVendorTo;
+	if(vendor && vendorTo ){
+			insertRegup += SQL WHERE AND BSIK.LIFNR BETWEEN @vendor
+				AND @vendorTo;
 	}
 \end{lstlisting}
 
@@ -97,8 +100,6 @@ Für das vorgestellte SQL-Statement werden dazu im folgenden Kapitel die Ansätz
 \subsection{Evaluierung der vorgestellten Ansätze am Fallbeispiel}
 % Die im Rahmen dieser Bachelorarbeit vorgestellten Ansätze zur Vorschlagsgenerierung von Testwerten werden in diesem Kapitel auf Basis des Fallbeispiels evaluiert.
 Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
-Dazu wurde das Verhältnis der durch die Algorithmen vorgeschlagenen Eingabetupel mit der Betrachtung aller Wertkombinationen (Brute-Force) untersucht.
-
 Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
 
    \begin{itemize}
@@ -111,7 +112,7 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
 	
 Die ermittelten Vorschläge nach dem im Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
 Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
-Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Bildung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommmen.
+Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Erstellung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommmen.
 Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben, mitsamt ihren Ausführungszeiten.
 \begin{table}[h]
 	\centering
@@ -132,10 +133,10 @@ Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die b
 Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
 Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
 Dies kann mit der Verteilung der Daten begründet werden, dargestellt in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang).
-Die Grafiken zeigen das Verhältnis von der Anzahl distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
+Die Grafiken zeigen das Verhältnis der Anzahl distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
 Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
 
-Dies zeigt sich auch in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
+Dies zeigt sich besonders in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
 Es wird deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
 Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsenationen innerhalb der Relation umfassen.
 Dies zeichnet sich auch in den ermittelten, vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei der die Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
@@ -144,7 +145,7 @@ Ebenso zeigen die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt
 So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen distinkten Werte nur wenige Ausprägungen haben.
 Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
 
-Zum Vergleich würde die Betrachtung aller Wertkombinationen das Erzeugen einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
+Ein Vergleich mit allen möglichen Wertkombinationen würde die Berechnung einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
 Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11,2 Milliarden Einträgen.
 Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
 In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, entspräche dies über 3 Jahre Berechnungen.
@@ -157,7 +158,7 @@ Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse
 			\item Permutation der ermittelten häufigste, seltensten und mittleren Werte der Spalten
    \end{enumerate}
 
-Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen ermittelt (zu sehen in Tabelle \ref{tab:tupel2}).
+Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen zurückgibt (zu sehen in Tabelle \ref{tab:tupel2}).
 Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die Laufzeit der Ermittlung betrachtet.
 
 \begin{table}[h]
@@ -180,7 +181,7 @@ Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die 
 \end{table}
 
 Die Ergebnisse (Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefunden Tupel reduziert.
-Die Betrachtung der Permutation ergibt zwar einen Tupel mehr, benötigt aber über eine Halbe Minute, da mehr als 30.000 Tupel getestet werden.
+Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
 
 \begin{table}[h]
 	\centering
@@ -195,7 +196,7 @@ Die Betrachtung der Permutation ergibt zwar einen Tupel mehr, benötigt aber üb
 		\hline
 	\end{tabular}
 	}
-	\caption{Vergleich der Ansätze}
+	\caption{Vergleich der evaluierten Ansätze}
 	\label{tab:tupel3}
 \end{table}
 
@@ -277,7 +278,7 @@ Dies bedarf weiteren Untersuchungen in Hinblick auf die Beziehung zwischen der A
 				};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Verteilung der Ergebnisszeilen in Relation zu den Eingabetupeln}
+	\caption{Verteilung der Anzahl von Ergebniszeilen der Eingabetupel}
 	\label{fig:tupelverteilung}
 \end{figure}
 
