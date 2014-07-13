@@ -30,6 +30,7 @@ Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und
 Sie können für Anfragen genutzt werden, die jederzeit dieselben Informationen aus der Datenbank auslesen (zum Beispiel das Auflisten aller Kunden).
 Diese Datenbankanfragen sind für Analysen leicht aus dem Quellcode herauszuparsen und müssen nicht verändert oder mit Testwerten ergänzt werden.
 
+\clearpage
 \subsubsection{Prepared SQL-Statements}
 
 	\begin{lstlisting}[caption={Prepared Statements eingebettet im Quellcode}, label={lst:preparedsql}, language=JavaScript]
@@ -83,6 +84,7 @@ Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (z.B. Autovervollst�
 Um die Nachteile dieser Konkatenation von Zeichenketten abzuschaffen, kann der Quellcode in die Syntax nach Horschig \cite{Horschig2014} übertragen werden (vgl. Code-Beispiel \ref{lst:newsql}).
 Durch die Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die explizite Verknüpfung von Quellcodevariablen mit SQL-Statements und -Parametern.
 
+\clearpage
 	\begin{lstlisting}[caption={Darstellung des Code-Beispiels \ref{lst:dynamicsql} in der Syntax nach \cite{Horschig2014}}, label={lst:newsql}, language=JavaScriptSQL]
 		var customer = request.body.customer,
 		    customerTo = request.body.customerTo,

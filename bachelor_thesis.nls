@@ -9,7 +9,7 @@
   \item [{ERIC}]\begingroup Enterprise-Ready IDE Concepts\nomeqref {0}
 		\nompageref{1}
   \item [{ERP}]\begingroup Enterprise Resource Planning\nomeqref {0}
-		\nompageref{10}
+		\nompageref{11}
   \item [{IDE}]\begingroup Integrated Development Environment\nomeqref {0}
 		\nompageref{1}
   \item [{IT}]\begingroup Information Technology\nomeqref {0}
@@ -18,6 +18,6 @@
 		\nompageref{1}
   \item [{SQL}]\begingroup Structured Query Language\nomeqref {0}
 		\nompageref{1}
-  \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{25}
+  \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{26}
 
 \end{thenomenclature}

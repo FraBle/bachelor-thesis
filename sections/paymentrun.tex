@@ -144,7 +144,7 @@ Naheliegend ist die Auswahl der Werte mit dem jeweils höchsten Vorkommen.
 Dies ist in diesem Falle nicht zielführend, da die so gewählte Konstellation von Werten keine Einträge in der Relation vorweist.
 
 Mithilfe der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) wird deshalb die Kombination der Spalten betrachtet.
-Tabelle \ref{tab:tupel} zeigt die zwei Eingabetupel, die durch die initiale Erstellung der Testdatensets ermittelt wurden.
+Tabelle \ref{tab:tupel} zeigt die vier Eingabetupel, die durch die initiale Erstellung der Testdatensets ermittelt wurden.
 %Die durch die initiale Erstellung der Testdatensets ermittelten zwei Eingabetupel sind in Tabelle \ref{tab:tupel} dargestellt.
 %Die absteigende Sortierung anhand der Vorkommen der ermittelten Tupel und der gewählten Obergrenze von 50 resultieren in 2 gefunden Tupeln.
 TODO: Warum zwei?
@@ -155,8 +155,10 @@ TODO: Warum zwei?
 		\hline
 		\texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms) \\
 		\hline
-		'20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
-		'20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+		'20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 51,973 \\
+		'20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 50,685 \\
+		'20110221' & '20110216' & '0001063780' & ' ' & '3451' & 59 	& 49,280 \\
+		'20110224' & '20110216' & '0001063780' & ' ' & '3451' & 51 	& 47,110 \\
 		\hline
 	\end{tabular}
 	}
@@ -411,206 +413,226 @@ Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel, wovon zwei den er
 \end{table}
 
 TODO: Es wird vermutet, dass die gewählte Obergrenze an zu betrachtenden Tupeln die Anzahl der ermittelten Eingabetupel beeinflusst.
-Aus diesem Grund wurden die Grenze stufenweise erhöht.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-TODO: WO?? Überrebiten
-Vergleicht man die ermittelten Testdatensets...
-Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
-Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
-Dies lässt sich über die Verteilung der Daten, welche in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang) dargestellt sind, erklären.
-Die Grafiken zeigen das Verhältnis der Anzahl distinkter Werte innerhalb einer Spalte zur Anzahl der Ausprägungen in den Einträgen der Relation.
-TODO: Referenz Abb.
-Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
-TODO: Was heißt das? ...und das bedeutet
-
-TODO: Was zeigt sich da?
-Dies zeigt sich besonders in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
-Es wird deutlich, dass die Mehrheit der gefundenen distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt wird.
-TODO: Was heißt das für meine Vorschläge?
-Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsentationen innerhalb der Relation aufweisen.
-Dies zeichnet sich auch in den vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei dem die ermittelten Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
-TODO: Was heißt das? ..das bestätigt , diese legt nahe, ...das fehler gering tsind
-
-Generell fällt auf  das die Spalten strueung hinstichltihc der anzahl 
-viele werte nur einmal ...
-zeigt sich in den spalten
-es ist auch hier zu erkennen...
-Ebenso zeigen die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) eine deutlich Spaltung.
-So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen Werte nur wenige Ausprägungen haben.
-TODO: Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
-
-TODO: Der Brute-Force- Ansatz, der über eine PErmutation...
-Ein Vergleich mit allen möglichen Wertkombinationen würde die Berechnung einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
-Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11 Milliarden Einträgen.
-Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
-TODO:was heißt das?
-In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, würde dies zur einer Berechnungszeit von über 3 Jahren führen.
-Dieser Ansatz scheidet daher für die weiteren Betrachtungen dieser Analyse aus.
-
-TODO: Die folgenden Vergelcieh beziehen sich daher auf...
-Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse folgender Ansätze:
-
-   \begin{enumerate}
-      \item Adaptiver Algorithmus mit fester Obergrenze (50)
-      \item Adaptiver Algorithmus ohne feste Obergrenze
-			\item Permutation der ermittelten häufigsten, seltensten und mittleren Werte der Spalten
-   \end{enumerate}
-
-TODO: Zuncähst,... warum 5, warumd ie meisten?
-Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen zurückgibt (zu sehen in Tabelle \ref{tab:tupel2}).
-Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und der Laufzeit der Ermittlung betrachtet.
+Aus diesem Grund wurden die Grenze stufenweise erhöht und mit der benötigten Laufzeit sowie der Menge an ermittelten Tupeln verglichen (siehe Tabelle \ref{tab:tupel3}).
 
 \begin{table}[h]
 	\centering
 	\scalebox{.85}{
 	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
 		\hline
-		Tupel & \texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		Obergrenze 	& Anzahl gefundener Tupel & Laufzeit (sek)\\
 		\hline
-        1 & '20110228' & '20101227' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
-        2 & '20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
-        3 & '20110228' & '20101213' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
-        4 & '20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
-        5 & '20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+        50 			& 4 											& 0,06 \\
+        100 		& 5												& 0,12 \\
+        500 		& 50 											& 0,59 \\
+        1000 		& 81 											& 1,14 \\
+        1500 		& 236 										& 1,77 \\
+				2000 		& 301 										& 2,25 \\
 		\hline
 	\end{tabular}
 	}
 	\caption{Eingabetupel mit den meisten Ergebnissen}
-	\label{tab:tupel2}
-\end{table}
-
-TODO: was sehe ich? tupel als referenz zum treffen, tabelle 4
-Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefundenen Tupel reduziert.
-TODO: wie reduziert? substantiell
-Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
-TODO: was passower wenn ich nur 2 oder 3 habe? 
-
-\begin{table}[h]
-	\centering
-	\scalebox{.75}{
-	\begin{tabular}{ |c|c|c|c|c|c|c|c|c| }
-		\cline{2-8}
-		\multicolumn{1}{c|}{} & Tupel 1 & Tupel 2 & Tupel 3 & Tupel 4 & Tupel 5 & Getestete Tupel & Laufzeit (sek)\\
-		\hline
-        mit Obergrenze &  &  &  & X & X & 50 & 0,058 \\
-        ohne Obergrenze & X & X & X & X & X & 1.860 & 2,239 \\
-        Permutation & X &  &  & X & X & 30.618 & 34,352 \\
-		\hline
-	\end{tabular}
-	}
-	\caption{Vergleich der evaluierten Ansätze}
 	\label{tab:tupel3}
 \end{table}
 
-TODO: Wass?
-Der Grund für die vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
-Die 1.860 bestimmten Tupel entsprechen allen distinkten Konstellationen der Werte der betrachteten Spalten.
-Davon haben insgesamt nur 301 mindestens eine Ergebniszeile beim Ausführen des Programms, was einer Abdeckung des kompletten Eingaberaums entspricht.
-TODO: mehr erklären!
-Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Unterraum.
-Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgibt (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
-Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
-TODO: siehe irgendwas
+Die Messergebnisse zeigen, dass mit steigender Betrachtung von Tupeln auf der einen Seite die Anzahl der gefundenen Tupel mit mindestens einem Datensatz steigt.
+Auf der anderen Seite jedoch auch die Laufzeit der Analyse wächst.
+Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung der Obergrenze zu geben.
+Er könnte das Verhältnis zwischen dem Maximum an initial ermittelten Testdatensets und der vertretbaren Laufzeit selbstständig festlegen.
+Die optimale Parameterwahl bedarf weiterer Untersuchungen der Beziehung zwischen der Anzahl der betrachteten Spalten, der Verteilung der Daten und der Laufzeit der Berechnungen.
 
-Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung einer Obergrenze zu geben.
-TODO: was kann er damit machen?
-Dies bedarf weiterer Untersuchungen im Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
-TODO: nicht dies, die optimale parameterwahl, die möglichkeit?
+Aus Gründen der Einfachheit und Geschwindigkeit des Feedbacks für den Entwickler wird die adaptive Lösung für den Einsatz in der Web-IDE favorisiert.
+Sie ermöglicht es auf Grundlage der ermittelten initialen Testdatensets durch explorative Erweiterung den erfassten Datensatz zu ergänzen.
 
-\begin{figure}[ht]
-\centering
-	\begin{tikzpicture}
-		\begin{axis}[
-				axis lines=left,
-				width  = 1*\textwidth,
-				height  = 6cm,
-				%symbolic x coords={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,18,21,22,23,30,32,35,37,40,41,44,47,49,50,51,52,55,59,60,61,65,66,67,117,231,232,233,234},
-				%xtick=data,
-				%enlarge x limits=0.05,
-				%bar width=5pt,
-				%ybar,
-				ylabel={Eingabetupel},
-				xlabel={Anzahl der Ergebniszeilen},
-				ymin=0.0,
-				ymax=200.0,
-				xmax=250.0,
-				]
-				%\addplot[ybar,fill=light-gray] coordinates {
-				\addplot[color=red,mark=x] coordinates {
-						(1,187)
-						(2,23)
-						(3,14)
-						(3,14)
-						(4,11)
-						(5,8)
-						(6,4)
-						(7,4)
-						(8,4)
-						(9,2)
-						(10,2)
-						(11,3)
-						(12,1)
-						(13,1)
-						(14,2)
-						(15,2)
-						(15,2)
-						(18,1)
-						(21,1)
-						(22,2)
-						(23,2)
-						(30,1)
-						(32,1)
-						(35,1)
-						(37,1)
-						(40,1)
-						(41,1)
-						(44,1)
-						(47,1)
-						(49,1)
-						(50,1)
-						(51,1)
-						(52,1)
-						(55,1)
-						(59,2)
-						(60,1)
-						(61,1)
-						(65,1)
-						(66,1)
-						(67,1)
-						(117,1)
-						(231,1)
-						(232,1)
-						(233,1)
-						(234,1)
-				};
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Verteilung der Anzahl von Ergebniszeilen der Eingabetupel}
-	\label{fig:tupelverteilung}
-\end{figure}
 
-TODO: aus gründen x,y,z wird die adapttive Lösung für den Einsatz in der Web-IDE favorisiert...
-Die derzeitige adaptive Lösung ermöglicht es, auf Grundlage der mit einer Obergrenze ermittelten initialen Testdatensets durch explorative Erweiterung den erfassten Datensatz zu ergänzen.
-TODO: 2 Sätze
+
+
+
+
+%
+%
+%
+%
+%
+%TODO: WO?? Überrebiten
+%Vergleicht man die ermittelten Testdatensets...
+%Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
+%Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
+%Dies lässt sich über die Verteilung der Daten, welche in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang) dargestellt sind, erklären.
+%Die Grafiken zeigen das Verhältnis der Anzahl distinkter Werte innerhalb einer Spalte zur Anzahl der Ausprägungen in den Einträgen der Relation.
+%TODO: Referenz Abb.
+%Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
+%TODO: Was heißt das? ...und das bedeutet
+%
+%TODO: Was zeigt sich da?
+%Dies zeigt sich besonders in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
+%Es wird deutlich, dass die Mehrheit der gefundenen distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt wird.
+%TODO: Was heißt das für meine Vorschläge?
+%Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsentationen innerhalb der Relation aufweisen.
+%Dies zeichnet sich auch in den vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei dem die ermittelten Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
+%TODO: Was heißt das? ..das bestätigt , diese legt nahe, ...das fehler gering tsind
+%
+%Generell fällt auf  das die Spalten strueung hinstichltihc der anzahl 
+%viele werte nur einmal ...
+%zeigt sich in den spalten
+%es ist auch hier zu erkennen...
+%Ebenso zeigen die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) eine deutlich Spaltung.
+%So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen Werte nur wenige Ausprägungen haben.
+%TODO: Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
+%
+%TODO: Der Brute-Force- Ansatz, der über eine PErmutation...
+%Ein Vergleich mit allen möglichen Wertkombinationen würde die Berechnung einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
+%Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11 Milliarden Einträgen.
+%Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
+%TODO:was heißt das?
+%In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, würde dies zur einer Berechnungszeit von über 3 Jahren führen.
+%Dieser Ansatz scheidet daher für die weiteren Betrachtungen dieser Analyse aus.
+%
+%TODO: Die folgenden Vergelcieh beziehen sich daher auf...
+%Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse folgender Ansätze:
+%
+   %\begin{enumerate}
+      %\item Adaptiver Algorithmus mit fester Obergrenze (50)
+      %\item Adaptiver Algorithmus ohne feste Obergrenze
+			%\item Permutation der ermittelten häufigsten, seltensten und mittleren Werte der Spalten
+   %\end{enumerate}
+%
+%TODO: Zuncähst,... warum 5, warumd ie meisten?
+%Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen zurückgibt (zu sehen in Tabelle \ref{tab:tupel2}).
+%Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und der Laufzeit der Ermittlung betrachtet.
+%
+%\begin{table}[h]
+	%\centering
+	%\scalebox{.85}{
+	%\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		%\hline
+		%Tupel & \texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		%\hline
+        %1 & '20110228' & '20101227' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
+        %2 & '20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
+        %3 & '20110228' & '20101213' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
+        %4 & '20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
+        %5 & '20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+		%\hline
+	%\end{tabular}
+	%}
+	%\caption{Eingabetupel mit den meisten Ergebnissen}
+	%\label{tab:tupel2}
+%\end{table}
+%
+%TODO: was sehe ich? tupel als referenz zum treffen, tabelle 4
+%Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefundenen Tupel reduziert.
+%TODO: wie reduziert? substantiell
+%Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
+%TODO: was passower wenn ich nur 2 oder 3 habe? 
+%
+%\begin{table}[h]
+	%\centering
+	%\scalebox{.75}{
+	%\begin{tabular}{ |c|c|c|c|c|c|c|c|c| }
+		%\cline{2-8}
+		%\multicolumn{1}{c|}{} & Tupel 1 & Tupel 2 & Tupel 3 & Tupel 4 & Tupel 5 & Getestete Tupel & Laufzeit (sek)\\
+		%\hline
+        %mit Obergrenze &  &  &  & X & X & 50 & 0,058 \\
+        %ohne Obergrenze & X & X & X & X & X & 1.860 & 2,239 \\
+        %Permutation & X &  &  & X & X & 30.618 & 34,352 \\
+		%\hline
+	%\end{tabular}
+	%}
+	%\caption{Vergleich der evaluierten Ansätze}
+	%\label{tab:tupel3}
+%\end{table}
+%
+%TODO: Wass?
+%Der Grund für die vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
+%Die 1.860 bestimmten Tupel entsprechen allen distinkten Konstellationen der Werte der betrachteten Spalten.
+%Davon haben insgesamt nur 301 mindestens eine Ergebniszeile beim Ausführen des Programms, was einer Abdeckung des kompletten Eingaberaums entspricht.
+%TODO: mehr erklären!
+%Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Unterraum.
+%Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgibt (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
+%Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
+%TODO: siehe irgendwas
+%
+%Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung einer Obergrenze zu geben.
+%TODO: was kann er damit machen?
+%Dies bedarf weiterer Untersuchungen im Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
+%TODO: nicht dies, die optimale parameterwahl, die möglichkeit?
+%
+%\begin{figure}[ht]
+%\centering
+	%\begin{tikzpicture}
+		%\begin{axis}[
+				%axis lines=left,
+				%width  = 1*\textwidth,
+				%height  = 6cm,
+				%%symbolic x coords={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,18,21,22,23,30,32,35,37,40,41,44,47,49,50,51,52,55,59,60,61,65,66,67,117,231,232,233,234},
+				%%xtick=data,
+				%%enlarge x limits=0.05,
+				%%bar width=5pt,
+				%%ybar,
+				%ylabel={Eingabetupel},
+				%xlabel={Anzahl der Ergebniszeilen},
+				%ymin=0.0,
+				%ymax=200.0,
+				%xmax=250.0,
+				%]
+				%%\addplot[ybar,fill=light-gray] coordinates {
+				%\addplot[color=red,mark=x] coordinates {
+						%(1,187)
+						%(2,23)
+						%(3,14)
+						%(3,14)
+						%(4,11)
+						%(5,8)
+						%(6,4)
+						%(7,4)
+						%(8,4)
+						%(9,2)
+						%(10,2)
+						%(11,3)
+						%(12,1)
+						%(13,1)
+						%(14,2)
+						%(15,2)
+						%(15,2)
+						%(18,1)
+						%(21,1)
+						%(22,2)
+						%(23,2)
+						%(30,1)
+						%(32,1)
+						%(35,1)
+						%(37,1)
+						%(40,1)
+						%(41,1)
+						%(44,1)
+						%(47,1)
+						%(49,1)
+						%(50,1)
+						%(51,1)
+						%(52,1)
+						%(55,1)
+						%(59,2)
+						%(60,1)
+						%(61,1)
+						%(65,1)
+						%(66,1)
+						%(67,1)
+						%(117,1)
+						%(231,1)
+						%(232,1)
+						%(233,1)
+						%(234,1)
+				%};
+		%\end{axis}
+	%\end{tikzpicture}
+	%\caption{Verteilung der Anzahl von Ergebniszeilen der Eingabetupel}
+	%\label{fig:tupelverteilung}
+%\end{figure}
+%
+%TODO: aus gründen x,y,z wird die adapttive Lösung für den Einsatz in der Web-IDE favorisiert...
+%Die derzeitige adaptive Lösung ermöglicht es, auf Grundlage der mit einer Obergrenze ermittelten initialen Testdatensets durch explorative Erweiterung den erfassten Datensatz zu ergänzen.
+%TODO: 2 Sätze
 
 %\begin{table}[h]
 	%\centering
