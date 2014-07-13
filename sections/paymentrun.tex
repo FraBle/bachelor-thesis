@@ -117,15 +117,38 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
 			\item Buchungskreis (\texttt{BUKRS})
    \end{itemize}
 	
-Die ermittelten Vorschläge nach dem in Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
-Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten.
-Dies ist in diesem Falle nicht zielführend, da TODO
- für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
-Mithilfe der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive})... TODO
-Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Erstellung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommen.
-Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben.
+Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritte ermittelten drei häufigsten Werte für die betrachteten Spalten (entsprechend dem Verfahren in Kapitel \ref{chap:datacharacteristics}).
+%Die ermittelten Vorschläge nach dem in Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
+\begin{table}[ht!]
+	\centering
+	\scalebox{.73}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\cline{3-8}
+		\multicolumn{2}{c|}{} & \multicolumn{6}{c|}{Häufigste Werte}\\
+		\hline
+		Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen \\
+		\hline
+		BUDAT & 903 & 20110228 	& 760 	& 20110221 	& 139 	& 20110224 	& 103 \\
+		BLDAT & 933 & 20110216 	& 177 	& 20101208 	& 124 	& 20101204 	& 118 \\
+		LIFNR & 247 & 1051 			& 3717 	& 2671 			& 1029 	& 1082993 	& 234 \\
+		BUKRS & 9 	& 3451 			& 4426 	& 8211 			& 816 	& 4101 			& 259 \\
+		ZLSCH & 6 	& 					& 5739 	& T 				& 181 	& R 				& 10 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Ermittelte häufigste Werte für die Eingabedaten}
+	\label{tab:paymentruntable1}
+\end{table}
+
+Naheliegend ist die Auswahl der Werte mit dem jeweils höchsten Vorkommen.
+Dies ist in diesem Falle nicht zielführend, da die so gewählte Konstellation von Werten keine Einträge in der Relation vorweist.
+
+Mithilfe der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) wird deshalb die Kombination der Spalten betrachtet.
+Tabelle \ref{tab:tupel} zeigt die zwei Eingabetupel, die durch die initiale Erstellung der Testdatensets ermittelt wurden.
+%Die durch die initiale Erstellung der Testdatensets ermittelten zwei Eingabetupel sind in Tabelle \ref{tab:tupel} dargestellt.
+%Die absteigende Sortierung anhand der Vorkommen der ermittelten Tupel und der gewählten Obergrenze von 50 resultieren in 2 gefunden Tupeln.
 TODO: Warum zwei?
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\scalebox{.9}{
 	\begin{tabular}{ |c|c|c|c|c|c|c| }
@@ -141,7 +164,275 @@ TODO: Warum zwei?
 	\label{tab:tupel}
 \end{table}
 
-TODO: WO?? Überarebiten
+Die Anzahl ist anhand der Verteilung der Daten innerhalb der Spalten erklärbar.
+Abbildung \ref{fig:budatverteilung} zeigt beispielhaft das Verhältnis der Anzahl distinkter Werte innerhalb der Spalte \texttt{BUDAT} zur Anzahl der Ausprägungen in der Relation.
+Besonders auffällig ist die starke Streuung.
+So gibt es beispielsweise 630 Werte, die jeweils nur in einem Datensatz der Relation vorkommen, wohingegen ein einziger Wert 760 Repräsentationen hat.
+In den weiteren vier betrachteten Spalten verhält sich die Verteilung analog.
+
+\begin{figure}[h!]
+\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				axis lines=left,
+				width  = 1*\textwidth,
+				height  = 8cm,
+				ylabel={Anzahl distinkter Werte},
+				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
+				ymin=0.0,
+				xmin=0.0,
+				ymax=650.0,
+				xmax=780.0,
+				]
+				\addplot[only marks,color=blue,mark=square*,mark size=1pt] coordinates {
+					(1,630)
+					(2,102)
+					(3,25)
+					(4,19)
+					(5,10)
+					(6,6)
+					(7,1)
+					(8,3)
+					(10,1)
+					(11,3)
+					(13,1)
+					(16,1)
+					(17,1)
+					(19,2)
+					(20,1)
+					(21,2)
+					(22,2)
+					(25,1)
+					(27,2)
+					(28,1)
+					(29,4)
+					(31,2)
+					(32,4)
+					(33,4)
+					(34,4)
+					(35,5)
+					(36,6)
+					(37,5)
+					(38,6)
+					(39,4)
+					(40,6)
+					(41,5)
+					(42,3)
+					(43,4)
+					(44,4)
+					(45,2)
+					(46,1)
+					(47,1)
+					(48,1)
+					(49,3)
+					(50,1)
+					(52,3)
+					(54,2)
+					(55,2)
+					(56,2)
+					(59,1)
+					(66,1)
+					(103,1)
+					(139,1)
+					(760,1)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Verteilung der distinkten Werte in der Spalte \texttt{BUDAT}}
+	\label{fig:budatverteilung}
+\end{figure}
+
+Dies spiegelt sich auch in der Verteilung innerhalb der Kombination der Spalten \texttt{BUDAT}, \texttt{BLDAT}, \texttt{LIFNR}, \texttt{ZLSCH} und \texttt{BUKRS} wieder (siehe Abbildung \ref{fig:combverteilung}).
+Rot hervorgehoben ist der Anteil der Tupel, der durch die absteigende Sortierung anhand der Vorkommen sowie der festgelegten Obergrenze (50) bestimmt wurde.
+Zusammen mit dem blauen Anteil ergibt dies in der Summe 1860 Tupel, was dem kompletten Eingaberaum entspricht.
+Nur zwei Tupel der ausgewählten Menge (rot) ergeben bei der Ausführung des Zahllaufprogramms ein Resultat mit mindestens einem Datensatz (dies sind die zuvor erwähnten Eingabetupel in Tabelle \ref{tab:tupel}).
+
+\begin{figure}[h]
+\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				axis lines=left,
+				width  = 1*\textwidth,
+				height  = 8cm,
+				ylabel={Anzahl distinkter Werte},
+				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
+				ymin=0.0,
+				xmin=0.0,
+				ymax=1400.0,
+				xmax=120.0,
+				scatter/classes={
+					a={mark=square*,red},%
+					b={mark=square*,blue}}
+				]
+				\addplot[scatter, only marks,mark size=1pt,scatter src=explicit symbolic] coordinates {
+					(1,1318)	[b]
+					(2,197)		[b]
+					(3,79)		[b]
+					(4,55)		[b]
+					(5,50)		[b]
+					(6,27)		[b]
+					(7,13)		[b]
+					(8,7)			[b]
+					(9,4)			[b]
+					(10,5)		[b]
+					(11,2)		[b]
+					(12,3)		[b]
+					(13,1)		[b]
+					(14,1)		[b]
+					(15,2)		[b]
+					(16,2)		[b]
+					(17,2)		[b]
+					(18,1)		[b]
+					(19,2)		[b]
+					(20,2)		[b]
+					(21,2)		[b]
+					(22,2)		[b]
+					(23,3)		[b]
+					(24,5)		[b]
+					(25,7)		[b]
+					(26,6)		[b]
+					(27,6)		[b]
+					(28,5)		[b]
+					(29,3)		[a]
+					(30,9)		[a]
+					(31,5)		[a]
+					(32,1)		[a]
+					(33,3)		[a]
+					(34,7)		[a]
+					(35,4)		[a]
+					(36,7)		[a]
+					(37,2)		[a]
+					(38,1)		[a]
+					(39,1)		[a]
+					(40,1)		[a]
+					(42,1)		[a]
+					(43,1)		[a]
+					(47,1)		[a]
+					(51,1)		[a]
+					(59,1)		[a]
+					(114,1)		[a]
+					(117,1)		[a]
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Verteilung der distinkten Tupel in der Relation BSIK}
+	\label{fig:combverteilung}
+\end{figure}
+
+Wird der komplette Eingaberaum für Ausführung des Zahllaufprogramms genutzt, so haben 301 der 1860 Tupel ein Ergebnis mit mindestens einem Eintrag.
+Ihre Verteilung verhält sich ähnlich zu den vorangegangen Beobachtungen.
+Nur fünf der ermittelten Tupel haben über 100 Datensätze in ihrer jeweiligen Ergebnismenge, wohingegen 187 Tupel jeweils nur einem Datensatz repräsentiert sind.
+ 
+\begin{figure}[h]
+\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				axis lines=left,
+				width  = 1*\textwidth,
+				height  = 8cm,
+				ylabel={Anzahl distinkter Tupel},
+				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
+				ymin=0.0,
+				xmin=0.0,
+				ymax=210.0,
+				xmax=240.0,
+				]
+				\addplot[only marks,color=blue,mark=square*,mark size=1pt] coordinates {
+					(1,187)
+					(2,23)
+					(3,14)
+					(4,11)
+					(5,8)
+					(6,4)
+					(7,4)
+					(8,4)
+					(9,2)
+					(10,2)
+					(11,3)
+					(12,1)
+					(13,1)
+					(14,2)
+					(15,2)
+					(17,2)
+					(18,1)
+					(21,1)
+					(22,2)
+					(23,2)
+					(30,1)
+					(32,1)
+					(35,1)
+					(37,1)
+					(40,1)
+					(41,1)
+					(44,1)
+					(47,1)
+					(49,1)
+					(50,1)
+					(51,1)
+					(52,1)
+					(55,1)
+					(59,2)
+					(60,1)
+					(61,1)
+					(65,1)
+					(66,1)
+					(67,1)
+					(117,1)
+					(231,1)
+					(232,1)
+					(233,1)
+					(234,1)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Verhältnis distinkter Eingabetupel zur Anzahl von Datensätzen in BSIK}
+	\label{fig:tupelbsikverteilung}
+\end{figure}
+
+Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel, wovon zwei den ermittelten Eingabetupel (siehe Tabelle \ref{tab:tupel}) entsprechen.
+
+\begin{table}[h]
+	\centering
+	\scalebox{.85}{
+	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+		\hline
+		Tupel & \texttt{BUDAT} & \texttt{BLDAT} & \texttt{LIFNR} & \texttt{ZLSCH} & \texttt{BUKRS} & Ergebnisse & Zeit (ms)\\
+		\hline
+        1 & '20110228' & '20101227' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
+        2 & '20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
+        3 & '20110228' & '20101213' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
+        4 & '20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
+        5 & '20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+		\hline
+	\end{tabular}
+	}
+	\caption{Eingabetupel mit den meisten Ergebnissen}
+	\label{tab:tupel2}
+\end{table}
+
+TODO: Es wird vermutet, dass die gewählte Obergrenze an zu betrachtenden Tupeln die Anzahl der ermittelten Eingabetupel beeinflusst.
+Aus diesem Grund wurden die Grenze stufenweise erhöht.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TODO: WO?? Überrebiten
 Vergleicht man die ermittelten Testdatensets...
 Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
 Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
