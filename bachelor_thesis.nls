@@ -3,19 +3,21 @@
  \nomgroup{A}
 
   \item [{AST}]\begingroup Abstract Syntax Tree\nomeqref {0}
-		\nompageref{16}
+		\nompageref{18}
   \item [{ER}]\begingroup Entity-Relationship\nomeqref {0}
 		\nompageref{1}
   \item [{ERIC}]\begingroup Enterprise-Ready IDE Concepts\nomeqref {0}
 		\nompageref{1}
   \item [{ERP}]\begingroup Enterprise Resource Planning\nomeqref {0}
-		\nompageref{9}
+		\nompageref{10}
   \item [{IDE}]\begingroup Integrated Development Environment\nomeqref {0}
 		\nompageref{1}
+  \item [{IT}]\begingroup Information Technology\nomeqref {0}
+		\nompageref{25}
   \item [{JSON}]\begingroup JavaScript Object Notation\nomeqref {0}
 		\nompageref{1}
   \item [{SQL}]\begingroup Structured Query Language\nomeqref {0}
 		\nompageref{1}
-  \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{23}
+  \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{25}
 
 \end{thenomenclature}

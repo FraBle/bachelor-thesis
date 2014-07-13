@@ -334,8 +334,8 @@ Die Ermittlung der Vorschläge an Testdatensets mit höchster, mittlerer und lan
 
 \nomenclature{AST}{Abstract Syntax Tree}
 \subsection{Vorschläge für Variablenwerte ohne Datenbankbezug}
-Nicht immer müssen Variablen in ein SQL-Statement einfließen um darauf Auswirkungen zu haben.
-Typisches Beispiel ist die Verwendung einer Variable als Bedingung, z.B. für Verzweigungen, zu sehen im Code-Beispiel \ref{lst:differentdep} in der Nutzung der Variable \texttt{noDunning}.
+Nicht immer müssen Variablen in ein SQL-Statement einfließen, um darauf Auswirkungen zu haben.
+Ein typisches Beispiel ist die Verwendung einer Variable als Bedingung, z.B. für Verzweigungen, zu sehen im Code-Beispiel \ref{lst:differentdep} in der Nutzung der Variable \texttt{noDunning}.
 Das Setzen der Variable entscheidet über die Ergänzung des Selektionsfilters um die Bedingung \texttt{BSEG.MANST = 0}.
 Sie hat jedoch keinen Bezug zu einem Attribut aus der Datenbank.
 Für solche Fälle wird der Programmkontext der Variable für die Vorschläge der dazugehörigen Testwerte genutzt.
@@ -450,7 +450,7 @@ Abbildung \ref{fig:querytreeextended} zeigt für das Code-Beispiel \ref{lst:diff
 In den erkannten Abhängigkeiten eines SQL-Statements werden zusätzlich ihre Kontextinformationen als Knoten gespeichert.
 Diese dienen zur Einordnung innerhalb des vom Quellcodeparser erstellten AST \cite{Horschig2014}.
 Durch Betrachtung der Typen der Vorfahren im Baum, in diesem Beispiel des Elternknotens vom Typ ``IfStatement'', können passende Vorschläge erzeugt werden.
-Ein Vorschlag für eine Variable umfasst immer 2 Werte: Einer, der die assoziierte Bedingung erfüllt und Einer, der sie nicht erfüllt.
+Ein Vorschlag für eine Variable umfasst immer 2 Werte: einer, der die assoziierte Bedingung erfüllt und einer, der sie nicht erfüllt.
 Tabelle \ref{tab:tableforgeneratedvalues} zeigt für verschiedene Knotentypen und Operatoren die Bestimmung der zwei Wertvorschläge bei Vergleichen mit Literalen.
 Für die Variable \texttt{noDunning} sind das \texttt{true} und \texttt{false}.
 Ein Vergleich, beispielsweise \texttt{if(amount > 5)} ergibt als Testwerte \texttt{5} (nicht erfüllend) und \texttt{5+1}, also \texttt{6} (erfüllend).
@@ -461,7 +461,7 @@ In Abhängigkeit des Vergleichsoperators muss einer der beiden vorgeschlagene We
 	\begin{tabular}{ |l|c|c|c| }
 		\hline
 		%\multicolumn{2}{|c|}{BSEG-Spalten} \\
-		Elternknotentyp 								  & Operator 											& Erfüllender Wert 	& Nicherfüllender Wert\\
+		Elternknotentyp 								  & Operator 											& Erfüllender Wert 	& Nichterfüllender Wert\\
 		\hline
 		\multicolumn{2}{|l|}{IfStatement} 																& \texttt{true} 		& \texttt{false} 	\\
 		\hline
@@ -480,7 +480,7 @@ In Abhängigkeit des Vergleichsoperators muss einer der beiden vorgeschlagene We
 	\label{tab:tableforgeneratedvalues}
 \end{table}
 
-Der Ansatz ist ähnlich dem Verfahren in Testing-Frameworks um eine erhöhte Verzweigungsüberdeckung zu erreichen und unterstützt derzeit die drei primitiven Datentypen von JavaScript (Wahrheitswerte, Zahlen, Zeichenketten).
+Der Ansatz ist ähnlich dem Verfahren in Testing-Frameworks, um eine erhöhte Verzweigungsüberdeckung zu erreichen und unterstützt derzeit die drei primitiven Datentypen von JavaScript (Wahrheitswerte, Zahlen, Zeichenketten).
 
 \subsection{Integration in die Web-IDE}
 \begin{figure}[ht]
@@ -491,7 +491,7 @@ Der Ansatz ist ähnlich dem Verfahren in Testing-Frameworks um eine erhöhte Ver
 \end{figure}
 
 Die in Kapitel \ref{chap:datacharacteristics} und \ref{chap:adaptive} erzeugten Vorschläge werden in der zur Web-IDE gehörenden Datenbank gespeichert und in einer Sidebar im Frontend eingebunden (vgl. Abbildung \ref{fig:ideintegration}).
-Durch das Auswählen einer Quellcodezeile mit SQL-Inhalt, werden die Informationen zu dem dazugehörigen SQL-Statement aggregiert und aufbereitet (vgl. Kapitel \ref{chap:entwicklungsumgebung}) und schließlich in der Sidebar angezeigt.
+Durch das Auswählen einer Quellcodezeile mit SQL-Inhalt werden die Informationen zu dem dazugehörigen SQL-Statement aggregiert und aufbereitet (vgl. Kapitel \ref{chap:entwicklungsumgebung}) und schließlich in der Sidebar angezeigt.
 
 Aus der in Kapitel \ref{chap:adaptive} ermittelten Menge an Testdatensets werden zum einen die drei Sets mit der höchsten, geringsten und durchschnittlichen Laufzeit angeboten, zum anderen aber auch ein Menü mit allen gespeicherten Sets zur Auswahl gestellt.
 Die Wahl einer dieser Optionen füllt die Eingabefelder für die Testdaten automatisch mit den gespeicherten Werten und löst eine Analyse aus.

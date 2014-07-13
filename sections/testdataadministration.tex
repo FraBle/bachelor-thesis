@@ -8,15 +8,15 @@
 
 An das Backend der Web-IDE ist eine eigene SAP HANA-Instanz angebunden.
 Darin werden die Testdatensets und Zugangsdaten für Testsysteme hinterlegt.
-Im Folgenden geht es um das zugrundeliegende Schema, die Integration verschiedener Testsysteme und das Pflegen der Testdaten, insbesondere in Hinblick auf deren Gültigkeit.
+Im Folgenden geht es um das zugrunde liegende Schema, die Integration verschiedener Testsysteme und das Pflegen der Testdaten, insbesondere im Hinblick auf deren Gültigkeit.
 
 \subsection{Datenschema für Testdatensets}
 Die größte Herausforderung beim Speichern der Testdatensets liegt in der Wiederzuordnung zu den Variablen in der vom Entwickler geöffneten Quellcodedatei.
 Der in der Web-IDE genutzte Quellcode-Parser \cite{Horschig2014} nutzt symbolische Ausführung \cite{DBLP:journals/cacm/King76} zur Bestimmung von Variablen und deren eventuell bereits festgelegten Werten.
 Die auf diesem Wege gefundenen Variablen bekommen eine eindeutige Kennzeichnung, die zum Identifizieren genutzt werden kann.
-Sollten die Variablen im Laufe des Programmflusses in mindestens ein SQL-Statement einfließen, werden sie als sog. Testvariablen betrachtet.
+Sollten die Variablen im Laufe des Programmflusses in mindestens ein SQL-Statement einfließen, werden sie als sogenannte Testvariablen betrachtet.
 Eine Menge von Testvariablen bildet zusammen mit dem Pfad der geöffneten Quellcodedatei auf dem Server, der ermittelten Laufzeit und einem vom Entwickler angegebenen Namen ein Testdatenset.
-Diese Sets können wiederum in Beziehung mit dem Testsystem gebracht werden, auf dem die Performanceanalysen erfolgten, um die Abhängigkeit der Systemauswahl auf die Laufzeiten der Testdatensets zu berücksichtigen.
+Diese Sets können wiederum in Beziehung mit dem Testsystem gebracht werden, auf dem die Performance-Analysen erfolgten, um den Einfluss der Systemauswahl auf die Laufzeiten der Testdatensets zu berücksichtigen.
 In Abbildung \ref{fig:erm} ist das dazugehörige Datenschema dargestellt.
 
 \newcommand {\key}[1]{\underline{#1}}
@@ -51,7 +51,7 @@ Um nicht für jede Vorschlagsanfrage einen Datenbankzugriff durchzuführen, werd
 Die Caches unterscheiden sich in der Hinsicht, dass es einen Frontendcache für jede Sitzung eines Entwicklers gibt, wohingegen der Backendcache global agiert.
 Eine Anfrage für Testdatenvorschläge zu einer Spalte einer Relation wird dabei erst durch den Frontendcache zu beantworten versucht.
 Sollten dort keine passenden Daten vorliegen, wird eine Anfrage an das Backend ausgelöst.
-Dort versucht der Backendcache als erste Instanz diese Anfrage zu beantworten.
+Dort versucht der Backendcache als erste Instanz, diese Anfrage zu beantworten.
 Sollten auch dort keine Daten vorliegen, werden die initialen Vorschläge mithilfe der in Kapitel \ref{chap:testdatasuggestions} vorgestellten Algorithmen bestimmt und in den Caches hinterlegt.
 
 Eine Herausforderung stellt das Überprüfen der Gültigkeit der Vorschläge und Testdatensets dar.
@@ -59,7 +59,7 @@ Diese kann durch zwei Fälle beeinflusst werden: die Daten in der genutzten Date
 
 Für Ersteres gibt es Ansätze \cite{DBLP:conf/dasfaa/HarangsriSN97}, die kontinuierlich verändernde SQL-Statements nachverfolgen und dementsprechend ihren Algorithmus durch manuelles Mitzählen der Anzahl von Einträgen in der betrachteten Relation anpassen.
 Dieser Ansatz ist für die in Kapitel \ref{chap:testdatasuggestions} beschriebenen Algorithmen nicht anwendbar, da sie nicht nur die Anzahl der Vorkommen innerhalb einer Relation betrachten, sondern darüber hinaus auch die Werteausprägungen und Analyseergebnisse für die Vorschlagsgenerierung berücksichtigen.
-Nichtsdestotrotz floss die Idee der Betrachtung von manipulierenden SQL-Statements mit in die Implementierung ein, indem ein Schwellwert für Datenveränderungen festgelegt wird (derzeit 10), ab dem eine Neubestimmung der Vorschläge und der initial berechneten Testdatensets erfolgt.
+Nichtsdestotrotz floss die Idee der Betrachtung von manipulierenden SQL-Statements mit in die Implementierung ein, indem ein Schwellenwert für Datenveränderungen festgelegt wurde (derzeit 10), ab dem eine Neubestimmung der Vorschläge und der initial berechneten Testdatensets erfolgt.
 
 Die Invalidierung der Daten durch Veränderung des dazugehörigen Quellcodes wurde im Zuge dieser Arbeit nicht betrachtet, ist aber als Weiterentwicklung geplant.
 Die Herausforderung liegt in der Findung einer Granularität, auf der Änderungen zur Invalidierung führen, und gegebenenfalls diese Veränderung nachzuvollziehen.
@@ -68,7 +68,7 @@ Wählt man eine feine Granularitätsstufe (zum Beispiel alle Änderungen, die nu
 Sollte ein Versionsverwaltungssystem für die Quellcodedateien genutzt werden, könnten dessen Informationen in der Nachverfolgung berücksichtigt werden.
 
 \subsection{Integration mehrerer Testsysteme}
-Typischerweise dient nicht nur ein System als Grundlage für Performanceanalysen einer Geschäftsanwendung, sondern eine Auswahl an Systemen mit unterschiedlichen Ausstattungsmerkmalen.
+Typischerweise dient nicht nur ein System als Grundlage für Performance-Analysen einer Geschäftsanwendung, sondern eine Auswahl an Systemen mit unterschiedlichen Ausstattungsmerkmalen.
 Dies kann mehrere Gründe haben.
 In Hinblick auf die Daten können so Datenschutzbestimmungen eingehalten oder auch Datensätze mit verschiedene Charakteristiken getestet werden.
 Zum anderen kann so auch die Auswirkung verschiedener Systemkonfigurationen auf die Performance der Anwendung geprüft werden, wodurch Kosten gespart werden können, indem man eine passendes System für den Produktiveinsatz auswählt.

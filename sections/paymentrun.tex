@@ -1,19 +1,19 @@
 \section{Fallbeispiel: Der Zahllauf}\label{chap:paymentrun}
 
+\nomenclature{IT}{Information Technology}
 Im Bereich der Geschäftsanwendungen gibt es eine Reihe hochkomplexer Prozesse, die in der IT abgebildet werden.
 Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt, den Vorschlag überprüft und anschließend die Bearbeitung durch das System veranlasst.
-Dabei spielen insbesondere die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
+Dabei spielen insbesondere die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in eine günstige Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
 
 Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren. 
-Zusätzlich erschweren große Relationen mit stark abgekürzten Namen von Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung besonders für domänenfremde Entwickler.
-Umso wichtiger ist es bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
+Zusätzlich erschweren große Relationen mit stark abgekürzten Namen von Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung.
+Dies gilt besonders für domänenfremde Entwickler.
+Umso wichtiger ist es, bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
 Dabei unterstützt die im Rahmen des Bachelorprojektes erstellte Web-IDE den Entwickler durch die in dieser Arbeit vorgestellten Ansätze zur Generierung von Testdatenvorschlägen.
 
 In diesem Kapitel wird folgend exemplarisch die Implementierung des Zahllauf-Algorithmus mithilfe der Web-IDE vorgestellt.
-Dabei steht die von Nutzereingaben geprägte Verarbeitung der Suchanfrage im Fokus.
-TODO: Grammatikalischer kontext
-Eine 
-Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansätze zur Testwertgenerierung durchgeführt.
+Dabei steht die von Nutzereingaben geprägte Verarbeitung der Suche nach Belegen im Fokus.
+Anschließend werden die vorgestellten Ansätze zur Testwertgenerierung anhand der Umsetzung des Fallbeispiels evaluiert.
 
 \subsection{Implementierung des Algorithmus in der Web-IDE}
 
@@ -25,9 +25,13 @@ Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansä
 \end{figure}
 
 \nomenclature{UI}{User Interface}
-Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs besteht zum einen aus allgemeinen Parametern für die Suche und zum anderen aus Eingabefeldern für Suchkriterien einzelner Rechnungen.
-TODO, zum bei spiel nennen, an der graifk langführen
-Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt, der Fokus dieses Kapitels liegt jedoch auf der Backendimplementierung auf Basis der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
+Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs hat zwei Bestandteile. 
+Zum einen können allgemeine Parameter für die Suche festgelegt werden (z.B. das Ausführungsdatum (Run Date) und der Bereich der Lieferantennummern (Vendor)).
+Zum anderen dient die Eingabe in Form einer Tabelle (Payment Control) zur Festlegung von zusammenhängende Suchkriterien.
+Jede Zeile der Tabelle besteht aus einem Filter nach Buchungskreis (Company Codes), Zahlmethoden (Payment Methods) und dem nächsten Ausführungsdatum (Next p/date) und entspricht damit einem eigenen Suchlauf.
+
+Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt.
+Der Fokus dieses Kapitels liegt jedoch auf der Backendimplementierung auf Basis der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
 
 Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
    \begin{enumerate}
@@ -38,14 +42,13 @@ Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
 			\item Senden einer JSON-Antwort
    \end{enumerate}
 
-Die REGUP- und REGUH dienen als datenbankinterne Zwischenspeicher für die ermittelten Ergebnisse.
+Die REGUP- und REGUH-Relationen dienen als datenbankinterne Zwischenspeicher für die ermittelten Ergebnisse.
 Zur Selektion wird die Relation BSIK als materialisierte Sicht auf die BSEG-Relation genutzt.
 
-Die Eingaben des Nutzers in der Filtermaske (aus dem 1. Schritt, siehe Code-Beispiel \ref{lst:jsoninput} im Anhang) wirken sich insbesondere auf die Selektion der Belegpositionen aus.
-Dem allgemeinen Teil des dazugehörigen SQL-Statements (siehe Code-Beispiel \ref{lst:regupgeneral} im Anhang) werden durch die Eingaben weitere Filterkriterien hinzugefügt, die nachfolgend näher untersucht werden.
+Die Eingaben des Nutzers in der Filtermaske wirken sich insbesondere auf die Selektion der Belegpositionen aus.
+Sie werden im ersten Schritt aus der JSON-Anfrage geparst (siehe Code-Beispiel \ref{lst:jsoninput} im Anhang) und fließen im Programmverlauf in das allgemeine SQL-Statement zur Selektion (siehe Code-Beispiel \ref{lst:regupgeneral} im Anhang) ein.
 
-Das Code-Beispiel \ref{lst:laufi} zeigt exemplarisch, wie die Projektion des Ausführungsdatums (zu sehen in Abbildung \ref{fig:paymentrun} unter ``General Settings'') dem SQL-Statement ergänzt werden.
-Code-Beispiel TODO zeigt exemplarisch wie die Projektion des SQL-Statement umd das Ausführungsdatum ergänzt wird.
+Code-Beispiel \ref{lst:laufi} zeigt exemplarisch wie die Projektion des SQL-Statements um das Ausführungsdatum (\texttt{LAUFD}) ergänzt wird.
 Für das Identifikationsmerkmal (\texttt{LAUFI}) wird analog verfahren.
 
 \begin{lstlisting}[caption={Ergänzung der Projektion um das Ausführungsdatum}, label={lst:laufi}, language=JavaScriptSQL]
@@ -56,7 +59,7 @@ Für das Identifikationsmerkmal (\texttt{LAUFI}) wird analog verfahren.
 	}
 \end{lstlisting}
 
-Anschließend werden dem SQL-Statement optional die Filter für Buchungs- und Erfassungsdatum (unter ``Parameters'' in Abbildung \ref{fig:paymentrun}) hinzugefügt (Code-Beispiel \ref{lst:budat}).
+Anschließend werden dem SQL-Statement das Buchungs- (\texttt{BUDAT}) und Erfassungsdatum (\texttt{BLDAT}) optional als Filter hinzugefügt (Code-Beispiel \ref{lst:budat}).
 
 \begin{lstlisting}[caption={Einfügen zusätzlicher Filter}, label={lst:budat}, language=JavaScriptSQL]
 	if(postingDate){
@@ -67,7 +70,7 @@ Anschließend werden dem SQL-Statement optional die Filter für Buchungs- und Er
 	}
 \end{lstlisting}
 
-Für die Eingabe einer bzw. mehrerer Kundennummern (in Abbildung \ref{fig:paymentrun} unter ``Accounts'' ) wird das bereits bekannte Code-Beispiel \ref{lst:newsql} aus Kapitel \ref{sec:sqlandsourcecode} genutzt und kann in leicht abgewandelter Form auch für Lieferantennummern verwendet werden.
+Für die Eingabe einer bzw. mehrerer Kundennummern (\texttt{KUNNR}) wird das bereits bekannte Code-Beispiel \ref{lst:newsql} aus Kapitel \ref{sec:sqlandsourcecode} genutzt und kann in leicht abgewandelter Form auch für Lieferantennummern (\texttt{LIFNR}) verwendet werden (Code-Beispiel \ref{lst:vendor}).
 
 \begin{lstlisting}[caption={Unterscheidung zwischen Einzel- und Bereichsfilter}, label={lst:vendor}, language=JavaScriptSQL]
 	if(vendor && !vendorTo ){
@@ -79,24 +82,22 @@ Für die Eingabe einer bzw. mehrerer Kundennummern (in Abbildung \ref{fig:paymen
 	}
 \end{lstlisting}
 
-Das komplexeste Konstrukt der Eingabemaske ist die Tabelle für Kriterien zur Suche anhand von Buchungskreisen, Zahlmethoden und dem nächsten Ausführungsdatums des Zahllaufs.
-Die einzelnen Zellen einer Reihe bilden eine Konjunktion, wobei die Reihen untereinander jeweils disjunkt sind.
+Das komplexeste Konstrukt der Eingabemaske ist die Tabelle für Kriterien zur Suche anhand von Buchungskreisen (\texttt{BUKRS}), Zahlmethoden (\texttt{ZLSCH}) und dem nächsten Ausführungsdatums (\texttt{NEDAT}) des Zahllaufs.
+Die einzelnen Zellen einer Zeile bilden eine Konjunktion, wobei die Reihen untereinander jeweils disjunkt sind.
 Die Komplexität entsteht durch die vielen Variationsmöglichkeiten der Eingabe.
 So können Buchungskreise z.B. kommasepariert, mittels Klammern als Bereich oder beides kombiniert angegeben werden.
 Die Zahlmethoden werden mit Großbuchstaben abgekürzt und aneinander gereiht um die Angabe mehrerer Methoden zuzulassen.
 
-TODO: besser erklären, code beispiel nach oben
-Die Verarbeitung der Nutzereingaben aus der Tabelle erfolgt zeilenweise.
-Für jede Zeile wird zunächst ein leeres SQL-Statement erstellt.
-Dieses wird im ersten Schritt mit den, mittels der Funktion \texttt{parseCompanyCodes()} ermittelten, Buchungskreisen gefüllt.
-Sollten Zahlmethoden und ein nächstes Ausführungsdatum angegeben sein, werden diese dem SQL-Statement ergänzt.
-Anschließend wird es einem allgemeinen, anfangs leeren SQL-Statement hinzugefügt.
-Sobald alle Zeilen der Tabelle abgearbeitet sind, wird der zusammengestellte Filter dem SQL-Statement \texttt{insertRegup} angefügt.
-Der Algorithmus zur Verarbeitung dieser Eingaben befindet sich im Anhang (Code-Beispiel \ref{lst:paymentcontrol}).
+Die Verarbeitung der Nutzereingaben aus der Tabelle erfolgt dazu zeilenweise (siehe Code-Beispiel \ref{lst:paymentcontrol}).
+Im ersten Schritt wird die Angabe der Buchungskreise geparst.
+Zusammen mit den Zahlmethoden und nächsten Ausführungsdatum bildet sie einen Filter.
+Die gebildeten Filter der einzelnen Zeilen werden als Disjunktion dem SQL-Statement angefügt wird.
+Mit der anschließenden Ausführung des Statements ist der 2. Schritt des Algorithmus abgeschlossen.
 
-Die Berechnung vom Zahldatum und Skontobetrag erfolgt mithilfe einer SQLScript-Funktion im selben Schritt mit der Ermittlung und Speicherung der Beleginformationen in der REGUH-Relation.
+Die nachfolgende Berechnung von Zahldatum und Skontobetrag erfolgt mithilfe einer SQLScript-Funktion.
+Dies geschieht im selbe Zuge mit der Ermittlung und Speicherung der Beleginformationen in der REGUH-Relation.
 Im letzten Schritt wird aus den Ergebnissen der REGUH-Relation die JSON-Antwort für den Anwender gebildet.
-Sie enthält eine Liste mit Gesamtbetrag, Lieferantennummer, Ausführungsdatum Identifikationsmerkmal für jede erfasste Rechnung.
+Sie umfasst das Ausführungsdatum und Identifikationsmerkmal, sowie eine Liste mit Lieferantennummern und Gesamtbeträgen.
 
 Die vielen optionalen Eingaben durch den Anwender bestimmen das Aussehen, die Komplexität und die Laufzeit des untersuchten SQL-Statements.
 In diesen Fällen ist es für Entwickler deshalb wichtig, relevante Testwerte zu haben, um früh in der Entwicklung Performance-Analysen zu ermöglichen.
@@ -104,8 +105,8 @@ Für das vorgestellte SQL-Statement werden dazu im folgenden Kapitel die Ansätz
 
 \subsection{Evaluierung der vorgestellten Ansätze am Fallbeispiel}
 % Die im Rahmen dieser Bachelorarbeit vorgestellten Ansätze zur Vorschlagsgenerierung von Testwerten werden in diesem Kapitel auf Basis des Fallbeispiels evaluiert.
-TODO: Die vorgestellten Ansätze wurden anhand des Fallbeispiels auf ihre Ausführungsdauer TODO verglichen.
 %Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
+Die vorgestellten Ansätze wurden anhand des Fallbeispiels auf ihre Ausführungsdauer und vorgeschlagenen Testwerte verglichen.
 Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
 
    \begin{itemize}
@@ -116,7 +117,7 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
 			\item Buchungskreis (\texttt{BUKRS})
    \end{itemize}
 	
-Die ermittelten Vorschläge nach dem im Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
+Die ermittelten Vorschläge nach dem in Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
 Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten.
 Dies ist in diesem Falle nicht zielführend, da TODO
  für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
@@ -152,7 +153,7 @@ TODO: Was heißt das? ...und das bedeutet
 
 TODO: Was zeigt sich da?
 Dies zeigt sich besonders in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
-Es wird deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
+Es wird deutlich, dass die Mehrheit der gefundenen distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt wird.
 TODO: Was heißt das für meine Vorschläge?
 Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsentationen innerhalb der Relation aufweisen.
 Dies zeichnet sich auch in den vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei dem die ermittelten Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
@@ -171,7 +172,7 @@ Ein Vergleich mit allen möglichen Wertkombinationen würde die Berechnung einer
 Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11 Milliarden Einträgen.
 Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
 TODO:was heißt das?
-In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, würde die sin einer Berechnungszeit von über 3 Jahren resultieren.
+In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, würde dies zur einer Berechnungszeit von über 3 Jahren führen.
 Dieser Ansatz scheidet daher für die weiteren Betrachtungen dieser Analyse aus.
 
 TODO: Die folgenden Vergelcieh beziehen sich daher auf...
@@ -180,12 +181,12 @@ Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse
    \begin{enumerate}
       \item Adaptiver Algorithmus mit fester Obergrenze (50)
       \item Adaptiver Algorithmus ohne feste Obergrenze
-			\item Permutation der ermittelten häufigste, seltensten und mittleren Werte der Spalten
+			\item Permutation der ermittelten häufigsten, seltensten und mittleren Werte der Spalten
    \end{enumerate}
 
 TODO: Zuncähst,... warum 5, warumd ie meisten?
 Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen zurückgibt (zu sehen in Tabelle \ref{tab:tupel2}).
-Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die Laufzeit der Ermittlung betrachtet.
+Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und der Laufzeit der Ermittlung betrachtet.
 
 \begin{table}[h]
 	\centering
@@ -202,12 +203,12 @@ Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die 
 		\hline
 	\end{tabular}
 	}
-	\caption{Eingabetupel für mit den meisten Ergebnissen}
+	\caption{Eingabetupel mit den meisten Ergebnissen}
 	\label{tab:tupel2}
 \end{table}
 
 TODO: was sehe ich? tupel als referenz zum treffen, tabelle 4
-Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefunden Tupel reduziert.
+Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefundenen Tupel reduziert.
 TODO: wie reduziert? substantiell
 Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
 TODO: was passower wenn ich nur 2 oder 3 habe? 
@@ -230,18 +231,18 @@ TODO: was passower wenn ich nur 2 oder 3 habe?
 \end{table}
 
 TODO: Wass?
-Der Grund für vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
+Der Grund für die vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
 Die 1.860 bestimmten Tupel entsprechen allen distinkten Konstellationen der Werte der betrachteten Spalten.
 Davon haben insgesamt nur 301 mindestens eine Ergebniszeile beim Ausführen des Programms, was einer Abdeckung des kompletten Eingaberaums entspricht.
 TODO: mehr erklären!
 Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Unterraum.
-Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgeben (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
+Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgibt (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
 Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
 TODO: siehe irgendwas
 
-Aufgrund dessen ist es in Erwägung zu ziehen dem Entwickler die Möglichkeit der manuellen Festlegung einer Obergrenze zu geben.
+Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung einer Obergrenze zu geben.
 TODO: was kann er damit machen?
-Dies bedarf weiteren Untersuchungen in Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
+Dies bedarf weiterer Untersuchungen im Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
 TODO: nicht dies, die optimale parameterwahl, die möglichkeit?
 
 \begin{figure}[ht]
@@ -317,7 +318,7 @@ TODO: nicht dies, die optimale parameterwahl, die möglichkeit?
 \end{figure}
 
 TODO: aus gründen x,y,z wird die adapttive Lösung für den Einsatz in der Web-IDE favorisiert...
-Die derzeitige adaptive Lösung ermöglicht es auf Grundlage der mit einer Obergrenze ermittelten initialen Testdatensets durch exploratives Erweiterung durch den Entwickler den ermittelten Datensatz zu ergänzen.
+Die derzeitige adaptive Lösung ermöglicht es, auf Grundlage der mit einer Obergrenze ermittelten initialen Testdatensets durch explorative Erweiterung den erfassten Datensatz zu ergänzen.
 TODO: 2 Sätze
 
 %\begin{table}[h]
