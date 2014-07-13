@@ -1,17 +1,19 @@
 \section{Fallbeispiel: Der Zahllauf}\label{chap:paymentrun}
 
 Im Bereich der Geschäftsanwendungen gibt es eine Reihe hochkomplexer Prozesse, die in der IT abgebildet werden.
-Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt und anschließend die Bearbeitung durch das System veranlasst.
-Dabei spielen die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
+Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt, den Vorschlag überprüft und anschließend die Bearbeitung durch das System veranlasst.
+Dabei spielen insbesondere die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in einer günstigen Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
 
 Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren. 
 Zusätzlich erschweren große Relationen mit stark abgekürzten Namen von Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung besonders für domänenfremde Entwickler.
 Umso wichtiger ist es bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
-Dabei unterstützt die im Rahmen des Bachelorprojektes erstellte Web-IDE durch die in dieser Arbeit vorgestellten Ansätze zur Generierung von Testdatenvorschlägen.
+Dabei unterstützt die im Rahmen des Bachelorprojektes erstellte Web-IDE den Entwickler durch die in dieser Arbeit vorgestellten Ansätze zur Generierung von Testdatenvorschlägen.
 
-In diesem Kapitel wird exemplarisch die Implementierung des Zahllauf-Algorithmus mithilfe der Web-IDE vorgestellt.
+In diesem Kapitel wird folgend exemplarisch die Implementierung des Zahllauf-Algorithmus mithilfe der Web-IDE vorgestellt.
 Dabei steht die von Nutzereingaben geprägte Verarbeitung der Suchanfrage im Fokus.
-Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansätze zum Vorgeschlagen von Testwerten durchgeführt.
+TODO: Grammatikalischer kontext
+Eine 
+Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansätze zur Testwertgenerierung durchgeführt.
 
 \subsection{Implementierung des Algorithmus in der Web-IDE}
 
@@ -24,7 +26,8 @@ Auf dieser Grundlage wird anschließend eine Evaluierung der vorgestellten Ansä
 
 \nomenclature{UI}{User Interface}
 Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs besteht zum einen aus allgemeinen Parametern für die Suche und zum anderen aus Eingabefeldern für Suchkriterien einzelner Rechnungen.
-Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt, der Fokus dieses Kapitels liegt indessen auf der Backendimplementierung mittels der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
+TODO, zum bei spiel nennen, an der graifk langführen
+Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt, der Fokus dieses Kapitels liegt jedoch auf der Backendimplementierung auf Basis der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
 
 Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
    \begin{enumerate}
@@ -36,13 +39,14 @@ Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
    \end{enumerate}
 
 Die REGUP- und REGUH dienen als datenbankinterne Zwischenspeicher für die ermittelten Ergebnisse.
-Zur Selektion wird BSIK als materialisierte Sicht auf die BSEG-Relation genutzt.
+Zur Selektion wird die Relation BSIK als materialisierte Sicht auf die BSEG-Relation genutzt.
 
 Die Eingaben des Nutzers in der Filtermaske (aus dem 1. Schritt, siehe Code-Beispiel \ref{lst:jsoninput} im Anhang) wirken sich insbesondere auf die Selektion der Belegpositionen aus.
 Dem allgemeinen Teil des dazugehörigen SQL-Statements (siehe Code-Beispiel \ref{lst:regupgeneral} im Anhang) werden durch die Eingaben weitere Filterkriterien hinzugefügt, die nachfolgend näher untersucht werden.
 
 Das Code-Beispiel \ref{lst:laufi} zeigt exemplarisch, wie die Projektion des Ausführungsdatums (zu sehen in Abbildung \ref{fig:paymentrun} unter ``General Settings'') dem SQL-Statement ergänzt werden.
-Für das Identifikationsmerkmal (\texttt{LAUFI}) gilt dies analog.
+Code-Beispiel TODO zeigt exemplarisch wie die Projektion des SQL-Statement umd das Ausführungsdatum ergänzt wird.
+Für das Identifikationsmerkmal (\texttt{LAUFI}) wird analog verfahren.
 
 \begin{lstlisting}[caption={Ergänzung der Projektion um das Ausführungsdatum}, label={lst:laufi}, language=JavaScriptSQL]
 	if(runDate){
@@ -76,13 +80,14 @@ Für die Eingabe einer bzw. mehrerer Kundennummern (in Abbildung \ref{fig:paymen
 \end{lstlisting}
 
 Das komplexeste Konstrukt der Eingabemaske ist die Tabelle für Kriterien zur Suche anhand von Buchungskreisen, Zahlmethoden und dem nächsten Ausführungsdatums des Zahllaufs.
-Die einzelnen Zellen einer Reihe bilden eine Konjunktion, wobei die Reihen miteinander disjunkt sind.
-Die Komplexität entsteht durch die vielen Möglichkeiten der Eingabe.
+Die einzelnen Zellen einer Reihe bilden eine Konjunktion, wobei die Reihen untereinander jeweils disjunkt sind.
+Die Komplexität entsteht durch die vielen Variationsmöglichkeiten der Eingabe.
 So können Buchungskreise z.B. kommasepariert, mittels Klammern als Bereich oder beides kombiniert angegeben werden.
-Die Zahlmethoden werden mit Großbuchstaben abgekürzt und aneinander gereiht um mehrere Methoden zuzulassen.
+Die Zahlmethoden werden mit Großbuchstaben abgekürzt und aneinander gereiht um die Angabe mehrerer Methoden zuzulassen.
 
+TODO: besser erklären, code beispiel nach oben
 Die Verarbeitung der Nutzereingaben aus der Tabelle erfolgt zeilenweise.
-Für jede Zeile wird ein leeres SQL-Statement erstellt.
+Für jede Zeile wird zunächst ein leeres SQL-Statement erstellt.
 Dieses wird im ersten Schritt mit den, mittels der Funktion \texttt{parseCompanyCodes()} ermittelten, Buchungskreisen gefüllt.
 Sollten Zahlmethoden und ein nächstes Ausführungsdatum angegeben sein, werden diese dem SQL-Statement ergänzt.
 Anschließend wird es einem allgemeinen, anfangs leeren SQL-Statement hinzugefügt.
@@ -90,16 +95,17 @@ Sobald alle Zeilen der Tabelle abgearbeitet sind, wird der zusammengestellte Fil
 Der Algorithmus zur Verarbeitung dieser Eingaben befindet sich im Anhang (Code-Beispiel \ref{lst:paymentcontrol}).
 
 Die Berechnung vom Zahldatum und Skontobetrag erfolgt mithilfe einer SQLScript-Funktion im selben Schritt mit der Ermittlung und Speicherung der Beleginformationen in der REGUH-Relation.
-Im letzten Schritt dienen der Ergebnisse in der REGUH-Relation für die JSON-Antwort an den Anwender.
-Sie enthält eine Liste mit Gesamtbetrag, Lieferantennummer, Ausführungsdatum Identifikationsmerkmal für jede erfasste Rechnung der REGUH-Relation.
+Im letzten Schritt wird aus den Ergebnissen der REGUH-Relation die JSON-Antwort für den Anwender gebildet.
+Sie enthält eine Liste mit Gesamtbetrag, Lieferantennummer, Ausführungsdatum Identifikationsmerkmal für jede erfasste Rechnung.
 
 Die vielen optionalen Eingaben durch den Anwender bestimmen das Aussehen, die Komplexität und die Laufzeit des untersuchten SQL-Statements.
-In diesen Fällen ist es für Entwickler deshalb wichtig relevante Testwerte zu haben, um früh in der Entwicklung Performance-Analysen zu ermöglichen.
+In diesen Fällen ist es für Entwickler deshalb wichtig, relevante Testwerte zu haben, um früh in der Entwicklung Performance-Analysen zu ermöglichen.
 Für das vorgestellte SQL-Statement werden dazu im folgenden Kapitel die Ansätze dieser Arbeit zur Vorschlagsgenerierung evaluiert.
 
 \subsection{Evaluierung der vorgestellten Ansätze am Fallbeispiel}
 % Die im Rahmen dieser Bachelorarbeit vorgestellten Ansätze zur Vorschlagsgenerierung von Testwerten werden in diesem Kapitel auf Basis des Fallbeispiels evaluiert.
-Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
+TODO: Die vorgestellten Ansätze wurden anhand des Fallbeispiels auf ihre Ausführungsdauer TODO verglichen.
+%Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
 Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
 
    \begin{itemize}
@@ -111,9 +117,13 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
    \end{itemize}
 	
 Die ermittelten Vorschläge nach dem im Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
-Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
-Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Erstellung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommmen.
-Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben, mitsamt ihren Ausführungszeiten.
+Naheliegend ist die Auswahl der häufigsten Werte der jeweiligen Spalten.
+Dies ist in diesem Falle nicht zielführend, da TODO
+ für eine Analyse der Datenbankanfrage, welche jedoch eine leere Ergebnismenge liefert.
+Mithilfe der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive})... TODO
+Deshalb wird in der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) die Erstellung initialer Kombinationen der ermittelten Testwerte als Testdatensets vorgenommen.
+Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die beim Ausführen der Datenbankanfrage mindestens eine Ergebniszeile zurückgeben.
+TODO: Warum zwei?
 \begin{table}[h]
 	\centering
 	\scalebox{.9}{
@@ -126,30 +136,45 @@ Tabelle \ref{tab:tupel} zeigt die zwei in diesem Schritt gefundenen Tupel, die b
 		\hline
 	\end{tabular}
 	}
-	\caption{Gefundene Tupel für Testdatensets}
+	\caption{Gefundene Tupel für Testdatensets inklusive Ausführungszeiten}
 	\label{tab:tupel}
 \end{table}
 
+TODO: WO?? Überarebiten
+Vergleicht man die ermittelten Testdatensets...
 Vergleicht man die ermittelten Testdatensets mit den initial vorgeschlagenen häufigsten Werten der einzelnen Spalten, fällt auf, dass die Werte des Buchungsdatums, der Lieferantennummer, der Zahlmethode und des Buchungskreises konstant bleiben und nur das Belegdatum in seinem Wert variiert.
 Des Weiteren ist zu beobachten, dass alle Werte aus den ermittelten Listen der häufigsten Werte stammen.
-Dies kann mit der Verteilung der Daten begründet werden, dargestellt in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang).
-Die Grafiken zeigen das Verhältnis der Anzahl distinkter Werten innerhalb einer Spalte zu der Anzahl der Ausprägungen in den Einträgen der Relation.
+Dies lässt sich über die Verteilung der Daten, welche in den Abbildungen \ref{fig:budatverteilung} bis \ref{fig:zlschverteilung} (siehe Anhang) dargestellt sind, erklären.
+Die Grafiken zeigen das Verhältnis der Anzahl distinkter Werte innerhalb einer Spalte zur Anzahl der Ausprägungen in den Einträgen der Relation.
+TODO: Referenz Abb.
 Beispielsweise haben 630 distinkte Werte in der Spalte \texttt{BUDAT} nur jeweils einen Eintrag, wohingegen ein einziger Wert 760 Repräsentationen in der Relation hat.
+TODO: Was heißt das? ...und das bedeutet
 
+TODO: Was zeigt sich da?
 Dies zeigt sich besonders in den Abbildungen \ref{fig:budatverteilung} (\texttt{BUDAT}), \ref{fig:bldatverteilung} (\texttt{BLDAT}) und \ref{fig:lifnrverteilung} (\texttt{LIFNR}).
 Es wird deutlich, dass die Mehrheit der gefunden distinkten Werte in den Spalten meist nur in einem Eintrag der Relation genutzt werden.
-Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsenationen innerhalb der Relation umfassen.
-Dies zeichnet sich auch in den ermittelten, vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei der die Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
+TODO: Was heißt das für meine Vorschläge?
+Dem gegenüber stehen wenige Ausnahmen, die eine hohe Anzahl von Repräsentationen innerhalb der Relation aufweisen.
+Dies zeichnet sich auch in den vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei dem die ermittelten Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
+TODO: Was heißt das? ..das bestätigt , diese legt nahe, ...das fehler gering tsind
 
+Generell fällt auf  das die Spalten strueung hinstichltihc der anzahl 
+viele werte nur einmal ...
+zeigt sich in den spalten
+es ist auch hier zu erkennen...
 Ebenso zeigen die Verteilung der Daten in den Spalten \texttt{BUKRS} und \texttt{ZLSCH} (Abbildung \ref{fig:bukrsverteilung} und \ref{fig:zlschverteilung}) eine deutlich Spaltung.
-So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen distinkten Werte nur wenige Ausprägungen haben.
-Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
+So ist zu erkennen, dass jeweils ein Wert im Großteil der Einträge in der Relation genutzt wird und somit die anderen Werte nur wenige Ausprägungen haben.
+TODO: Aufgrund der wenigen distinkten Werte ergibt dies eine Gerade in der Darstellung.
 
+TODO: Der Brute-Force- Ansatz, der über eine PErmutation...
 Ein Vergleich mit allen möglichen Wertkombinationen würde die Berechnung einer Permutation über alle Listen der distinkten Werte der fünf betrachteten Spalten erfordern.
-Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11,2 Milliarden Einträgen.
+Aufgrund der Größe der einzelnen Listen (\texttt{BUDAT} 903, \texttt{BLDAT} 933, \texttt{LIFNR} 247, \texttt{ZLSCH} 6, \texttt{BUKRS} 9) ergäbe sich in der Gesamtsumme ein Liste mit über 11 Milliarden Einträgen.
 Des Weiteren hat nur ein Bruchteil dieser Kombinationen mindestens einen Repräsentanten in der Datenbank.
-In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, entspräche dies über 3 Jahre Berechnungen.
+TODO:was heißt das?
+In der Annahme, dass die Berechnung der Analyse pro Listeneintrag 10ms braucht, würde die sin einer Berechnungszeit von über 3 Jahren resultieren.
+Dieser Ansatz scheidet daher für die weiteren Betrachtungen dieser Analyse aus.
 
+TODO: Die folgenden Vergelcieh beziehen sich daher auf...
 Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse folgender Ansätze:
 
    \begin{enumerate}
@@ -158,6 +183,7 @@ Aus diesem Grund fokussiert sich das Experiment auf den Vergleich der Ergebnisse
 			\item Permutation der ermittelten häufigste, seltensten und mittleren Werte der Spalten
    \end{enumerate}
 
+TODO: Zuncähst,... warum 5, warumd ie meisten?
 Dazu wird ermittelt, welcher der Ansätze die meisten der 5 Tupel mit den größten Ergebnismengen zurückgibt (zu sehen in Tabelle \ref{tab:tupel2}).
 Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die Laufzeit der Ermittlung betrachtet.
 
@@ -180,8 +206,11 @@ Dies wird zusätzlich in Beziehung zu der Anzahl der betrachteten Tupel und die 
 	\label{tab:tupel2}
 \end{table}
 
-Die Ergebnisse (Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefunden Tupel reduziert.
+TODO: was sehe ich? tupel als referenz zum treffen, tabelle 4
+Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefunden Tupel reduziert.
+TODO: wie reduziert? substantiell
 Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
+TODO: was passower wenn ich nur 2 oder 3 habe? 
 
 \begin{table}[h]
 	\centering
@@ -200,15 +229,20 @@ Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über
 	\label{tab:tupel3}
 \end{table}
 
+TODO: Wass?
 Der Grund für vollständige Abdeckung der Tupel der Variante ohne Obergrenze liegt in der Ermittlung der zu testenden Tupel.
 Die 1.860 bestimmten Tupel entsprechen allen distinkten Konstellationen der Werte der betrachteten Spalten.
 Davon haben insgesamt nur 301 mindestens eine Ergebniszeile beim Ausführen des Programms, was einer Abdeckung des kompletten Eingaberaums entspricht.
-Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Subraum.
+TODO: mehr erklären!
+Die Festlegung einer Obergrenze entspricht also einer Einschränkung auf einen Unterraum.
 Die Verteilung der 301 Tupel (siehe Abbildung \ref{fig:tupelverteilung}) macht deutlich, dass der Großteil der Eingabekonstellationen nur eine Ergebniszeile aus der Datenbank zurückgeben (187 Tupel) und nur wenige Tupel eine größere Ergebnismenge abrufen (5 Tupel mit über 150 Ergebnissen, erfasst in Tabelle \ref{tab:tupel2}).
 Dies spiegelt die zuvor betrachtete Verteilung der Daten innerhalb der einzelnen Spalten wieder.
+TODO: siehe irgendwas
 
-Aufgrund dessen ist es in Erwägung zu ziehen dem Entwickler die Möglichkeit der Festlegung einer Obergrenze zu geben.
+Aufgrund dessen ist es in Erwägung zu ziehen dem Entwickler die Möglichkeit der manuellen Festlegung einer Obergrenze zu geben.
+TODO: was kann er damit machen?
 Dies bedarf weiteren Untersuchungen in Hinblick auf die Beziehung zwischen der Anzahl der betrachteten Spalten, dem Umfang an distinkten Werten und der Laufzeit der Berechnungen.
+TODO: nicht dies, die optimale parameterwahl, die möglichkeit?
 
 \begin{figure}[ht]
 \centering
@@ -282,7 +316,9 @@ Dies bedarf weiteren Untersuchungen in Hinblick auf die Beziehung zwischen der A
 	\label{fig:tupelverteilung}
 \end{figure}
 
-Die derzeitige adaptive Lösung ermöglicht es auf Grundlage der mit Obergrenze ermittelten initialen Testdatensets durch exploratives Erweiterung durch den Entwickler den ermittelten Datensatz zu ergänzen.
+TODO: aus gründen x,y,z wird die adapttive Lösung für den Einsatz in der Web-IDE favorisiert...
+Die derzeitige adaptive Lösung ermöglicht es auf Grundlage der mit einer Obergrenze ermittelten initialen Testdatensets durch exploratives Erweiterung durch den Entwickler den ermittelten Datensatz zu ergänzen.
+TODO: 2 Sätze
 
 %\begin{table}[h]
 	%\centering

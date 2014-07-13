@@ -20,7 +20,7 @@ Besonders die Schärfung des Bewusstseins für Daten und Datenmengen sowie das v
 Grundlage dafür bietet die Einbettung von SQL in die Programmiersprache der Geschäftsanwendung \cite{Horschig2014} (mehr Details dazu in Kapitel \ref{sec:dependencydetection}).
 Durch das Parsen des Quellcodes \cite{Horschig2014} und der darin enthaltenen SQL-Statements \cite{Schulz2014} werden die Voraussetzungen geschaffen, Analysen und Visualisierungen der Datenabfragen durchzuführen.
 Unter anderem kann anschließend eine Abschätzung über die Laufzeiten und Ergebnisgrößen von SQL-Statements gegeben werden, sowie eine Vorschau der Ergebnisse und die Verteilung der Daten in den angefragten Spalten.
-Für die Berechnung der abgeschätzten Laufzeiten und Ergebnisgrößen stehen zwei Verfahren zur Auswahl: auf Basis von Sampling \cite{Exner2014} werden mithilfe von Teilmengen der Relationen ungefähre Größen hochgerechnet und durch den Ansatz des Machine Learnings \cite{Mues2014} können Ergebnisse vergangener Anfragen als Grundlage der Berechnung genutzt werden.
+Für die Berechnung der abgeschätzten Laufzeiten und Ergebnisgrößen stehen zwei Verfahren zur Auswahl: beim Sampling \cite{Exner2014} werden mithilfe von Teilmengen der Relationen ungefähre Größen hochgerechnet und durch den Ansatz des Machine Learnings \cite{Mues2014} können Ergebnisse vergangener Anfragen als Grundlage der Berechnung genutzt werden.
 
 \begin{figure}[ht]
 	\centering
@@ -29,7 +29,7 @@ Für die Berechnung der abgeschätzten Laufzeiten und Ergebnisgrößen stehen zw
 	\label{fig:feedback}
 \end{figure}
 
-Zusätzlich ist es möglich den Verlauf des Kontrollflusses in Zusammenhang mit den Datenanfragen zu visualisieren \cite{Frahnow2014} (siehe Abbildung \ref{fig:feedback}) um die Ursachen von Performance-Problemen ausfindig zu machen.
+Zusätzlich ist es möglich, den Verlauf des Kontrollflusses im Zusammenhang mit den Datenanfragen zu visualisieren \cite{Frahnow2014} (siehe Abbildung \ref{fig:feedback}) um die Ursachen von Performance-Problemen ausfindig zu machen.
 
 Die betrachteten Features für die Analysen von SQL-Statements haben dabei zwei Voraussetzungen: das SQL-Statement muss komplett erfasst und dessen variable Parameter müssen testweise mit Werten belegt sein.
 
