@@ -106,10 +106,13 @@ Für das vorgestellte SQL-Statement werden dazu im folgenden Kapitel die Ansätz
 \subsection{Evaluierung der vorgestellten Ansätze am Fallbeispiel}
 % Die im Rahmen dieser Bachelorarbeit vorgestellten Ansätze zur Vorschlagsgenerierung von Testwerten werden in diesem Kapitel auf Basis des Fallbeispiels evaluiert.
 %Zur Evaluation der vorgestellten Ansätze wurde ein vergleichendes Experiment auf Basis des Fallbeispiels durchgeführt.
-Die vorgestellten Ansätze wurden anhand des Fallbeispiels auf ihre Ausführungsdauer und vorgeschlagenen Testwerte verglichen.
-Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
+Die vorgestellten Ansätze werden in diesem Kapitel anhand des Fallbeispiels auf ihre Ausführungsdauer und vorgeschlagenen Testwerten verglichen.
+Als Grundlage dienen folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
 
    \begin{itemize}
+  \setlength{\itemsep}{0cm}%
+  \setlength{\parskip}{0cm}%
+
       \item Buchungsdatum (\texttt{BUDAT})
       \item Belegdatum (\texttt{BLDAT})
 			\item Lieferantennummer (\texttt{LIFNR})
@@ -117,7 +120,7 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
 			\item Buchungskreis (\texttt{BUKRS})
    \end{itemize}
 
-Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritte ermittelten drei häufigsten Werte für die betrachteten Spalten (entsprechend dem Verfahren in Kapitel \ref{chap:datacharacteristics}).
+
 %Die ermittelten Vorschläge nach dem in Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
 \begin{table}[ht!]
 	\centering
@@ -128,10 +131,10 @@ Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritte ermittelten drei
 		\hline
 		Spalte & Distinkte Werte & Wert & Vorkommen & Wert & Vorkommen & Wert & Vorkommen \\
 		\hline
-		BUDAT & 903 & 20110228 	& 760 	& 20110221 	& 139 	& 20110224 	& 103 \\
-		BLDAT & 933 & 20110216 	& 177 	& 20101208 	& 124 	& 20101204 	& 118 \\
-		LIFNR & 247 & 1051 			& 3717 	& 2671 			& 1029 	& 1082993 	& 234 \\
-		BUKRS & 9 	& 3451 			& 4426 	& 8211 			& 816 	& 4101 			& 259 \\
+		BUDAT & 903 & \textbf{20110228} 	& 760 	& 20110221 	& 139 	& 20110224 	& 103 \\
+		BLDAT & 933 & \textbf{20110216} 	& 177 	& 20101208 	& 124 	& 20101204 	& 118 \\
+		LIFNR & 247 & \textbf{1051} 			& 3717 	& 2671 			& 1029 	& 1082993 	& 234 \\
+		BUKRS & 9 	& \textbf{3451} 			& 4426 	& 8211 			& 816 	& 4101 			& 259 \\
 		ZLSCH & 6 	& 					& 5739 	& T 				& 181 	& R 				& 10 \\
 		\hline
 	\end{tabular}
@@ -140,14 +143,15 @@ Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritte ermittelten drei
 	\label{tab:paymentruntable1}
 \end{table}
 
-Naheliegend ist die Auswahl der Werte mit dem jeweils höchsten Vorkommen.
-Dies ist in diesem Falle nicht zielführend, da die so gewählte Konstellation von Werten keine Einträge in der Relation vorweist.
+Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritt ermittelten drei häufigsten Werte für die betrachteten Spalten (entsprechend dem Verfahren in Kapitel \ref{chap:datacharacteristics}).
+Naheliegend ist die Auswahl der Werte mit dem jeweils höchsten Vorkommen (in der Tabelle hervorgehoben).
+Dies ist in diesem Fall nicht zielführend, da die so gewählte Konstellation von Werten keine Einträge in der Relation vorweist.
 
 Mithilfe der adaptiven Erweiterung des Ansatzes (siehe Kapitel \ref{chap:adaptive}) wird deshalb die Kombination der Spalten betrachtet.
-Tabelle \ref{tab:tupel} zeigt die vier Eingabetupel, die durch die initiale Erstellung der Testdatensets ermittelt wurden.
+Tabelle \ref{tab:tupel} zeigt die vier Eingabetupel aus den so erstellten initialen Testdatensets.
 %Die durch die initiale Erstellung der Testdatensets ermittelten zwei Eingabetupel sind in Tabelle \ref{tab:tupel} dargestellt.
 %Die absteigende Sortierung anhand der Vorkommen der ermittelten Tupel und der gewählten Obergrenze von 50 resultieren in 2 gefunden Tupeln.
-TODO: Warum zwei?
+
 \begin{table}[ht]
 	\centering
 	\scalebox{.9}{
@@ -166,88 +170,91 @@ TODO: Warum zwei?
 	\label{tab:tupel}
 \end{table}
 
-Die Anzahl ist anhand der Verteilung der Daten innerhalb der Spalten erklärbar.
-Abbildung \ref{fig:budatverteilung} zeigt beispielhaft das Verhältnis der Anzahl distinkter Werte innerhalb der Spalte \texttt{BUDAT} zur Anzahl der Ausprägungen in der Relation.
-Besonders auffällig ist die starke Streuung.
-So gibt es beispielsweise 630 Werte, die jeweils nur in einem Datensatz der Relation vorkommen, wohingegen ein einziger Wert 760 Repräsentationen hat.
-In den weiteren vier betrachteten Spalten verhält sich die Verteilung analog.
 
-\begin{figure}[h!]
-\centering
-	\begin{tikzpicture}
-		\begin{axis}[
-				axis lines=left,
-				width  = 1*\textwidth,
-				height  = 8cm,
-				ylabel={Anzahl distinkter Werte},
-				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
-				ymin=0.0,
-				xmin=0.0,
-				ymax=650.0,
-				xmax=780.0,
-				]
-				\addplot[only marks,color=blue,mark=square*,mark size=1pt] coordinates {
-					(1,630)
-					(2,102)
-					(3,25)
-					(4,19)
-					(5,10)
-					(6,6)
-					(7,1)
-					(8,3)
-					(10,1)
-					(11,3)
-					(13,1)
-					(16,1)
-					(17,1)
-					(19,2)
-					(20,1)
-					(21,2)
-					(22,2)
-					(25,1)
-					(27,2)
-					(28,1)
-					(29,4)
-					(31,2)
-					(32,4)
-					(33,4)
-					(34,4)
-					(35,5)
-					(36,6)
-					(37,5)
-					(38,6)
-					(39,4)
-					(40,6)
-					(41,5)
-					(42,3)
-					(43,4)
-					(44,4)
-					(45,2)
-					(46,1)
-					(47,1)
-					(48,1)
-					(49,3)
-					(50,1)
-					(52,3)
-					(54,2)
-					(55,2)
-					(56,2)
-					(59,1)
-					(66,1)
-					(103,1)
-					(139,1)
-					(760,1)
-				};
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Verteilung der distinkten Werte in der Spalte \texttt{BUDAT}}
-	\label{fig:budatverteilung}
-\end{figure}
 
-Dies spiegelt sich auch in der Verteilung innerhalb der Kombination der Spalten \texttt{BUDAT}, \texttt{BLDAT}, \texttt{LIFNR}, \texttt{ZLSCH} und \texttt{BUKRS} wieder (siehe Abbildung \ref{fig:combverteilung}).
-Rot hervorgehoben ist der Anteil der Tupel, der durch die absteigende Sortierung anhand der Vorkommen sowie der festgelegten Obergrenze (50) bestimmt wurde.
-Zusammen mit dem blauen Anteil ergibt dies in der Summe 1860 Tupel, was dem kompletten Eingaberaum entspricht.
-Nur zwei Tupel der ausgewählten Menge (rot) ergeben bei der Ausführung des Zahllaufprogramms ein Resultat mit mindestens einem Datensatz (dies sind die zuvor erwähnten Eingabetupel in Tabelle \ref{tab:tupel}).
+%\begin{figure}[h!]
+%\centering
+	%\begin{tikzpicture}
+		%\begin{axis}[
+				%axis lines=left,
+				%width  = 1*\textwidth,
+				%height  = 6cm,
+				%ylabel={Anzahl distinkter Werte},
+				%xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
+				%ymin=0.0,
+				%xmin=0.0,
+				%ymax=650.0,
+				%xmax=780.0,
+				%]
+				%\addplot[only marks,color=blue,mark=square*,mark size=1pt] coordinates {
+					%(1,630)
+					%(2,102)
+					%(3,25)
+					%(4,19)
+					%(5,10)
+					%(6,6)
+					%(7,1)
+					%(8,3)
+					%(10,1)
+					%(11,3)
+					%(13,1)
+					%(16,1)
+					%(17,1)
+					%(19,2)
+					%(20,1)
+					%(21,2)
+					%(22,2)
+					%(25,1)
+					%(27,2)
+					%(28,1)
+					%(29,4)
+					%(31,2)
+					%(32,4)
+					%(33,4)
+					%(34,4)
+					%(35,5)
+					%(36,6)
+					%(37,5)
+					%(38,6)
+					%(39,4)
+					%(40,6)
+					%(41,5)
+					%(42,3)
+					%(43,4)
+					%(44,4)
+					%(45,2)
+					%(46,1)
+					%(47,1)
+					%(48,1)
+					%(49,3)
+					%(50,1)
+					%(52,3)
+					%(54,2)
+					%(55,2)
+					%(56,2)
+					%(59,1)
+					%(66,1)
+					%(103,1)
+					%(139,1)
+					%(760,1)
+				%};
+		%\end{axis}
+	%\end{tikzpicture}
+	%\caption{Verteilung der distinkten Werte in der Spalte \texttt{BUDAT}}
+	%\label{fig:budatverteilung}
+%\end{figure}
+%
+%Die Anzahl der gefunden Ergebnisse ist anhand der Verteilung der Daten innerhalb der jeweiligen Spalten erklärbar.
+%Abbildung \ref{fig:budatverteilung} zeigt beispielhaft das Verhältnis der Anzahl distinkter Werte innerhalb der Spalte \texttt{BUDAT} zur Anzahl der Ausprägungen in der Relation.
+%Besonders auffällig ist die starke Streuung.
+%So gibt es beispielsweise 630 Werte, die jeweils nur in einem Datensatz der Relation vorkommen, wohingegen ein einziger Wert 760 Repräsentationen hat.
+%In den weiteren vier betrachteten Spalten verhält sich die Verteilung analog.
+
+Die Anzahl der gefunden Tupel kann anhand der Verteilung der Daten innerhalb der Relation erklärt werden.
+Abbildung \ref{fig:combverteilung} zeigt das Verhältnis der Anzahl der distinkten Tupel zur ihrer Anzahl an Vorkommen in der Relation.
+
+%Dies spiegelt sich auch in der Verteilung innerhalb der Kombination der Spalten \texttt{BUDAT}, \texttt{BLDAT}, \texttt{LIFNR}, \texttt{ZLSCH} und \texttt{BUKRS} wieder (siehe Abbildung \ref{fig:combverteilung}).
+
 
 \begin{figure}[h]
 \centering
@@ -255,8 +262,8 @@ Nur zwei Tupel der ausgewählten Menge (rot) ergeben bei der Ausführung des Zah
 		\begin{axis}[
 				axis lines=left,
 				width  = 1*\textwidth,
-				height  = 8cm,
-				ylabel={Anzahl distinkter Werte},
+				height  = 6cm,
+				ylabel={Anzahl distinkter Tupel},
 				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
 				ymin=0.0,
 				xmin=0.0,
@@ -317,23 +324,28 @@ Nur zwei Tupel der ausgewählten Menge (rot) ergeben bei der Ausführung des Zah
 				};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Verteilung der distinkten Tupel in der Relation BSIK}
+	\caption{Verteilung der distinkten Tupel über die Relation BSIK}
 	\label{fig:combverteilung}
 \end{figure}
 
-Wird der komplette Eingaberaum für Ausführung des Zahllaufprogramms genutzt, so haben 301 der 1860 Tupel ein Ergebnis mit mindestens einem Eintrag.
-Ihre Verteilung verhält sich ähnlich zu den vorangegangen Beobachtungen.
-Nur fünf der ermittelten Tupel haben über 100 Datensätze in ihrer jeweiligen Ergebnismenge, wohingegen 187 Tupel jeweils nur einem Datensatz repräsentiert sind.
+Besonders auffällig ist die starke Streuung.
+So gibt es beispielsweise 1318 Tupel, die jeweils nur in einem Datensatz der Relation vorkommen, wohingegen zwei Tupel über 100 Repräsentanten haben.
 
-\begin{figure}[h]
+Rot hervorgehoben ist der Anteil, der vom adaptiven Ansatz als initiale Eingabe genutzt wird.
+Dies entspricht der absteigenden Sortierung anhand der Vorkommen sowie der festgelegten Obergrenze von 50 Tupeln.
+Zusammen mit dem blauen Anteil ergibt dies in der Summe 1860 Tupel, was dem kompletten Eingaberaum entspricht.
+Nur vier Tupel der betrachteten roten Menge ergeben bei Ausführung des Zahllaufprogramms ein Resultat mit mindestens einem Datensatz.
+Dies sind die zuvor erwähnten Eingabetupel in Tabelle \ref{tab:tupel}.
+
+\begin{figure}[h!]
 \centering
 	\begin{tikzpicture}
 		\begin{axis}[
 				axis lines=left,
 				width  = 1*\textwidth,
-				height  = 8cm,
+				height  = 6cm,
 				ylabel={Anzahl distinkter Tupel},
-				xlabel={Anzahl der Vorkommen in der Relation \texttt{BSIK}},
+				xlabel={Anzahl an Resultaten vom Zahllaufalgorithmus},
 				ymin=0.0,
 				xmin=0.0,
 				ymax=210.0,
@@ -387,13 +399,17 @@ Nur fünf der ermittelten Tupel haben über 100 Datensätze in ihrer jeweiligen 
 				};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Verhältnis distinkter Eingabetupel zur Anzahl von Datensätzen in BSIK}
+	\caption{Verteilung der 301 möglichen Eingabetupel für den Zahllauf}
 	\label{fig:tupelbsikverteilung}
 \end{figure}
 
-Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel, wovon zwei den ermittelten Eingabetupel (siehe Tabelle \ref{tab:tupel}) entsprechen.
+Wird der komplette Eingaberaum für die Ausführung des Zahllaufprogramms genutzt, so haben nur 301 der 1860 Tupel ein Ergebnis mit mindestens einem Eintrag.
+Dies entspricht einem Anteil von 16 \%.
+Ihre Verteilung (siehe Abbildung \ref{fig:tupelbsikverteilung}) verhält sich analog zu der Beobachtung über den gesamten, potentiellen Eingaberaum (Abbildung \ref{fig:combverteilung}).
+Nur fünf der Tupel haben über 100 Datensätze in ihren Resultaten, wohingegen 187 Tupel jeweils nur einen Datensatz umfassen.
+Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel mit den größten Ergebnismengen, wovon zwei den ermittelten Eingabetupel in Tabelle \ref{tab:tupel} entsprechen.
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\scalebox{.85}{
 	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
@@ -403,8 +419,8 @@ Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel, wovon zwei den er
         1 & '20110228' & '20101227' & '0001082993' & ' ' & '8211' & 234 & 52,317 \\
         2 & '20110228' & '20101220' & '0001082993' & ' ' & '8211' & 233 & 51,689 \\
         3 & '20110228' & '20101213' & '0001082993' & ' ' & '8211' & 232 & 50,240 \\
-        4 & '20110228' & '20101208' & '0001082993' & ' ' & '8211' & 231 & 49,917 \\
-        5 & '20110228' & '20101204' & '0001082993' & ' ' & '8211' & 117 & 49,280 \\
+        \textbf{4} & \textbf{'20110228'} & \textbf{'20101208'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{231} & \textbf{49,917} \\
+        \textbf{5} & \textbf{'20110228'} & \textbf{'20101204'} & \textbf{'0001082993'} & \textbf{' '} & \textbf{'8211'} & \textbf{117} & \textbf{49,280} \\
 		\hline
 	\end{tabular}
 	}
@@ -412,8 +428,14 @@ Tabelle \ref{tab:tupel2} zeigt exemplarisch diese fünf Tupel, wovon zwei den er
 	\label{tab:tupel2}
 \end{table}
 
-TODO: Es wird vermutet, dass die gewählte Obergrenze an zu betrachtenden Tupeln die Anzahl der ermittelten Eingabetupel beeinflusst.
-Aus diesem Grund wurden die Grenze stufenweise erhöht und mit der benötigten Laufzeit sowie der Menge an ermittelten Tupeln verglichen (siehe Tabelle \ref{tab:tupel3}).
+Im Weiteren wird der deshalb der Einfluss der gewählten Obergrenze auf die Anzahl der ermittelten Eingabetupel mit mindestens einem Ergebnisdatensatz untersucht.
+%TODO: Es wird vermutet, dass die gewählte Obergrenze an zu betrachtenden Tupeln die Anzahl der ermittelten Eingabetupel beeinflusst.
+Dazu wird die Grenze stufenweise erhöht und mit der benötigten Laufzeit sowie der Menge an ermittelten Tupeln verglichen.
+
+Die Messergebnisse (siehe Tabelle \ref{tab:tupel3}) zeigen, dass mit steigender Betrachtung von Tupeln auf der einen Seite die Anzahl der gefundenen Eingabetupel für Testdatensets steigt, auf der anderen Seite jedoch auch die Laufzeit der Analysen wächst.
+Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung der Obergrenze zu geben.
+Er könnte so das Verhältnis zwischen dem Maximum an initial ermittelten Testdatensets und der für ihn vertretbaren Laufzeit selbst festlegen.
+Die optimale Parameterwahl bedarf dabei weiteren Untersuchungen der Beziehung zwischen der Anzahl der betrachteten Spalten, der Verteilung der Daten und der Laufzeit der Berechnungen.
 
 \begin{table}[h]
 	\centering
@@ -431,18 +453,13 @@ Aus diesem Grund wurden die Grenze stufenweise erhöht und mit der benötigten L
 		\hline
 	\end{tabular}
 	}
-	\caption{Eingabetupel mit den meisten Ergebnissen}
+	\caption{Auswirkung der Wahl der Obergrenze auf Anzahl der Eingabetupel und Laufzeit}
 	\label{tab:tupel3}
 \end{table}
 
-Die Messergebnisse zeigen, dass mit steigender Betrachtung von Tupeln auf der einen Seite die Anzahl der gefundenen Tupel mit mindestens einem Datensatz steigt.
-Auf der anderen Seite jedoch auch die Laufzeit der Analyse wächst.
-Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit der manuellen Festlegung der Obergrenze zu geben.
-Er könnte das Verhältnis zwischen dem Maximum an initial ermittelten Testdatensets und der vertretbaren Laufzeit selbstständig festlegen.
-Die optimale Parameterwahl bedarf weiterer Untersuchungen der Beziehung zwischen der Anzahl der betrachteten Spalten, der Verteilung der Daten und der Laufzeit der Berechnungen.
+Aus Gründen der Einfachheit und Geschwindigkeit des Feedbacks für den Entwickler wird die adaptive Lösung mit fester Obergrenze für den Einsatz in der Web-IDE favorisiert.
+Sie ermöglicht es auf Grundlage der explorativen Erweiterung die Menge der initial ermittelten Testdatensets kontinuierlich zu erweitern und stellt somit ein Kompromiss aus Laufzeit und Menge an Testdaten dar.
 
-Aus Gründen der Einfachheit und Geschwindigkeit des Feedbacks für den Entwickler wird die adaptive Lösung für den Einsatz in der Web-IDE favorisiert.
-Sie ermöglicht es auf Grundlage der ermittelten initialen Testdatensets durch explorative Erweiterung den erfassten Datensatz zu ergänzen.
 
 
 

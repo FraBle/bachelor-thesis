@@ -1,23 +1,28 @@
 \section{Zusammenfassung und Ausblick}\label{chap:conclusion}
 
-In dieser Bachelorarbeit wurden Konzept und Implementierung der Vorschlagsgenerierung relevanter Testwerte für Performance-Analysen vorgestellt.
-Die entwickelten Ansätze sind Bestandteil der Werkzeugpalette der vom Bachelorprojekt erschaffenen Web-IDE und dienen als Grundlage sowohl für Vorhersagen von Laufzeit und Ergebnisgrößen als auch für die Visualisierung von SQL-Statements.
+In dieser Bachelorarbeit wurden Konzept und Implementierung der Vorschlagsgenerierung relevanter Testwerte für Performance-Analysen vorgestellt und evaluiert.
+%Auf Grundlage der Einbettung von SQL in die Programmiersprache der Geschäftsanwendung wurden die Verknüpfung der Datenbankinteraktionen mit dem Kontext der Anwendung untersucht.
+%Die daraus resultierenden Informationen wurden zur Generierung von Vorschlägen für Testdaten anhand von Datencharacteristiken genutzt.
+Die verschiedenen, vorgestellten Ansätze nutzen dabei neben den Datencharakteristiken innerhalb der Datenbank auch die Kontrollfluss- und Kontextinformationen der Anwendung.
+Eine adaptive Erweiterung ermöglicht das kontinuierliche Ergänzen der Testdaten durch den Entwickler.
+Zusammen mit der Integration mehrerer Testsysteme wurde so die Grundlage geschaffen für das performancebewusste Testen von Geschäftsanwendungen.
 
-TODO: Weiter ausführen
+Die entwickelten Palette an Werkzeugen sind Bestandteil der vom Bachelorprojekt erschaffenen Web-IDE und dienen als Grundlage sowohl für Vorhersagen von Laufzeit und Ergebnisgrößen als auch für die Visualisierung von SQL-Statements.
 
-Nachfolgend werden weitere Ideen diskutiert, die die Ansätze in Zukunft ergänzen können.
+Nachfolgend werden weitere Ideen vorgestellt, die die Ansätze in Zukunft ergänzen können.
 
 \subsection{Vorschläge auf Basis von Query-Plan-Analysen}
 Um den Einfluss bestimmter Parameter auf Abfrageausführungspläne zu ermitteln, können die Bordmittel des Datenbanksystems als Ergänzung genutzt werden.
-Die Analyse des SQL-Statements durch den SQL-Befehl \texttt{EXPLAIN PLAN} liefert dafür eine Kostenaufschlüsselung der einzelnen SQL-Operatoren vor der eigentlichen Ausführung.
+Die Analyse von SQL-Statements durch den SQL-Befehl \texttt{EXPLAIN PLAN} liefert eine Kostenaufschlüsselung der einzelnen SQL-Operatoren vor der eigentlichen Ausführung.
 Die Zuordnung der Kosten zu den Parametern mit den zuvor ermittelten Testwerten würde eine Auskunft über deren Gewichtung geben.
 Für eine Kostenanalyse inklusive Ausführung kann die SAP HANA interne Prozedur \texttt{PLANVIZ\_ACTION} genutzt werden.
 Die Betrachtung einer solchen Analyse ist nicht Teil dieser Arbeit, kann aber in einer späteren Erweiterung die Präzision der Vorschläge von Testwerten erhöhen.
 
 \subsection{Einbeziehung von Vorwissen über das genutzte System}
-Sollte ein bestimmtes System genutzt werden, z.B. SAP ERP-Software, so kann Vorwissen über dessen Charakteristiken in den Vorschlägen zu Testdaten berücksichtigt werden.
+Sollte ein bestimmtes System genutzt werden, z.B. SAP ERP, so kann Vorwissen über dessen Charakteristiken in den Vorschlägen zu Testdaten berücksichtigt werden.
 Ein Beispiel dafür sind Standardwerte, die in jeder Instanz des Systems verwendet werden (z.B. feste Benutzerkennungen), oder die Betrachtung besonderer Zeiträume, wie das Jahresende.
 Somit können Informationen aus dem Kontext des Systems die Vorschläge erweitern, um typische Szenarien abzudecken.
 
 
-Schon jetzt unterstützen die Werkzeuge die Entwickler von Geschäftsanwendungen, während der Entwicklungsphase Engpässe aufzudecken und zu beheben, um so das kostenintensive Nachbessern zu vermeiden.
+Schon jetzt unterstützen die Analysen von Datenbankinteraktionen mittels relevanter Testwerte die Entwickler von Geschäftsanwendungen.
+Sie können bereits während der Entwicklungsphase helfen Engpässe aufzudecken und zu beheben, um so kostenintensives Nachbessern zu vermeiden.
