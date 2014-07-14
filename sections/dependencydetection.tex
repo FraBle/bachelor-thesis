@@ -30,7 +30,7 @@ Statische SQL-Statements bleiben über den Kontrollfluss hinweg unverändert und
 Sie können für Anfragen genutzt werden, die jederzeit dieselben Informationen aus der Datenbank auslesen (zum Beispiel das Auflisten aller Kunden).
 Diese Datenbankanfragen sind für Analysen leicht aus dem Quellcode herauszuparsen und müssen nicht verändert oder mit Testwerten ergänzt werden.
 
-\clearpage
+
 \subsubsection{Prepared SQL-Statements}
 
 	\begin{lstlisting}[caption={Prepared Statements eingebettet im Quellcode}, label={lst:preparedsql}, language=JavaScript]
@@ -39,8 +39,7 @@ Diese Datenbankanfragen sind für Analysen leicht aus dem Quellcode herauszupars
 		FROM CUSTOMER.BSEG LEFT OUTER JOIN CUSTOMER.LFA1
 		ON BSEG.MANDT = LFA1.MANDT AND BSEG.LIFNR = LFA1.LIFNR
 		WHERE BSEG.KUNNR = ?");
-		stmt.setInt(1, 23342341);
-		stmt.execute();
+		stmt.setInt(1, 23342341).execute();
 	\end{lstlisting}
 
 Der Anwendungsfall von Prepared Statements ist das mehrfache Ausführen derselben Anfrage mit verschiedenen Parameterwerten.
@@ -76,7 +75,6 @@ In beiden Fällen gibt es einen konstanten Part der Anfrage (Zeile 1 bis 4) und 
 
 Im folgenden Abschnitt werden diese Beziehungen auf Basis von Variablen aus dem Kontext der Anwendung ausführlicher untersucht.
 
-
 \subsection{Verkn{\"u}pfung von SQL-Parametern und Quellcodevariablen}\label{sec:sqlandsourcecode}
 Aus dem Code-Beispiel \ref{lst:dynamicsql} geht bereits deutlich hervor, dass Kontextvariablen einen Einfluss auf das SQL-Statement und vorrangig dessen Parameter haben.
 Allerdings wurden in den vorherigen Beispielen SQL-Teile stets nur als Zeichenketten in der Anwendung genutzt.
@@ -84,7 +82,6 @@ Durch diese Umwandlung verlieren sie ihre Komfortfunktionen (z.B. Autovervollst�
 Um die Nachteile dieser Konkatenation von Zeichenketten abzuschaffen, kann der Quellcode in die Syntax nach Horschig \cite{Horschig2014} übertragen werden (vgl. Code-Beispiel \ref{lst:newsql}).
 Durch die Einbettung der Datenbankanfragen nach dem Prinzip von Language Boxes \cite{diekmann2013parsing} werden die Konzepte von SQL und der umgebenen Sprache miteinander kombiniert und es entstehen Synergien, die die Entwicklung der Anwendung vereinfachen und den Quellcode leichter verständlich machen, zum Beispiel durch die explizite Verknüpfung von Quellcodevariablen mit SQL-Statements und -Parametern.
 
-\clearpage
 	\begin{lstlisting}[caption={Darstellung des Code-Beispiels \ref{lst:dynamicsql} in der Syntax nach \cite{Horschig2014}}, label={lst:newsql}, language=JavaScriptSQL]
 		var customer = request.body.customer,
 		    customerTo = request.body.customerTo,

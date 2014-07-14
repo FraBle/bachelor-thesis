@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=appendix\distinctvalues.tex
+Document=sections\paymentrun.tex
 
 [Frame0_View0,0]
-TopLine=0
-Cursor=356
+TopLine=485
+Cursor=19764
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\paymentrun.tex
+Document=sections\introduction.tex
 
 [Frame1_View0,0]
-TopLine=393
-Cursor=17188
+TopLine=0
+Cursor=466
 
 [Frame2]
 Flags=0
@@ -47,14 +47,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
-Class=BibTeXView
-Document=bachelor.bib
+NormalPos.right=1030
+NormalPos.bottom=426
+Class=LaTeXView
+Document=sections\abstract.tex
 
 [Frame2_View0,0]
-TopLine=343
-Cursor=12662
+TopLine=0
+Cursor=2209
 
 [Frame3]
 Flags=0
@@ -65,14 +65,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=bachelor_thesis.tex
+Document=sections\terminology.tex
 
 [Frame3_View0,0]
-TopLine=127
-Cursor=5961
+TopLine=0
+Cursor=542
 
 [Frame4]
 Flags=0
@@ -83,14 +83,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\relatedwork.tex
+Document=titlepage.tex
 
 [Frame4_View0,0]
-TopLine=5
-Cursor=2300
+TopLine=0
+Cursor=477
 
 [Frame5]
 Flags=0
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=appendix\paymentrunsql.tex
+Document=..\..\..\..\..\Program Files\MiKTeX 2.9\tex\generic\pgfplots\pgfplots.code.tex
 
 [Frame5_View0,0]
-TopLine=52
-Cursor=3776
+TopLine=21
+Cursor=2094
 
 [Frame6]
 Flags=0
@@ -119,14 +119,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=..\..\..\..\..\Program Files\MiKTeX 2.9\tex\generic\pgfplots\pgfplots.code.tex
+Document=appendix\paymentrunsql.tex
 
 [Frame6_View0,0]
-TopLine=21
-Cursor=2094
+TopLine=55
+Cursor=3776
 
 [Frame7]
 Flags=0
@@ -137,14 +137,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=titlepage.tex
+Document=bachelor_thesis.tex
 
 [Frame7_View0,0]
-TopLine=0
-Cursor=477
+TopLine=141
+Cursor=5961
 
 [Frame8]
 Flags=0
@@ -155,14 +155,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\terminology.tex
+Document=appendix\distinctvalues.tex
 
 [Frame8_View0,0]
 TopLine=0
-Cursor=542
+Cursor=356
 
 [Frame9]
 Flags=0
@@ -173,14 +173,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\testdatasuggestions.tex
+Document=sections\ide.tex
 
 [Frame9_View0,0]
-TopLine=296
-Cursor=16723
+TopLine=18
+Cursor=2515
 
 [Frame10]
 Flags=0
@@ -191,14 +191,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\abstract.tex
+Document=sections\testdatasuggestions.tex
 
 [Frame10_View0,0]
-TopLine=0
-Cursor=2209
+TopLine=544
+Cursor=24994
 
 [Frame11]
 Flags=0
@@ -209,14 +209,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\introduction.tex
+Document=sections\relatedwork.tex
 
 [Frame11_View0,0]
-TopLine=0
-Cursor=466
+TopLine=5
+Cursor=577
 
 [Frame12]
 Flags=0
@@ -227,14 +227,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\dependencydetection.tex
+Document=sections\testdataadministration.tex
 
 [Frame12_View0,0]
-TopLine=84
-Cursor=6461
+TopLine=61
+Cursor=4550
 
 [Frame13]
 Flags=0
@@ -245,14 +245,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=appendix\bsegtable.tex
+Document=appendix\paymentruntable.tex
 
 [Frame13_View0,0]
-TopLine=0
-Cursor=647
+TopLine=61
+Cursor=2610
 
 [Frame14]
 Flags=0
@@ -263,14 +263,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\conclusion.tex
+Document=acknowledgments.tex
 
 [Frame14_View0,0]
 TopLine=0
-Cursor=689
+Cursor=819
 
 [Frame15]
 Flags=0
@@ -281,8 +281,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
 Document=appendix\paymentrundistribution.tex
 
@@ -299,14 +299,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=acknowledgments.tex
+Document=sections\conclusion.tex
 
 [Frame16_View0,0]
 TopLine=0
-Cursor=819
+Cursor=2822
 
 [Frame17]
 Flags=0
@@ -317,14 +317,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=appendix\paymentruntable.tex
+Document=appendix\bsegtable.tex
 
 [Frame17_View0,0]
-TopLine=45
-Cursor=2610
+TopLine=0
+Cursor=647
 
 [Frame18]
 Flags=0
@@ -335,14 +335,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
+NormalPos.right=1030
+NormalPos.bottom=426
 Class=LaTeXView
-Document=sections\testdataadministration.tex
+Document=sections\dependencydetection.tex
 
 [Frame18_View0,0]
-TopLine=54
-Cursor=4550
+TopLine=93
+Cursor=4854
 
 [Frame19]
 Flags=0
@@ -353,16 +353,16 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1706
-NormalPos.bottom=868
-Class=LaTeXView
-Document=sections\ide.tex
+NormalPos.right=1030
+NormalPos.bottom=426
+Class=BibTeXView
+Document=bachelor.bib
 
 [Frame19_View0,0]
-TopLine=18
-Cursor=1944
+TopLine=334
+Cursor=12171
 
 [SessionInfo]
 FrameCount=20
-ActiveFrame=1
+ActiveFrame=0
 

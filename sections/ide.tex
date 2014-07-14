@@ -1,3 +1,4 @@
+\clearpage
 \section{ERIC: Eine IDE f{\"u}r daten- und performancebewusste Entwicklung}\label{chap:entwicklungsumgebung}
 
 %%%%%%%%%%%%%%%%
@@ -6,7 +7,7 @@
 %
 %%%%%%%%%%%%%%%%
 
-\markboth{2. ERIC}{}
+\markboth{3. ERIC}{}
 
 \begin{figure}[h]
 	\centering
@@ -24,7 +25,7 @@ Für die Berechnung der abgeschätzten Laufzeiten und Ergebnisgrößen stehen zw
 
 \begin{figure}[ht]
 	\centering
-  \includegraphics[width=0.75\textwidth]{figures/feedback.png}
+  \includegraphics[width=0.7\textwidth]{figures/feedback.png}
 	\caption{Visualisierung des Kontrollflusses}
 	\label{fig:feedback}
 \end{figure}
@@ -38,14 +39,12 @@ Die betrachteten Features für die Analysen von SQL-Statements haben dabei zwei 
 		    negative = request.body.negative,
 				filter = [],
 		    stmt = "SELECT * FROM CUSTOMER.BSEG";
-		if(negative){
+		if(negative)
 			filter.push("BSEG.XNEGP = 'X'");
-		}
-		if(customer){
+		if(customer)
 			filter.push("BSEG.KUNNR = '" + customer + "'");
-		}
-		if(filter.length > 0){
-		stmt += " WHERE " +  filter.join(" and ");
+		if(filter.length > 0)
+			stmt += " WHERE " +  filter.join(" and ");
 \end{lstlisting}
 
 Schon einfache Algorithmen, wie im Code-Beispiel \ref{lst:ide}, lassen das SQL-Statement auf Basis von Programmvariablen variieren (\texttt{negative}) und belegen die SQL-Parameter in Abhängigkeit von beispielsweise Sitzungsdaten, Formularen oder Anfrageparametern mit unterschiedlichen Werten (\texttt{customer}).

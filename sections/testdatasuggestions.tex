@@ -455,6 +455,7 @@ Tabelle \ref{tab:tableforgeneratedvalues} zeigt für verschiedene Knotentypen un
 Für die Variable \texttt{noDunning} sind das \texttt{true} und \texttt{false}.
 Ein Vergleich, beispielsweise \texttt{if(amount > 5)} ergibt als Testwerte \texttt{5} (nicht erfüllend) und \texttt{5+1}, also \texttt{6} (erfüllend).
 In Abhängigkeit des Vergleichsoperators muss einer der beiden vorgeschlagene Werte angepasst werden um die Negation der Bedingung zu erreichen.
+Der Ansatz ist ähnlich dem Verfahren in Testing-Frameworks, um eine erhöhte Verzweigungsüberdeckung zu erreichen und unterstützt derzeit die drei primitiven Datentypen von JavaScript (Wahrheitswerte, Zahlen, Zeichenketten).
 
 \begin{table}[ht!]
 	\centering
@@ -479,8 +480,6 @@ In Abhängigkeit des Vergleichsoperators muss einer der beiden vorgeschlagene We
 	\caption{Testwertermittlung für Vergleiche einer Variable mit einem Literal \texttt{x}}
 	\label{tab:tableforgeneratedvalues}
 \end{table}
-
-Der Ansatz ist ähnlich dem Verfahren in Testing-Frameworks, um eine erhöhte Verzweigungsüberdeckung zu erreichen und unterstützt derzeit die drei primitiven Datentypen von JavaScript (Wahrheitswerte, Zahlen, Zeichenketten).
 
 \subsection{Integration in die Web-IDE}
 \begin{figure}[ht]

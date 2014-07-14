@@ -33,8 +33,11 @@ Jede Zeile der Tabelle besteht aus einem Filter nach Buchungskreis (Company Code
 Für die Implementierung des Frontends wurde das UI-Framework OpenUI5\footnote{\url{http://sap.github.io/openui5/}} von SAP genutzt.
 Der Fokus dieses Kapitels liegt jedoch auf der Backendimplementierung auf Basis der SAP XS-Engine\footnote{\url{http://help.sap.com/hana/SAP_HANA_XS_JavaScript_Reference_en/index.html}}.
 
+\clearpage
 Der Algorithmus des Zahllaufs besteht aus 5 Schritten:
    \begin{enumerate}
+			\setlength{\itemsep}{0cm}%
+			\setlength{\parskip}{0cm}%
       \item Parsen der JSON-Anfrage vom Frontend
 			\item Selektion von Belegpositionen und Speicherung in der REGUP-Relation
 			\item Berechnung von Zahldatum und Skonto
@@ -110,9 +113,8 @@ Die vorgestellten Ansätze werden in diesem Kapitel anhand des Fallbeispiels auf
 Als Grundlage dienen folgende mögliche Nutzereingaben zur Filterung der Ergebnisse des Zahllaufprogramms:
 
    \begin{itemize}
-  \setlength{\itemsep}{0cm}%
-  \setlength{\parskip}{0cm}%
-
+			\setlength{\itemsep}{0cm}%
+			\setlength{\parskip}{0cm}%
       \item Buchungsdatum (\texttt{BUDAT})
       \item Belegdatum (\texttt{BLDAT})
 			\item Lieferantennummer (\texttt{LIFNR})
@@ -139,7 +141,7 @@ Als Grundlage dienen folgende mögliche Nutzereingaben zur Filterung der Ergebni
 		\hline
 	\end{tabular}
 	}
-	\caption{Ermittelte häufigste Werte für die Eingabedaten}
+	\caption{Ermittelte häufigste Werte der betrachteten Spalten}
 	\label{tab:paymentruntable1}
 \end{table}
 
@@ -324,7 +326,7 @@ Abbildung \ref{fig:combverteilung} zeigt das Verhältnis der Anzahl der distinkt
 				};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Verteilung der distinkten Tupel über die Relation BSIK}
+	\caption{Verhältnis der distinkten Tupel zur Anzahl ihres Vorkommens}
 	\label{fig:combverteilung}
 \end{figure}
 
@@ -345,7 +347,7 @@ Dies sind die zuvor erwähnten Eingabetupel in Tabelle \ref{tab:tupel}.
 				width  = 1*\textwidth,
 				height  = 6cm,
 				ylabel={Anzahl distinkter Tupel},
-				xlabel={Anzahl an Resultaten vom Zahllaufalgorithmus},
+				xlabel={Anzahl der Ergebnisse vom Zahllauf},
 				ymin=0.0,
 				xmin=0.0,
 				ymax=210.0,
@@ -437,7 +439,7 @@ Aufgrund dessen ist es in Erwägung zu ziehen, dem Entwickler die Möglichkeit d
 Er könnte so das Verhältnis zwischen dem Maximum an initial ermittelten Testdatensets und der für ihn vertretbaren Laufzeit selbst festlegen.
 Die optimale Parameterwahl bedarf dabei weiteren Untersuchungen der Beziehung zwischen der Anzahl der betrachteten Spalten, der Verteilung der Daten und der Laufzeit der Berechnungen.
 
-\begin{table}[h]
+\begin{table}[b]
 	\centering
 	\scalebox{.85}{
 	\begin{tabular}{ |c|c|c|c|c|c|c|c| }
@@ -453,7 +455,7 @@ Die optimale Parameterwahl bedarf dabei weiteren Untersuchungen der Beziehung zw
 		\hline
 	\end{tabular}
 	}
-	\caption{Auswirkung der Wahl der Obergrenze auf Anzahl der Eingabetupel und Laufzeit}
+	\caption{Auswirkung der Wahl der Obergrenze auf Eingabetupel und Laufzeit}
 	\label{tab:tupel3}
 \end{table}
 
