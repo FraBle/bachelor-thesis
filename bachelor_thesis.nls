@@ -4,6 +4,10 @@
 
   \item [{AST}]\begingroup Abstract Syntax Tree\nomeqref {0}
 		\nompageref{18}
+  \item [{BVC}]\begingroup Boundary Value Coverage\nomeqref {0}
+		\nompageref{1}
+  \item [{DSE}]\begingroup Dynamic Symbolic Execution\nomeqref {0}
+		\nompageref{1}
   \item [{ER}]\begingroup Entity-Relationship\nomeqref {0}
 		\nompageref{1}
   \item [{ERIC}]\begingroup Enterprise-Ready IDE Concepts\nomeqref {0}
@@ -16,6 +20,7 @@
 		\nompageref{25}
   \item [{JSON}]\begingroup JavaScript Object Notation\nomeqref {0}
 		\nompageref{1}
+  \item [{LC}]\begingroup Logical Coverage\nomeqref {0}\nompageref{1}
   \item [{SQL}]\begingroup Structured Query Language\nomeqref {0}
 		\nompageref{1}
   \item [{UI}]\begingroup User Interface\nomeqref {0}\nompageref{26}

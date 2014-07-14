@@ -1,7 +1,7 @@
 \clearpage
 \section{SQL-Statements zur Bestimmung von Testwerten}
 
-\begin{lstlisting}[caption={Bestimmung vorzuschlagender Testwerte anhand von Datencharakteristiken}, label={lst:distinctvalues}, language=mySQL]
+\begin{lstlisting}[caption={Bestimmung vorzuschlagender Testwerte anhand von Datencharakteristiken}, label={lst:distinctvalues}, language=mySQL, deletekeywords={schema, table, TABLE, SCHEMA, COLUMN, column}]
 -- Häufigste Werte
 SELECT <column>, COUNT(<column>) AS OCCURENCES
 FROM <schema>.<table>

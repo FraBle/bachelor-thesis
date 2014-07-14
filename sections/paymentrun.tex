@@ -5,7 +5,7 @@ Im Bereich der Geschäftsanwendungen gibt es eine Reihe hochkomplexer Prozesse, 
 Einer davon ist der sogenannte Zahllauf, bei dem sich der Anwender eine Liste von offenen Zahlungen erst vorschlagen lässt, den Vorschlag überprüft und anschließend die Bearbeitung durch das System veranlasst.
 Dabei spielen insbesondere die Abhängigkeiten von Zahlungen, Lieferanten und Rabattverträgen eine wichtige Rolle, da sie im Idealfall in eine günstige Konstellation für das Unternehmen resultieren und dadurch Einsparungen bei den Ausgaben ermöglichen.
 
-Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren. 
+Aus diesem Grund hat die Implementierung des dazugehörigen Algorithmus viele Einflussfaktoren.
 Zusätzlich erschweren große Relationen mit stark abgekürzten Namen von Feldern und Werten, die als Eingabe, Zwischenspeicher und Ausgabe dienen, das Erstellen einer daten- und performancebewussten Umsetzung.
 Dies gilt besonders für domänenfremde Entwickler.
 Umso wichtiger ist es, bereits frühzeitig in der Entwicklung relevante Testdaten zu nutzen, die auch Randfälle der Implementierung abdecken und Engpässe aufzeigen.
@@ -25,7 +25,7 @@ Anschließend werden die vorgestellten Ansätze zur Testwertgenerierung anhand d
 \end{figure}
 
 \nomenclature{UI}{User Interface}
-Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs hat zwei Bestandteile. 
+Die in Abbildung \ref{fig:paymentrun} dargestellte Filtereingabemaske des Zahllaufs hat zwei Bestandteile.
 Zum einen können allgemeine Parameter für die Suche festgelegt werden (z.B. das Ausführungsdatum (Run Date) und der Bereich der Lieferantennummern (Vendor)).
 Zum anderen dient die Eingabe in Form einer Tabelle (Payment Control) zur Festlegung von zusammenhängende Suchkriterien.
 Jede Zeile der Tabelle besteht aus einem Filter nach Buchungskreis (Company Codes), Zahlmethoden (Payment Methods) und dem nächsten Ausführungsdatum (Next p/date) und entspricht damit einem eigenen Suchlauf.
@@ -53,9 +53,9 @@ Für das Identifikationsmerkmal (\texttt{LAUFI}) wird analog verfahren.
 
 \begin{lstlisting}[caption={Ergänzung der Projektion um das Ausführungsdatum}, label={lst:laufi}, language=JavaScriptSQL]
 	if(runDate){
-			insertRegup += SQL SELECT @runDate as LAUFD;
+			insertRegup += SQL SELECT @runDate AS LAUFD;
 	} else {
-			insertRegup += SQL SELECT '' as LAUFD;
+			insertRegup += SQL SELECT '' AS LAUFD;
 	}
 \end{lstlisting}
 
@@ -116,7 +116,7 @@ Als Grundlage dienten folgende mögliche Nutzereingaben zur Filterung der Ergebn
 			\item Zahlmethode (\texttt{ZLSCH})
 			\item Buchungskreis (\texttt{BUKRS})
    \end{itemize}
-	
+
 Tabelle \ref{tab:paymentruntable1} zeigt die im ersten Schritte ermittelten drei häufigsten Werte für die betrachteten Spalten (entsprechend dem Verfahren in Kapitel \ref{chap:datacharacteristics}).
 %Die ermittelten Vorschläge nach dem in Kapitel \ref{chap:datacharacteristics} spezifizierten Verfahren sind in den Tabellen \ref{tab:paymentruntable1}, \ref{tab:paymentruntable2} und \ref{tab:paymentruntable3} dargestellt (siehe Anhang).
 \begin{table}[ht!]
@@ -324,7 +324,7 @@ Nur zwei Tupel der ausgewählten Menge (rot) ergeben bei der Ausführung des Zah
 Wird der komplette Eingaberaum für Ausführung des Zahllaufprogramms genutzt, so haben 301 der 1860 Tupel ein Ergebnis mit mindestens einem Eintrag.
 Ihre Verteilung verhält sich ähnlich zu den vorangegangen Beobachtungen.
 Nur fünf der ermittelten Tupel haben über 100 Datensätze in ihrer jeweiligen Ergebnismenge, wohingegen 187 Tupel jeweils nur einem Datensatz repräsentiert sind.
- 
+
 \begin{figure}[h]
 \centering
 	\begin{tikzpicture}
@@ -472,7 +472,7 @@ Sie ermöglicht es auf Grundlage der ermittelten initialen Testdatensets durch e
 %Dies zeichnet sich auch in den vorgeschlagenen Werten um den Median ab (Tabelle \ref{tab:paymentruntable3}), bei dem die ermittelten Werte für die Spalten \texttt{BUDAT}, \texttt{BLDAT} und \texttt{LIFNR} auch dort nur einen Eintrag vorweisen.
 %TODO: Was heißt das? ..das bestätigt , diese legt nahe, ...das fehler gering tsind
 %
-%Generell fällt auf  das die Spalten strueung hinstichltihc der anzahl 
+%Generell fällt auf  das die Spalten strueung hinstichltihc der anzahl
 %viele werte nur einmal ...
 %zeigt sich in den spalten
 %es ist auch hier zu erkennen...
@@ -524,7 +524,7 @@ Sie ermöglicht es auf Grundlage der ermittelten initialen Testdatensets durch e
 %Die Messungen für die drei genannten Ansätze (siehe Tabelle \ref{tab:tupel3}) zeigen, dass die Einschränkung durch die Obergrenze den Umfang der gefundenen Tupel reduziert.
 %TODO: wie reduziert? substantiell
 %Die Betrachtung der Permutation ergibt zwar ein Tupel mehr, benötigt aber über eine halbe Minute für die Bestimmung, da mehr als 30.000 Tupel getestet werden.
-%TODO: was passower wenn ich nur 2 oder 3 habe? 
+%TODO: was passower wenn ich nur 2 oder 3 habe?
 %
 %\begin{table}[h]
 	%\centering
@@ -654,5 +654,5 @@ Sie ermöglicht es auf Grundlage der ermittelten initialen Testdatensets durch e
 %\end{table}
 
 %Die Messergebnisse zeigen, dass 3 der 5 Kombinationen von Eingabewerten mit den höchsten Ergebnismengen und Laufzeiten durch die vorgestellten Ansätze vorgeschlagen wurden (in Tabelle \ref{tab:tupel2} dick hervorgehoben).
-%Im Vergleich mussten dazu jediglich 
+%Im Vergleich mussten dazu jediglich
 %Zusätzlich kann die adaptive Variantedurch exploratives Probieren weitere Testwerte durch den Entwickler dem ermittelten Datensatz ergänzen.

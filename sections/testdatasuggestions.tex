@@ -222,7 +222,7 @@ Die SQL-Statements dazu befinden sich als Code-Beispiel \ref{lst:distinctvalues}
 \subsection{Vorschläge anhand von Metainformationen}\label{chap:databasemeta}
 Für Projektion, Sortierung oder Gruppierung sind weniger die Spalteninhalte wichtig, als vielmehr die Spalten an sich.
 Um Vorschläge für diese Art SQL-Statement-Variablen zu erzeugen, werden anhand der Metainformationen über Spalten der betrachteten Relation aus der SAP HANA-internen Systemtabelle \texttt{SYS.TABLE\_COLUMNS} die Spaltennamen bestimmt (vgl. Code-Beispiel\ref{lst:hanasys}).
-\begin{lstlisting}[caption={SQL-Statement für Metainformationen zu Relationen}, label={lst:hanasys}, language=mySQL]
+\begin{lstlisting}[caption={SQL-Statement für Metainformationen zu Relationen}, label={lst:hanasys}, language=mySQL, deletekeywords={schema,table}]
 	SELECT COLUMN_NAME
 	FROM SYS.TABLE_COLUMNS
 	WHERE SCHEMA_NAME = '<schema>'
@@ -297,7 +297,7 @@ Aus diesem Grund werden die distinkten Kombinationen der betrachteten Spalten mi
 In Hinblick auf die Laufzeit der Analysen der einzelnen Kombinationen, wurde eine derzeitige Obergrenze von 50 zu betrachtenden Tupeln festgelegt.
 Sollten Spalten über mehrere Relationen hinweg betrachtet werden, so erfolgt die Bestimmung auf Basis der Verknüpfung der Relationen.
 
-\begin{lstlisting}[caption={Bestimmung distinkter Tupel anhand gegebener Spalten}, label={lst:disinctcombinations}, language=mySQL]
+\begin{lstlisting}[caption={Bestimmung distinkter Tupel anhand gegebener Spalten}, label={lst:disinctcombinations}, language=mySQL, deletekeywords={schema, table, TABLE}]
 	SELECT TOP 50 DISTINCT <list of columns>, COUNT(*) AS OCCURENCES
 	FROM <table>
 	GROUP BY <list of columns>
